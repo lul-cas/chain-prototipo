@@ -1,0 +1,95 @@
+<div class="chain-condition">
+  <ng-container *ngTemplateOutlet="groupTemplate; context: { $implicit: rows(), place: [] }" />
+  <p class="chain-condition__preview">
+    <span class="chain-condition__preview-label">Prévia:</span>
+    <code data-testid="condition-preview">{{ preview() }}</code>
+  </p>
+</div>
+
+<ng-template #groupTemplate let-group let-place="place">
+  <fieldset class="chain-condition__group" [class.chain-condition__group--nested]="place.length > 0">
+    <legend class="chain-visually-hidden">{{ place.length === 0 ? 'Condição' : 'Grupo ' + (place[place.length - 1] + 1) }}</legend>
+    <div class="chain-condition__group-head">
+      <select chainInput aria-label="Combinar" class="chain-condition__op" (change)="setOp(place, $event)">
+        <option value="and" [selected]="group.op === 'and'">E (todas)</option>
+        <option value="or" [selected]="group.op === 'or'">OU (qualquer)</option>
+      </select>
+      @if (place.length > 0) {
+        <button chainButton variant="ghost" size="sm" type="button" class="chain-condition__remove" (click)="remove(place)">Remover grupo</button>
+      }
+    </div>
+
+    @for (item of group.items; track $index) {
+      @switch (item.kind) {
+        @case ('group') {
+          <ng-container *ngTemplateOutlet="groupTemplate; context: { $implicit: item, place: child(place, $index) }" />
+        }
+        @case ('compare') {
+          <ng-container *ngTemplateOutlet="compareTemplate; context: { $implicit: item, place: child(place, $index) }" />
+        }
+        @default {
+          <div class="chain-condition__row" role="group" [attr.aria-label]="'Condição ' + ($index + 1)">
+            <span class="chain-condition__kept">{{ render(item) }}</span>
+            <button chainButton variant="ghost" size="sm" type="button" class="chain-condition__remove" (click)="remove(child(place, $index))">
+              Remover condição
+            </button>
+          </div>
+        }
+      }
+    }
+
+    <div class="chain-condition__add">
+      <button chainButton variant="secondary" size="sm" type="button" (click)="add(place, 'compare')">+ condição</button>
+      <button chainButton variant="secondary" size="sm" type="button" (click)="add(place, 'group')">+ grupo</button>
+    </div>
+    @if (problem(place); as found) {
+      <p class="chain-condition__problem" [class.chain-condition__problem--error]="'error' in found">{{ problemText(found) }}</p>
+    }
+  </fieldset>
+</ng-template>
+
+<ng-template #compareTemplate let-row let-place="place">
+  <div class="chain-condition__row" role="group" [attr.aria-label]="'Condição ' + (place[place.length - 1] + 1)">
+    @if (isKept(row)) {
+      <!-- An operand the builder doesn't edit, or a datum the catalog lacks: shown as text, and kept. -->
+      <span class="chain-condition__kept">{{ render(row) }}</span>
+    } @else {
+      <select chainInput aria-label="Dado" (change)="setLeft(place, $event)">
+        <option value="" [selected]="!row.left">Escolha o dado</option>
+        @for (entry of entries(); track entryValue(entry)) {
+          <option [value]="entryValue(entry)" [selected]="entryValue(entry) === pathValue(row.left)">{{ entryLabel(entry) }}</option>
+        }
+        @if (otherData()) {
+          <option [value]="other" [selected]="isOther(row.left)">Outro dado do pedido…</option>
+        }
+      </select>
+      @if (isOther(row.left)) {
+        <input
+          chainInput
+          class="chain-mono"
+          type="text"
+          aria-label="Caminho do dado do pedido"
+          placeholder="cliente.cpf"
+          [value]="otherText(row.left)"
+          (change)="setOtherPath(place, $event)"
+        />
+      }
+      <select chainInput aria-label="Operador" (change)="setOperator(place, $event)">
+        <option value="" [selected]="!row.operator">Escolha o operador</option>
+        @for (operator of operatorsOf(row); track operator) {
+          <option [value]="operator" [selected]="operator === row.operator">{{ operatorLabel[operator] }}</option>
+        }
+      </select>
+      @if (unitsOf(row.left).length > 0) {
+        <chain-offset-editor [offset]="offsetOf(row.left)" (offsetChange)="setLeftOffset(place, $event)" [units]="unitsOf(row.left)" label="Ajuste do dado" />
+      }
+      @if (row.operator && !isUnary(row.operator)) {
+        <chain-operand-editor [operand]="row.right" (operandChange)="setRight(place, $event)" [type]="rightType(row)" [catalog]="entries()" />
+      }
+    }
+    <button chainButton variant="ghost" size="sm" type="button" class="chain-condition__remove" (click)="remove(place)">Remover condição</button>
+    @if (problem(place); as found) {
+      <p class="chain-condition__problem" [class.chain-condition__problem--error]="'error' in found">{{ problemText(found) }}</p>
+    }
+  </div>
+</ng-template>

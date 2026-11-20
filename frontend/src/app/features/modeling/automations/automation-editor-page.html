@@ -1,0 +1,124 @@
+<section class="chain-editor" aria-labelledby="chain-automation-title">
+  @if (loadError(); as problem) {
+    @if (problem.code === 'not_found') {
+      <h1 id="chain-automation-title">Automação não encontrada</h1>
+      <p>Ela não existe, ou você não pode modelá-la.</p>
+      <p><a routerLink="/automacoes">Ver as automações</a></p>
+    } @else {
+      <h1 id="chain-automation-title">Automação</h1>
+      <chain-alert tone="danger">{{ messageFor(problem.code) }}</chain-alert>
+      <div>
+        <button chainButton variant="secondary" type="button" (click)="load()">Tentar de novo</button>
+      </div>
+    }
+  } @else if (automation(); as automation) {
+    <header class="chain-editor__header">
+      <p class="chain-editor__eyebrow">Automação:</p>
+      <div class="chain-editor__title-row">
+        <h1 id="chain-automation-title">{{ automation.name }}</h1>
+        @if (!editing()) {
+          <button chainButton variant="ghost" size="sm" type="button" (click)="edit()">Editar nome e descrição</button>
+        }
+      </div>
+      @if (editing()) {
+        <form class="chain-editor__header-form" (submit)="saveHeader($event)">
+          <chain-form-field label="Nome" required [error]="nameError()">
+            <input chainInput type="text" [maxLength]="nameLimit" [value]="nameDraft()" (input)="nameDraft.set(typed($event)); nameError.set(null)" />
+          </chain-form-field>
+          <chain-form-field label="Descrição" [hint]="descriptionDraft().length + '/' + descriptionLimit + ' caracteres'" [error]="descriptionError()">
+            <textarea
+              chainInput
+              rows="2"
+              [maxLength]="descriptionLimit"
+              [value]="descriptionDraft()"
+              (input)="descriptionDraft.set(typed($event)); descriptionError.set(null)"
+            ></textarea>
+          </chain-form-field>
+          <div class="chain-editor__header-actions">
+            <button chainButton type="submit" [loading]="savingHeader()">Salvar</button>
+            <button chainButton variant="secondary" type="button" (click)="editing.set(false)">Cancelar</button>
+          </div>
+        </form>
+      } @else if (automation.description) {
+        <p class="chain-editor__description">{{ automation.description }}</p>
+      }
+    </header>
+
+    <div class="chain-editor__toolbar-card">
+      <div class="chain-editor__toolbar" role="toolbar" aria-label="Ações da automação" tabindex="-1" (keydown)="moveInToolbar($event)">
+        <button chainButton variant="secondary" size="sm" type="button" [loading]="busy() === 'save'" [disabled]="!editor.dirty() || busy() !== null" (click)="save()">
+          Salvar rascunho
+        </button>
+        <button chainButton variant="ghost" size="sm" type="button" [disabled]="!editor.canUndo()" (click)="editor.undo()">Desfazer</button>
+        <button chainButton variant="ghost" size="sm" type="button" [disabled]="!editor.canRedo()" (click)="editor.redo()">Refazer</button>
+        <button chainButton variant="ghost" size="sm" type="button" [disabled]="!editor.dirty()" (click)="discard()">Descartar alterações</button>
+        <span class="chain-editor__divider" aria-hidden="true"></span>
+        <button chainButton size="sm" type="button" [loading]="busy() === 'publish'" [disabled]="busy() !== null" (click)="publish()">Publicar</button>
+        <button chainButton variant="secondary" size="sm" type="button" [loading]="busy() === 'validate'" [disabled]="busy() !== null" (click)="validate()">
+          Validar
+        </button>
+        <span class="chain-editor__divider" aria-hidden="true"></span>
+        <button chainButton variant="ghost" size="sm" type="button" (click)="showVersions()">Versões</button>
+        <button chainButton variant="ghost" size="sm" type="button" (click)="showJson()">Visualizar JSON</button>
+        <button chainButton variant="ghost" size="sm" type="button" (click)="downloadJson()">Baixar JSON</button>
+      </div>
+
+      <div class="chain-editor__status-row">
+        @if (editor.dirty()) {
+          <span class="chain-editor__unsaved">Alterações não salvas</span>
+        }
+        <p class="chain-editor__status" role="status" aria-label="Situação da edição">{{ editor.notice() }}</p>
+      </div>
+    </div>
+
+    @if (notice(); as text) {
+      <chain-alert tone="info">{{ text }}</chain-alert>
+    }
+
+    @if (actionError(); as refusal) {
+      <chain-alert tone="danger">
+        <span class="chain-editor__header-actions">
+          {{ refusal.message }}
+          @if (refusal.reload) {
+            <button chainButton variant="secondary" size="sm" type="button" (click)="reload()">Recarregar</button>
+          }
+          @if (refusal.retry; as retry) {
+            <button chainButton variant="secondary" size="sm" type="button" (click)="retry()">Tentar de novo</button>
+          }
+        </span>
+      </chain-alert>
+    }
+
+    <div class="chain-editor__findings" aria-live="polite">
+      @if (problems(); as problems) {
+        @if (problems.length > 0) {
+          <section class="chain-editor__problems" [attr.aria-label]="problemsLabel()">
+            <h2 class="chain-editor__problems-title">{{ problemsLabel() }}</h2>
+            <ul class="chain-editor__problem-list">
+              @for (problem of problems; track $index) {
+                <li>
+                  @if (controlOf(problem) !== null) {
+                    <button type="button" class="chain-editor__problem" (click)="show(problem)">
+                      {{ problemText(problem) }} <code>{{ problem.code }}</code>
+                    </button>
+                  } @else {
+                    <span class="chain-editor__problem">{{ problemText(problem) }} <code>{{ problem.code }}</code></span>
+                  }
+                </li>
+              }
+            </ul>
+          </section>
+        } @else {
+          <chain-alert tone="success">Nenhum problema encontrado.</chain-alert>
+        }
+      }
+    </div>
+
+    <chain-automation-sections [document]="document()" [resources]="resources()" [problems]="problems() ?? []" [published]="published()" />
+
+    <footer class="chain-editor__footer">
+      <span>{{ automation.latestVersion ? 'Versão publicada: ' + automation.latestVersion : 'Nunca publicada' }}</span>
+      <span>Rascunho salvo em <time [attr.datetime]="automation.draftUpdatedAt">{{ automation.draftUpdatedAt | date: 'dd/MM/yyyy HH:mm' }}</time></span>
+    </footer>
+  }
+</section>

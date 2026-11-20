@@ -1,0 +1,1869 @@
+{
+  "now": "2026-10-15T12:00:00Z",
+  "zone": "-03:00",
+  "data": {
+    "valor": 15000.5,
+    "nome": "Ana",
+    "vazio": "",
+    "espaco": " ",
+    "aprovado": true,
+    "vencimento": "2026-10-15",
+    "emitido": "2026-10-15T14:30:00Z",
+    "garantias": [
+      "pf",
+      "aval"
+    ],
+    "nenhuma": [],
+    "itens": [
+      {
+        "valor": 10
+      },
+      {
+        "valor": 20.5
+      },
+      {
+        "valor": 0
+      }
+    ],
+    "cliente": {
+      "cpf": "52998224725"
+    },
+    "texto_data": "15/10/2026",
+    "zero": 0,
+    "notas": [
+      7,
+      8,
+      9
+    ],
+    "inicio": "2026-01-01",
+    "fim": "2026-02-01",
+    "hora": "09:00",
+    "hora_fim": "18:00",
+    "fechamento": "2026-10-15T13:00:00-03:00",
+    "fechamento_utc": "2026-10-15T16:00:00Z",
+    "texto_nul": "12\u0000"
+  },
+  "cases": [
+    {
+      "name": "number equals",
+      "condition": {
+        "kind": "compare",
+        "left": {
+          "kind": "path",
+          "path": [
+            "valor"
+          ]
+        },
+        "operator": "equals",
+        "right": {
+          "kind": "literal",
+          "type": "number",
+          "value": "15000.50"
+        }
+      },
+      "expect": {
+        "result": true
+      }
+    },
+    {
+      "name": "number greaterThan",
+      "condition": {
+        "kind": "compare",
+        "left": {
+          "kind": "path",
+          "path": [
+            "valor"
+          ]
+        },
+        "operator": "greaterThan",
+        "right": {
+          "kind": "literal",
+          "type": "number",
+          "value": "15000.5"
+        }
+      },
+      "expect": {
+        "result": false
+      }
+    },
+    {
+      "name": "number greaterOrEqual",
+      "condition": {
+        "kind": "compare",
+        "left": {
+          "kind": "path",
+          "path": [
+            "valor"
+          ]
+        },
+        "operator": "greaterOrEqual",
+        "right": {
+          "kind": "literal",
+          "type": "number",
+          "value": "15000.5"
+        }
+      },
+      "expect": {
+        "result": true
+      }
+    },
+    {
+      "name": "number lessThan",
+      "condition": {
+        "kind": "compare",
+        "left": {
+          "kind": "path",
+          "path": [
+            "valor"
+          ]
+        },
+        "operator": "lessThan",
+        "right": {
+          "kind": "literal",
+          "type": "number",
+          "value": "50000"
+        }
+      },
+      "expect": {
+        "result": true
+      }
+    },
+    {
+      "name": "text equals is case-sensitive",
+      "condition": {
+        "kind": "compare",
+        "left": {
+          "kind": "path",
+          "path": [
+            "nome"
+          ]
+        },
+        "operator": "equals",
+        "right": {
+          "kind": "literal",
+          "type": "text",
+          "value": "ana"
+        }
+      },
+      "expect": {
+        "result": false
+      }
+    },
+    {
+      "name": "text notEquals",
+      "condition": {
+        "kind": "compare",
+        "left": {
+          "kind": "path",
+          "path": [
+            "nome"
+          ]
+        },
+        "operator": "notEquals",
+        "right": {
+          "kind": "literal",
+          "type": "text",
+          "value": "ana"
+        }
+      },
+      "expect": {
+        "result": true
+      }
+    },
+    {
+      "name": "text contains substring",
+      "condition": {
+        "kind": "compare",
+        "left": {
+          "kind": "path",
+          "path": [
+            "nome"
+          ]
+        },
+        "operator": "contains",
+        "right": {
+          "kind": "literal",
+          "type": "text",
+          "value": "n"
+        }
+      },
+      "expect": {
+        "result": true
+      }
+    },
+    {
+      "name": "text contains is accent-sensitive",
+      "condition": {
+        "kind": "compare",
+        "left": {
+          "kind": "literal",
+          "type": "text",
+          "value": "João"
+        },
+        "operator": "contains",
+        "right": {
+          "kind": "literal",
+          "type": "text",
+          "value": "Joao"
+        }
+      },
+      "expect": {
+        "result": false
+      }
+    },
+    {
+      "name": "boolean equals",
+      "condition": {
+        "kind": "compare",
+        "left": {
+          "kind": "path",
+          "path": [
+            "aprovado"
+          ]
+        },
+        "operator": "equals",
+        "right": {
+          "kind": "literal",
+          "type": "boolean",
+          "value": "true"
+        }
+      },
+      "expect": {
+        "result": true
+      }
+    },
+    {
+      "name": "list contains member",
+      "condition": {
+        "kind": "compare",
+        "left": {
+          "kind": "path",
+          "path": [
+            "garantias"
+          ]
+        },
+        "operator": "contains",
+        "right": {
+          "kind": "literal",
+          "type": "text",
+          "value": "aval"
+        }
+      },
+      "expect": {
+        "result": true
+      }
+    },
+    {
+      "name": "list contains non-member",
+      "condition": {
+        "kind": "compare",
+        "left": {
+          "kind": "path",
+          "path": [
+            "garantias"
+          ]
+        },
+        "operator": "contains",
+        "right": {
+          "kind": "literal",
+          "type": "text",
+          "value": "imovel"
+        }
+      },
+      "expect": {
+        "result": false
+      }
+    },
+    {
+      "name": "isEmpty on missing",
+      "condition": {
+        "kind": "compare",
+        "left": {
+          "kind": "path",
+          "path": [
+            "inexistente"
+          ]
+        },
+        "operator": "isEmpty"
+      },
+      "expect": {
+        "result": true
+      }
+    },
+    {
+      "name": "isEmpty on empty text",
+      "condition": {
+        "kind": "compare",
+        "left": {
+          "kind": "path",
+          "path": [
+            "vazio"
+          ]
+        },
+        "operator": "isEmpty"
+      },
+      "expect": {
+        "result": true
+      }
+    },
+    {
+      "name": "isEmpty on whitespace is false",
+      "condition": {
+        "kind": "compare",
+        "left": {
+          "kind": "path",
+          "path": [
+            "espaco"
+          ]
+        },
+        "operator": "isEmpty"
+      },
+      "expect": {
+        "result": false
+      }
+    },
+    {
+      "name": "isEmpty on empty list",
+      "condition": {
+        "kind": "compare",
+        "left": {
+          "kind": "path",
+          "path": [
+            "nenhuma"
+          ]
+        },
+        "operator": "isEmpty"
+      },
+      "expect": {
+        "result": true
+      }
+    },
+    {
+      "name": "isNotEmpty on value",
+      "condition": {
+        "kind": "compare",
+        "left": {
+          "kind": "path",
+          "path": [
+            "nome"
+          ]
+        },
+        "operator": "isNotEmpty"
+      },
+      "expect": {
+        "result": true
+      }
+    },
+    {
+      "name": "missing compares false",
+      "condition": {
+        "kind": "compare",
+        "left": {
+          "kind": "path",
+          "path": [
+            "inexistente"
+          ]
+        },
+        "operator": "equals",
+        "right": {
+          "kind": "literal",
+          "type": "text",
+          "value": "x"
+        }
+      },
+      "expect": {
+        "result": false
+      }
+    },
+    {
+      "name": "missing greaterThan is false",
+      "condition": {
+        "kind": "compare",
+        "left": {
+          "kind": "path",
+          "path": [
+            "inexistente"
+          ]
+        },
+        "operator": "greaterThan",
+        "right": {
+          "kind": "literal",
+          "type": "number",
+          "value": "0"
+        }
+      },
+      "expect": {
+        "result": false
+      }
+    },
+    {
+      "name": "missing notEquals is true",
+      "condition": {
+        "kind": "compare",
+        "left": {
+          "kind": "path",
+          "path": [
+            "inexistente"
+          ]
+        },
+        "operator": "notEquals",
+        "right": {
+          "kind": "literal",
+          "type": "text",
+          "value": "x"
+        }
+      },
+      "expect": {
+        "result": true
+      }
+    },
+    {
+      "name": "nested path",
+      "condition": {
+        "kind": "compare",
+        "left": {
+          "kind": "path",
+          "path": [
+            "cliente",
+            "cpf"
+          ]
+        },
+        "operator": "equals",
+        "right": {
+          "kind": "literal",
+          "type": "text",
+          "value": "52998224725"
+        }
+      },
+      "expect": {
+        "result": true
+      }
+    },
+    {
+      "name": "stored date vs currentDate (today in UTC-03:00)",
+      "condition": {
+        "kind": "compare",
+        "left": {
+          "kind": "path",
+          "path": [
+            "vencimento"
+          ]
+        },
+        "operator": "greaterOrEqual",
+        "right": {
+          "kind": "system",
+          "name": "currentDate"
+        }
+      },
+      "expect": {
+        "result": true
+      }
+    },
+    {
+      "name": "stored date before currentDate + 1 day",
+      "condition": {
+        "kind": "compare",
+        "left": {
+          "kind": "path",
+          "path": [
+            "vencimento"
+          ]
+        },
+        "operator": "lessThan",
+        "right": {
+          "kind": "system",
+          "name": "currentDate",
+          "offset": {
+            "amount": 1,
+            "unit": "days"
+          }
+        }
+      },
+      "expect": {
+        "result": true
+      }
+    },
+    {
+      "name": "currentDate is the 15th at 01:00 UTC on the 16th",
+      "condition": {
+        "kind": "compare",
+        "left": {
+          "kind": "system",
+          "name": "currentDate"
+        },
+        "operator": "equals",
+        "right": {
+          "kind": "literal",
+          "type": "date",
+          "value": "2026-10-15"
+        }
+      },
+      "expect": {
+        "result": true
+      },
+      "now": "2026-10-16T01:00:00Z"
+    },
+    {
+      "name": "month offset clamps to last day",
+      "condition": {
+        "kind": "compare",
+        "left": {
+          "kind": "literal",
+          "type": "date",
+          "value": "2026-01-31",
+          "offset": {
+            "amount": 1,
+            "unit": "months"
+          }
+        },
+        "operator": "equals",
+        "right": {
+          "kind": "literal",
+          "type": "date",
+          "value": "2026-02-28"
+        }
+      },
+      "expect": {
+        "result": true
+      }
+    },
+    {
+      "name": "datetime later than",
+      "condition": {
+        "kind": "compare",
+        "left": {
+          "kind": "path",
+          "path": [
+            "emitido"
+          ]
+        },
+        "operator": "greaterThan",
+        "right": {
+          "kind": "system",
+          "name": "currentDateTime"
+        }
+      },
+      "expect": {
+        "result": true
+      }
+    },
+    {
+      "name": "datetime offset hours",
+      "condition": {
+        "kind": "compare",
+        "left": {
+          "kind": "path",
+          "path": [
+            "emitido"
+          ]
+        },
+        "operator": "lessThan",
+        "right": {
+          "kind": "system",
+          "name": "currentDateTime",
+          "offset": {
+            "amount": 2,
+            "unit": "hours"
+          }
+        }
+      },
+      "expect": {
+        "result": false
+      }
+    },
+    {
+      "name": "unparsable stored date is a type mismatch",
+      "condition": {
+        "kind": "compare",
+        "left": {
+          "kind": "path",
+          "path": [
+            "texto_data"
+          ]
+        },
+        "operator": "equals",
+        "right": {
+          "kind": "system",
+          "name": "currentDate"
+        }
+      },
+      "expect": {
+        "error": "type_mismatch"
+      }
+    },
+    {
+      "name": "number vs text is a type mismatch",
+      "condition": {
+        "kind": "compare",
+        "left": {
+          "kind": "path",
+          "path": [
+            "valor"
+          ]
+        },
+        "operator": "equals",
+        "right": {
+          "kind": "literal",
+          "type": "text",
+          "value": "15000.5"
+        }
+      },
+      "expect": {
+        "error": "type_mismatch"
+      }
+    },
+    {
+      "name": "and group",
+      "condition": {
+        "kind": "group",
+        "op": "and",
+        "items": [
+          {
+            "kind": "compare",
+            "left": {
+              "kind": "path",
+              "path": [
+                "aprovado"
+              ]
+            },
+            "operator": "equals",
+            "right": {
+              "kind": "literal",
+              "type": "boolean",
+              "value": "true"
+            }
+          },
+          {
+            "kind": "compare",
+            "left": {
+              "kind": "path",
+              "path": [
+                "valor"
+              ]
+            },
+            "operator": "greaterThan",
+            "right": {
+              "kind": "literal",
+              "type": "number",
+              "value": "1000"
+            }
+          }
+        ]
+      },
+      "expect": {
+        "result": true
+      }
+    },
+    {
+      "name": "or group",
+      "condition": {
+        "kind": "group",
+        "op": "or",
+        "items": [
+          {
+            "kind": "compare",
+            "left": {
+              "kind": "path",
+              "path": [
+                "aprovado"
+              ]
+            },
+            "operator": "equals",
+            "right": {
+              "kind": "literal",
+              "type": "boolean",
+              "value": "false"
+            }
+          },
+          {
+            "kind": "compare",
+            "left": {
+              "kind": "path",
+              "path": [
+                "nome"
+              ]
+            },
+            "operator": "equals",
+            "right": {
+              "kind": "literal",
+              "type": "text",
+              "value": "Ana"
+            }
+          }
+        ]
+      },
+      "expect": {
+        "result": true
+      }
+    },
+    {
+      "name": "empty and is true",
+      "condition": {
+        "kind": "group",
+        "op": "and",
+        "items": []
+      },
+      "expect": {
+        "result": true
+      }
+    },
+    {
+      "name": "empty or is false",
+      "condition": {
+        "kind": "group",
+        "op": "or",
+        "items": []
+      },
+      "expect": {
+        "result": false
+      }
+    },
+    {
+      "name": "or stops at the first true item (later error not raised)",
+      "condition": {
+        "kind": "group",
+        "op": "or",
+        "items": [
+          {
+            "kind": "compare",
+            "left": {
+              "kind": "path",
+              "path": [
+                "aprovado"
+              ]
+            },
+            "operator": "equals",
+            "right": {
+              "kind": "literal",
+              "type": "boolean",
+              "value": "true"
+            }
+          },
+          {
+            "kind": "compare",
+            "left": {
+              "kind": "path",
+              "path": [
+                "valor"
+              ]
+            },
+            "operator": "equals",
+            "right": {
+              "kind": "literal",
+              "type": "text",
+              "value": "x"
+            }
+          }
+        ]
+      },
+      "expect": {
+        "result": true
+      }
+    },
+    {
+      "name": "and stops at the first false item (later error not raised)",
+      "condition": {
+        "kind": "group",
+        "op": "and",
+        "items": [
+          {
+            "kind": "compare",
+            "left": {
+              "kind": "path",
+              "path": [
+                "aprovado"
+              ]
+            },
+            "operator": "equals",
+            "right": {
+              "kind": "literal",
+              "type": "boolean",
+              "value": "false"
+            }
+          },
+          {
+            "kind": "compare",
+            "left": {
+              "kind": "path",
+              "path": [
+                "valor"
+              ]
+            },
+            "operator": "equals",
+            "right": {
+              "kind": "literal",
+              "type": "text",
+              "value": "x"
+            }
+          }
+        ]
+      },
+      "expect": {
+        "result": false
+      }
+    },
+    {
+      "name": "and evaluates later items when earlier ones are true",
+      "condition": {
+        "kind": "group",
+        "op": "and",
+        "items": [
+          {
+            "kind": "compare",
+            "left": {
+              "kind": "path",
+              "path": [
+                "aprovado"
+              ]
+            },
+            "operator": "equals",
+            "right": {
+              "kind": "literal",
+              "type": "boolean",
+              "value": "true"
+            }
+          },
+          {
+            "kind": "compare",
+            "left": {
+              "kind": "path",
+              "path": [
+                "valor"
+              ]
+            },
+            "operator": "equals",
+            "right": {
+              "kind": "literal",
+              "type": "text",
+              "value": "x"
+            }
+          }
+        ]
+      },
+      "expect": {
+        "error": "type_mismatch"
+      }
+    },
+    {
+      "name": "sum of projection",
+      "value": {
+        "kind": "call",
+        "function": "sum",
+        "args": [
+          {
+            "kind": "path",
+            "path": [
+              "itens",
+              "[]",
+              "valor"
+            ]
+          }
+        ]
+      },
+      "expect": {
+        "type": "number",
+        "value": "30.5"
+      }
+    },
+    {
+      "name": "avg of a list",
+      "value": {
+        "kind": "call",
+        "function": "avg",
+        "args": [
+          {
+            "kind": "path",
+            "path": [
+              "notas"
+            ]
+          }
+        ]
+      },
+      "expect": {
+        "type": "number",
+        "value": "8"
+      }
+    },
+    {
+      "name": "count",
+      "value": {
+        "kind": "call",
+        "function": "count",
+        "args": [
+          {
+            "kind": "path",
+            "path": [
+              "garantias"
+            ]
+          }
+        ]
+      },
+      "expect": {
+        "type": "number",
+        "value": "2"
+      }
+    },
+    {
+      "name": "min of arguments",
+      "value": {
+        "kind": "call",
+        "function": "min",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "number",
+            "value": "3"
+          },
+          {
+            "kind": "literal",
+            "type": "number",
+            "value": "-2"
+          },
+          {
+            "kind": "literal",
+            "type": "number",
+            "value": "7"
+          }
+        ]
+      },
+      "expect": {
+        "type": "number",
+        "value": "-2"
+      }
+    },
+    {
+      "name": "max of list",
+      "value": {
+        "kind": "call",
+        "function": "max",
+        "args": [
+          {
+            "kind": "path",
+            "path": [
+              "itens",
+              "[]",
+              "valor"
+            ]
+          }
+        ]
+      },
+      "expect": {
+        "type": "number",
+        "value": "20.5"
+      }
+    },
+    {
+      "name": "min of empty list",
+      "value": {
+        "kind": "call",
+        "function": "min",
+        "args": [
+          {
+            "kind": "path",
+            "path": [
+              "nenhuma"
+            ]
+          }
+        ]
+      },
+      "expect": {
+        "error": "empty_list"
+      }
+    },
+    {
+      "name": "avg of empty list",
+      "value": {
+        "kind": "call",
+        "function": "avg",
+        "args": [
+          {
+            "kind": "path",
+            "path": [
+              "nenhuma"
+            ]
+          }
+        ]
+      },
+      "expect": {
+        "error": "empty_list"
+      }
+    },
+    {
+      "name": "sum of empty list",
+      "value": {
+        "kind": "call",
+        "function": "sum",
+        "args": [
+          {
+            "kind": "path",
+            "path": [
+              "nenhuma"
+            ]
+          }
+        ]
+      },
+      "expect": {
+        "type": "number",
+        "value": "0"
+      }
+    },
+    {
+      "name": "round half away from zero",
+      "value": {
+        "kind": "call",
+        "function": "round",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "number",
+            "value": "2.5"
+          }
+        ]
+      },
+      "expect": {
+        "type": "number",
+        "value": "3"
+      }
+    },
+    {
+      "name": "round negative half away from zero",
+      "value": {
+        "kind": "call",
+        "function": "round",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "number",
+            "value": "-2.5"
+          }
+        ]
+      },
+      "expect": {
+        "type": "number",
+        "value": "-3"
+      }
+    },
+    {
+      "name": "round to places",
+      "value": {
+        "kind": "call",
+        "function": "round",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "number",
+            "value": "1.005"
+          },
+          {
+            "kind": "literal",
+            "type": "number",
+            "value": "2"
+          }
+        ]
+      },
+      "expect": {
+        "type": "number",
+        "value": "1.01"
+      }
+    },
+    {
+      "name": "floor",
+      "value": {
+        "kind": "call",
+        "function": "floor",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "number",
+            "value": "-1.5"
+          }
+        ]
+      },
+      "expect": {
+        "type": "number",
+        "value": "-2"
+      }
+    },
+    {
+      "name": "ceil",
+      "value": {
+        "kind": "call",
+        "function": "ceil",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "number",
+            "value": "1.2"
+          }
+        ]
+      },
+      "expect": {
+        "type": "number",
+        "value": "2"
+      }
+    },
+    {
+      "name": "abs",
+      "value": {
+        "kind": "call",
+        "function": "abs",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "number",
+            "value": "-7.25"
+          }
+        ]
+      },
+      "expect": {
+        "type": "number",
+        "value": "7.25"
+      }
+    },
+    {
+      "name": "decimal arithmetic",
+      "value": {
+        "kind": "arithmetic",
+        "op": "add",
+        "left": {
+          "kind": "literal",
+          "type": "number",
+          "value": "0.1"
+        },
+        "right": {
+          "kind": "literal",
+          "type": "number",
+          "value": "0.2"
+        }
+      },
+      "expect": {
+        "type": "number",
+        "value": "0.3"
+      }
+    },
+    {
+      "name": "multiply",
+      "value": {
+        "kind": "arithmetic",
+        "op": "multiply",
+        "left": {
+          "kind": "path",
+          "path": [
+            "valor"
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "number",
+          "value": "2"
+        }
+      },
+      "expect": {
+        "type": "number",
+        "value": "30001"
+      }
+    },
+    {
+      "name": "divide",
+      "value": {
+        "kind": "arithmetic",
+        "op": "divide",
+        "left": {
+          "kind": "literal",
+          "type": "number",
+          "value": "10"
+        },
+        "right": {
+          "kind": "literal",
+          "type": "number",
+          "value": "4"
+        }
+      },
+      "expect": {
+        "type": "number",
+        "value": "2.5"
+      }
+    },
+    {
+      "name": "division by zero",
+      "value": {
+        "kind": "arithmetic",
+        "op": "divide",
+        "left": {
+          "kind": "literal",
+          "type": "number",
+          "value": "1"
+        },
+        "right": {
+          "kind": "path",
+          "path": [
+            "zero"
+          ]
+        }
+      },
+      "expect": {
+        "error": "division_by_zero"
+      }
+    },
+    {
+      "name": "string of number is invariant",
+      "value": {
+        "kind": "call",
+        "function": "string",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "number",
+            "value": "1234.50"
+          }
+        ]
+      },
+      "expect": {
+        "type": "text",
+        "value": "1234.5"
+      }
+    },
+    {
+      "name": "string of date",
+      "value": {
+        "kind": "call",
+        "function": "string",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "date",
+            "value": "2026-10-15"
+          }
+        ]
+      },
+      "expect": {
+        "type": "text",
+        "value": "2026-10-15"
+      }
+    },
+    {
+      "name": "number of text",
+      "value": {
+        "kind": "call",
+        "function": "number",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "text",
+            "value": "1500.25"
+          }
+        ]
+      },
+      "expect": {
+        "type": "number",
+        "value": "1500.25"
+      }
+    },
+    {
+      "name": "number of bad text",
+      "value": {
+        "kind": "call",
+        "function": "number",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "text",
+            "value": "1.500,25"
+          }
+        ]
+      },
+      "expect": {
+        "error": "invalid_number"
+      }
+    },
+    {
+      "name": "number of text ending in NUL",
+      "value": {
+        "kind": "call",
+        "function": "number",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "text",
+            "value": "12\u0000"
+          }
+        ]
+      },
+      "expect": {
+        "error": "invalid_number"
+      }
+    },
+    {
+      "name": "number of data text ending in NUL",
+      "value": {
+        "kind": "call",
+        "function": "number",
+        "args": [
+          {
+            "kind": "path",
+            "path": [
+              "texto_nul"
+            ]
+          }
+        ]
+      },
+      "expect": {
+        "error": "invalid_number"
+      }
+    },
+    {
+      "name": "date of datetime uses evaluation zone",
+      "value": {
+        "kind": "call",
+        "function": "date",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "datetime",
+            "value": "2026-10-16T01:00:00Z"
+          }
+        ]
+      },
+      "expect": {
+        "type": "date",
+        "value": "2026-10-15"
+      }
+    },
+    {
+      "name": "date of bad text",
+      "value": {
+        "kind": "call",
+        "function": "date",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "text",
+            "value": "15/10/2026"
+          }
+        ]
+      },
+      "expect": {
+        "error": "invalid_date"
+      }
+    },
+    {
+      "name": "time of text",
+      "value": {
+        "kind": "call",
+        "function": "time",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "text",
+            "value": "09:30"
+          }
+        ]
+      },
+      "expect": {
+        "type": "time",
+        "value": "09:30:00"
+      }
+    },
+    {
+      "name": "datetime of date and time in evaluation zone",
+      "value": {
+        "kind": "call",
+        "function": "datetime",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "date",
+            "value": "2026-10-15"
+          },
+          {
+            "kind": "literal",
+            "type": "time",
+            "value": "09:00"
+          }
+        ]
+      },
+      "expect": {
+        "type": "datetime",
+        "value": "2026-10-15T12:00:00Z"
+      }
+    },
+    {
+      "name": "sum of text list is a type mismatch",
+      "value": {
+        "kind": "call",
+        "function": "sum",
+        "args": [
+          {
+            "kind": "path",
+            "path": [
+              "garantias"
+            ]
+          }
+        ]
+      },
+      "expect": {
+        "error": "type_mismatch"
+      }
+    },
+    {
+      "name": "date offset past year 9999 is an overflow",
+      "condition": {
+        "kind": "compare",
+        "left": {
+          "kind": "system",
+          "name": "currentDate",
+          "offset": {
+            "amount": 10000,
+            "unit": "years"
+          }
+        },
+        "operator": "greaterThan",
+        "right": {
+          "kind": "system",
+          "name": "currentDate"
+        }
+      },
+      "expect": {
+        "error": "overflow"
+      }
+    },
+    {
+      "name": "date literal moved past the last day is an overflow",
+      "condition": {
+        "kind": "compare",
+        "left": {
+          "kind": "literal",
+          "type": "date",
+          "value": "9999-12-31",
+          "offset": {
+            "amount": 1,
+            "unit": "days"
+          }
+        },
+        "operator": "greaterThan",
+        "right": {
+          "kind": "system",
+          "name": "currentDate"
+        }
+      },
+      "expect": {
+        "error": "overflow"
+      }
+    },
+    {
+      "name": "datetime offset before year 1 is an overflow",
+      "condition": {
+        "kind": "compare",
+        "left": {
+          "kind": "literal",
+          "type": "datetime",
+          "value": "0001-01-01T00:00:00Z",
+          "offset": {
+            "amount": -1,
+            "unit": "minutes"
+          }
+        },
+        "operator": "lessThan",
+        "right": {
+          "kind": "system",
+          "name": "currentDateTime"
+        }
+      },
+      "expect": {
+        "error": "overflow"
+      }
+    },
+    {
+      "name": "converting the first instant to the zone's date is an overflow",
+      "condition": {
+        "kind": "compare",
+        "left": {
+          "kind": "call",
+          "function": "date",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "datetime",
+              "value": "0001-01-01T00:00:00Z"
+            }
+          ]
+        },
+        "operator": "lessThan",
+        "right": {
+          "kind": "system",
+          "name": "currentDate"
+        }
+      },
+      "expect": {
+        "error": "overflow"
+      }
+    },
+    {
+      "name": "datetime of the last local minute past 9999 UTC is an overflow",
+      "condition": {
+        "kind": "compare",
+        "left": {
+          "kind": "call",
+          "function": "datetime",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "date",
+              "value": "9999-12-31"
+            },
+            {
+              "kind": "literal",
+              "type": "time",
+              "value": "23:00"
+            }
+          ]
+        },
+        "operator": "greaterThan",
+        "right": {
+          "kind": "system",
+          "name": "currentDateTime"
+        }
+      },
+      "expect": {
+        "error": "overflow"
+      }
+    },
+    {
+      "name": "two stored dates: lessThan",
+      "condition": {
+        "kind": "compare",
+        "left": {
+          "kind": "path",
+          "path": [
+            "inicio"
+          ]
+        },
+        "operator": "lessThan",
+        "right": {
+          "kind": "path",
+          "path": [
+            "fim"
+          ]
+        }
+      },
+      "expect": {
+        "result": true
+      }
+    },
+    {
+      "name": "two stored dates: greaterThan",
+      "condition": {
+        "kind": "compare",
+        "left": {
+          "kind": "path",
+          "path": [
+            "inicio"
+          ]
+        },
+        "operator": "greaterThan",
+        "right": {
+          "kind": "path",
+          "path": [
+            "fim"
+          ]
+        }
+      },
+      "expect": {
+        "result": false
+      }
+    },
+    {
+      "name": "two stored dates: greaterOrEqual on the same date",
+      "condition": {
+        "kind": "compare",
+        "left": {
+          "kind": "path",
+          "path": [
+            "inicio"
+          ]
+        },
+        "operator": "greaterOrEqual",
+        "right": {
+          "kind": "path",
+          "path": [
+            "inicio"
+          ]
+        }
+      },
+      "expect": {
+        "result": true
+      }
+    },
+    {
+      "name": "two stored dates: lessOrEqual",
+      "condition": {
+        "kind": "compare",
+        "left": {
+          "kind": "path",
+          "path": [
+            "fim"
+          ]
+        },
+        "operator": "lessOrEqual",
+        "right": {
+          "kind": "path",
+          "path": [
+            "inicio"
+          ]
+        }
+      },
+      "expect": {
+        "result": false
+      }
+    },
+    {
+      "name": "two stored times: lessThan",
+      "condition": {
+        "kind": "compare",
+        "left": {
+          "kind": "path",
+          "path": [
+            "hora"
+          ]
+        },
+        "operator": "lessThan",
+        "right": {
+          "kind": "path",
+          "path": [
+            "hora_fim"
+          ]
+        }
+      },
+      "expect": {
+        "result": true
+      }
+    },
+    {
+      "name": "two stored datetimes are ordered as instants, not as text",
+      "condition": {
+        "kind": "compare",
+        "left": {
+          "kind": "path",
+          "path": [
+            "fechamento"
+          ]
+        },
+        "operator": "greaterThan",
+        "right": {
+          "kind": "path",
+          "path": [
+            "emitido"
+          ]
+        }
+      },
+      "expect": {
+        "result": true
+      }
+    },
+    {
+      "name": "two stored datetimes: the same instant with two offsets",
+      "condition": {
+        "kind": "compare",
+        "left": {
+          "kind": "path",
+          "path": [
+            "fechamento"
+          ]
+        },
+        "operator": "lessOrEqual",
+        "right": {
+          "kind": "path",
+          "path": [
+            "fechamento_utc"
+          ]
+        }
+      },
+      "expect": {
+        "result": true
+      }
+    },
+    {
+      "name": "two stored datetimes: equals stays text equality",
+      "condition": {
+        "kind": "compare",
+        "left": {
+          "kind": "path",
+          "path": [
+            "fechamento"
+          ]
+        },
+        "operator": "equals",
+        "right": {
+          "kind": "path",
+          "path": [
+            "fechamento_utc"
+          ]
+        }
+      },
+      "expect": {
+        "result": false
+      }
+    },
+    {
+      "name": "ordering a stored date and a stored datetime is a type mismatch",
+      "condition": {
+        "kind": "compare",
+        "left": {
+          "kind": "path",
+          "path": [
+            "vencimento"
+          ]
+        },
+        "operator": "lessThan",
+        "right": {
+          "kind": "path",
+          "path": [
+            "emitido"
+          ]
+        }
+      },
+      "expect": {
+        "error": "type_mismatch"
+      }
+    },
+    {
+      "name": "ordering a stored date and a stored time is a type mismatch",
+      "condition": {
+        "kind": "compare",
+        "left": {
+          "kind": "path",
+          "path": [
+            "vencimento"
+          ]
+        },
+        "operator": "lessThan",
+        "right": {
+          "kind": "path",
+          "path": [
+            "hora"
+          ]
+        }
+      },
+      "expect": {
+        "error": "type_mismatch"
+      }
+    },
+    {
+      "name": "ordering a stored date and non-ISO text is a type mismatch",
+      "condition": {
+        "kind": "compare",
+        "left": {
+          "kind": "path",
+          "path": [
+            "vencimento"
+          ]
+        },
+        "operator": "lessThan",
+        "right": {
+          "kind": "path",
+          "path": [
+            "texto_data"
+          ]
+        }
+      },
+      "expect": {
+        "error": "type_mismatch"
+      }
+    },
+    {
+      "name": "ordering two plain texts is a type mismatch",
+      "condition": {
+        "kind": "compare",
+        "left": {
+          "kind": "path",
+          "path": [
+            "nome"
+          ]
+        },
+        "operator": "lessThan",
+        "right": {
+          "kind": "path",
+          "path": [
+            "nome"
+          ]
+        }
+      },
+      "expect": {
+        "error": "type_mismatch"
+      }
+    },
+    {
+      "name": "datetime of a stored date and a stored time in evaluation zone",
+      "value": {
+        "kind": "call",
+        "function": "datetime",
+        "args": [
+          {
+            "kind": "path",
+            "path": [
+              "vencimento"
+            ]
+          },
+          {
+            "kind": "path",
+            "path": [
+              "hora"
+            ]
+          }
+        ]
+      },
+      "expect": {
+        "type": "datetime",
+        "value": "2026-10-15T12:00:00Z"
+      }
+    },
+    {
+      "name": "datetime of a stored date and unparsable text is an invalid date",
+      "value": {
+        "kind": "call",
+        "function": "datetime",
+        "args": [
+          {
+            "kind": "path",
+            "path": [
+              "vencimento"
+            ]
+          },
+          {
+            "kind": "path",
+            "path": [
+              "nome"
+            ]
+          }
+        ]
+      },
+      "expect": {
+        "error": "invalid_date"
+      }
+    },
+    {
+      "name": "datetime of unparsable text and a stored time is an invalid date",
+      "value": {
+        "kind": "call",
+        "function": "datetime",
+        "args": [
+          {
+            "kind": "path",
+            "path": [
+              "texto_data"
+            ]
+          },
+          {
+            "kind": "path",
+            "path": [
+              "hora"
+            ]
+          }
+        ]
+      },
+      "expect": {
+        "error": "invalid_date"
+      }
+    }
+  ]
+}

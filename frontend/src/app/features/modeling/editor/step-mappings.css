@@ -1,0 +1,72 @@
+/* A step's inputs and outputs (workflow-editor.md §10.9, §10.10). */
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: var(--chain-space-3);
+}
+
+.chain-step__section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--chain-space-2);
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.chain-step__section legend {
+  margin-bottom: var(--chain-space-1);
+  font-weight: var(--chain-font-weight-semibold);
+}
+
+/* A row: its key on a line of its own, then the kind of value and the value, and an adjustment under them. */
+.chain-step__row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: center;
+  gap: var(--chain-space-2);
+  padding-block-start: var(--chain-space-2);
+  border-block-start: var(--chain-border-width) solid var(--color-border-subtle);
+}
+
+.chain-step__name,
+.chain-step__note,
+.chain-step__problem {
+  grid-column: 1 / -1;
+}
+
+.chain-step__name {
+  font-family: var(--chain-font-mono);
+  font-size: var(--chain-font-size-sm);
+}
+
+.chain-step__muted {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-family: var(--chain-font-sans);
+  font-size: var(--chain-font-size-sm);
+}
+
+.chain-step__kept {
+  justify-self: start;
+  padding: var(--chain-space-1) var(--chain-space-2);
+  border-radius: var(--chain-radius-sm);
+  background: var(--color-bg-subtle);
+  font-family: var(--chain-font-mono);
+  font-size: var(--chain-font-size-sm);
+}
+
+.chain-step__problem {
+  margin: 0;
+  color: var(--color-status-warning-text);
+  font-size: var(--chain-font-size-sm);
+}
+
+.chain-step__problem--error {
+  color: var(--color-text-danger);
+}
+
+.chain-step__key {
+  grid-column: 1;
+}

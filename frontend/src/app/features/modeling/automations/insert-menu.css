@@ -1,0 +1,63 @@
+/* An Inserir menu (automation-ui.md §7.3, §7.8): the list opens below its button, above what follows. */
+:host {
+  position: relative;
+  display: inline-flex;
+}
+
+.chain-insert__menu {
+  position: absolute;
+  inset-block-start: 100%;
+  inset-inline-end: 0;
+  z-index: var(--chain-z-overlay);
+  display: flex;
+  flex-direction: column;
+  min-inline-size: var(--chain-size-card);
+  max-inline-size: var(--chain-size-dialog-sm);
+  margin-block-start: var(--chain-space-1);
+  padding: var(--chain-space-1);
+  border: var(--chain-border-width) solid var(--color-border-elevated);
+  border-radius: var(--chain-radius-md);
+  background: var(--color-bg-surface);
+  box-shadow: var(--shadow-popover);
+}
+
+.chain-insert__menu[data-visible='false'] {
+  display: none;
+}
+
+.chain-insert__item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--chain-space-1);
+  padding: var(--chain-space-2);
+  border-radius: var(--chain-radius-sm);
+  cursor: pointer;
+}
+
+.chain-insert__item[data-active='true'],
+.chain-insert__item:focus {
+  outline: var(--chain-border-width-strong) solid var(--color-focus-ring);
+  outline-offset: calc(-1 * var(--chain-border-width-strong));
+}
+
+.chain-insert__item[aria-disabled='true'] {
+  cursor: not-allowed;
+  color: var(--color-text-muted);
+}
+
+.chain-insert__label {
+  font-family: var(--chain-font-mono);
+}
+
+.chain-insert__hint,
+.chain-insert__refusal {
+  font-size: var(--chain-font-size-sm);
+}
+
+.chain-insert__hint {
+  color: var(--color-text-muted);
+}
+
+.chain-insert__refusal {
+  color: var(--color-text-danger);
+}

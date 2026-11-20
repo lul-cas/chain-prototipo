@@ -1,0 +1,28 @@
+{
+  "contractVersion": 1,
+  "requestId": "0199f000-0000-7000-8000-000000000001",
+  "activation": 1,
+  "outcome": "succeeded",
+  "output": { "status": 200, "body": { "resultado": { "situacao": "regular", "score": 812 } } },
+  "error": null,
+  "attempts": [
+    {
+      "number": 1, "startedAt": "2026-10-16T12:00:01.120Z", "durationMs": 30001, "outcome": "retryable_error",
+      "errorClass": "timeout", "status": null, "responseBytes": null,
+      "request": {
+        "method": "POST", "destination": "erp", "host": "api.erp.example", "path": "/v1/clientes/123.456%2F78%209/consultas",
+        "queryNames": ["origem", "valor"], "headerNames": ["Accept", "Content-Type", "Idempotency-Key", "X-Api-Key"],
+        "secrets": [{ "name": "erp_api_key", "version": 2 }]
+      }
+    },
+    {
+      "number": 2, "startedAt": "2026-10-16T12:00:36.500Z", "durationMs": 412, "outcome": "succeeded",
+      "errorClass": null, "status": 200, "responseBytes": 58,
+      "request": {
+        "method": "POST", "destination": "erp", "host": "api.erp.example", "path": "/v1/clientes/123.456%2F78%209/consultas",
+        "queryNames": ["origem", "valor"], "headerNames": ["Accept", "Content-Type", "Idempotency-Key", "X-Api-Key"],
+        "secrets": [{ "name": "erp_api_key", "version": 2 }]
+      }
+    }
+  ]
+}

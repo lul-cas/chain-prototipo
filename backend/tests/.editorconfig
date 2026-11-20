@@ -1,0 +1,3 @@
+# Test methods use underscore-separated behavior names (e.g. Readiness_is_unhealthy_when_...).
+[*.cs]
+dotnet_diagnostic.CA1707.severity = none

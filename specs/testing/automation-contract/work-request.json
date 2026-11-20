@@ -1,0 +1,64 @@
+{
+  "description": "The work-request payload .NET must produce for the scenario below (automation-contract.md §3), dispatched at 2026-10-16T12:00:00Z. Fields listed in 'volatile' are compared by format only.",
+  "volatile": ["requestId", "instanceId", "automation.id", "idempotency.key", "correlationId", "traceparent"],
+  "scenario": {
+    "now": "2026-10-16T12:00:00Z",
+    "destination": { "name": "erp", "scheme": "https", "host": "api.erp.example", "pathPrefix": "/v1" },
+    "secret": { "name": "erp_api_key", "allowedDestinations": ["erp"] },
+    "automation": {
+      "name": "Consultar CPF",
+      "document": {
+        "schemaVersion": 1,
+        "kind": "http",
+        "inputs": [
+          { "key": "cpf", "type": "text", "required": true },
+          { "key": "valor", "type": "number", "required": false },
+          { "key": "nota", "type": "text", "required": false }
+        ],
+        "request": {
+          "method": "POST",
+          "destination": "erp",
+          "path": "/v1/clientes/{cpf}/consultas",
+          "query": { "origem": "chain", "valor": "{valor}", "nota": "{nota}" },
+          "headers": { "X-Api-Key": "{{secret:erp_api_key}}", "Accept": "application/json" },
+          "auth": null,
+          "body": { "type": "json", "keys": ["cpf", "valor"] }
+        },
+        "response": { "type": "json" },
+        "outputs": [
+          { "key": "situacao", "type": "text", "required": true, "source": "body", "path": ["resultado", "situacao"] },
+          { "key": "httpStatus", "type": "number", "required": true, "source": "status" }
+        ]
+      }
+    },
+    "stepInputs": { "cpf": { "kind": "path", "path": ["cpf"] }, "valor": { "kind": "path", "path": ["valor"] } },
+    "instanceData": { "cpf": "123.456/78 9", "valor": 1500 },
+    "nodeId": "task_cpf"
+  },
+  "expected": {
+    "contractVersion": 1,
+    "requestId": "0199f000-0000-7000-8000-000000000001",
+    "instanceId": "0199f000-0000-7000-8000-000000000002",
+    "nodeId": "task_cpf",
+    "activation": 1,
+    "automation": { "id": "0199f000-0000-7000-8000-000000000003", "version": 1, "name": "Consultar CPF" },
+    "destination": {
+      "name": "erp", "scheme": "https", "host": "api.erp.example", "port": null, "pathPrefix": "/v1",
+      "internal": false, "allowSecretsOverHttp": false, "maxRequestBytes": 1048576, "maxResponseBytes": 1048576
+    },
+    "request": {
+      "method": "POST",
+      "url": "https://api.erp.example/v1/clientes/123.456%2F78%209/consultas?origem=chain&valor=1500",
+      "headers": [["Accept", "application/json"], ["Content-Type", "application/json"], ["X-Api-Key", "{{secret:erp_api_key}}"]],
+      "basicAuth": null,
+      "body": "{\"cpf\":\"123.456/78 9\",\"valor\":1500}"
+    },
+    "secrets": ["erp_api_key"],
+    "response": { "type": "json" },
+    "execution": { "timeoutMs": 30000, "maxAttempts": 5, "initialDelayMs": 5000, "followRedirects": false, "maxRedirects": 0 },
+    "idempotency": { "header": "Idempotency-Key", "key": "0199f000-0000-7000-8000-000000000001" },
+    "deadlineAt": "2026-10-16T12:16:30Z",
+    "correlationId": "4bf92f3577b34da6a3ce929d0e0e4736",
+    "traceparent": null
+  }
+}

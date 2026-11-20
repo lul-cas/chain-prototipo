@@ -1,0 +1,40 @@
+/* Entradas (automation-ui.md §7.2): one row per input, its fields side by side on wide screens. */
+.chain-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: var(--chain-space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.chain-inputs__row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--chain-size-card)), 1fr));
+  align-items: end;
+  gap: var(--chain-space-2) var(--chain-space-3);
+  padding-block-end: var(--chain-space-3);
+  border-block-end: var(--chain-border-width) solid var(--color-border-subtle);
+}
+
+.chain-inputs__wide {
+  grid-column: 1 / -1;
+}
+
+.chain-inputs__required {
+  display: flex;
+  align-items: center;
+  gap: var(--chain-space-2);
+}
+
+.chain-inputs__usage {
+  color: var(--color-text-muted);
+  font-size: var(--chain-font-size-sm);
+}
+
+.chain-inputs__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--chain-space-1);
+}

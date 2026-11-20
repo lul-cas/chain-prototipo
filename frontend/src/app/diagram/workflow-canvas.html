@@ -1,0 +1,200 @@
+<svg
+  #svg
+  class="chain-canvas"
+  role="group"
+  aria-label="Diagrama do processo"
+  tabindex="0"
+  [class.chain-canvas--editable]="editable"
+  [class.chain-canvas--connecting]="connecting()"
+  (wheel)="zoom($event)"
+  (pointerdown)="down($event)"
+  (pointermove)="move($event)"
+  (pointerup)="up($event)"
+  (pointercancel)="cancelGesture()"
+  (click)="choose($event)"
+  (dblclick)="flip($event)"
+  (keydown)="press($event)"
+>
+  <defs>
+    <pattern [attr.id]="id + '-minor'" [attr.width]="minorDots" [attr.height]="minorDots" patternUnits="userSpaceOnUse" [attr.patternTransform]="transform()">
+      <circle cx="1" cy="1" r="0.8" class="chain-canvas__dot" />
+    </pattern>
+    <pattern [attr.id]="id + '-major'" [attr.width]="majorDots" [attr.height]="majorDots" patternUnits="userSpaceOnUse" [attr.patternTransform]="transform()">
+      <circle cx="1.5" cy="1.5" r="1.5" class="chain-canvas__dot chain-canvas__dot--major" />
+    </pattern>
+    @for (tone of ['plain', 'true', 'false']; track tone) {
+      <marker [attr.id]="id + '-arrow-' + tone" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path d="M 0 0 L 10 5 L 0 10 z" [class]="'chain-canvas__arrow chain-canvas__arrow--' + tone" />
+      </marker>
+    }
+  </defs>
+
+  <rect class="chain-canvas__grid" width="100%" height="100%" [attr.fill]="'url(#' + id + '-minor)'" />
+  <rect class="chain-canvas__grid" width="100%" height="100%" [attr.fill]="'url(#' + id + '-major)'" />
+
+  <!-- Drawn, and in the tab order, from the back: lanes, nodes, flows; the handles on top only take the pointer. -->
+  <g class="chain-canvas__scene" [attr.transform]="transform()">
+    @for (lane of lanes(); track lane.id) {
+      <g
+        class="chain-canvas__lane"
+        [attr.role]="editable ? 'button' : 'img'"
+        [attr.tabindex]="editable ? 0 : null"
+        [attr.aria-pressed]="editable ? lane.selected : null"
+        [attr.aria-label]="lane.name"
+        [attr.data-element]="lane.id"
+        [class.chain-canvas__element--problem]="lane.problem"
+        [class.chain-canvas__element--selected]="lane.selected"
+      >
+        @if (editable) {
+          <rect class="chain-canvas__ring" rx="6" [attr.x]="lane.box.x - 4" [attr.y]="lane.box.y - 4" [attr.width]="lane.box.w + 8" [attr.height]="lane.box.h + 8" />
+        }
+        <rect class="chain-canvas__lane-body" [attr.x]="lane.box.x" [attr.y]="lane.box.y" [attr.width]="lane.box.w" [attr.height]="lane.box.h" />
+        <rect class="chain-canvas__lane-band" [attr.x]="lane.box.x" [attr.y]="lane.box.y" [attr.width]="band" [attr.height]="lane.box.h" />
+        <text
+          class="chain-canvas__lane-title"
+          text-anchor="middle"
+          dominant-baseline="central"
+          [attr.transform]="'translate(' + (lane.box.x + band / 2) + ' ' + (lane.box.y + lane.box.h / 2) + ') rotate(-90)'"
+        >
+          {{ lane.title }}
+        </text>
+      </g>
+    }
+
+    @for (node of nodes(); track node.id) {
+      <g
+        [class]="'chain-canvas__node chain-canvas__node--' + node.kind"
+        [attr.role]="editable ? 'button' : 'img'"
+        [attr.tabindex]="editable ? 0 : null"
+        [attr.aria-pressed]="editable ? node.selected : null"
+        [attr.aria-label]="node.name"
+        [attr.data-element]="node.id"
+        [class.chain-canvas__element--problem]="node.problem"
+        [class.chain-canvas__element--current]="node.current"
+        [class.chain-canvas__element--selected]="node.selected"
+        [class.chain-canvas__element--source]="node.source"
+      >
+        @if (editable) {
+          <rect class="chain-canvas__ring" rx="14" [attr.x]="node.box.x - 6" [attr.y]="node.box.y - 6" [attr.width]="node.box.w + 12" [attr.height]="node.box.h + 12" />
+        }
+        @switch (node.shape) {
+          @case ('circle') {
+            <circle class="chain-canvas__shape" [attr.cx]="node.center.x" [attr.cy]="node.center.y" [attr.r]="node.radius" />
+            <text class="chain-canvas__caption" text-anchor="middle" [attr.x]="node.center.x" [attr.y]="node.box.y + node.box.h + 18">
+              {{ node.label }}
+            </text>
+          }
+          @case ('diamond') {
+            <polygon class="chain-canvas__shape" [attr.points]="node.diamond" />
+            <foreignObject [attr.x]="node.box.x + node.box.w / 4" [attr.y]="node.box.y + node.box.h / 4" [attr.width]="node.box.w / 2" [attr.height]="node.box.h / 2">
+              <div class="chain-canvas__label chain-canvas__label--small">{{ node.label }}</div>
+            </foreignObject>
+          }
+          @default {
+            <rect class="chain-canvas__shape" rx="10" [attr.x]="node.box.x" [attr.y]="node.box.y" [attr.width]="node.box.w" [attr.height]="node.box.h" />
+            <foreignObject [attr.x]="node.box.x + 8" [attr.y]="node.box.y + 4" [attr.width]="node.box.w - 16" [attr.height]="node.box.h - 8">
+              <div class="chain-canvas__label">{{ node.label }}</div>
+            </foreignObject>
+          }
+        }
+        @if (node.marker) {
+          <text class="chain-canvas__marker" aria-hidden="true" text-anchor="end" [attr.x]="node.box.x + node.box.w - 6" [attr.y]="node.box.y + 15">
+            {{ node.marker }}
+          </text>
+        }
+      </g>
+    }
+
+    @for (flow of flows(); track flow.id) {
+      <g
+        class="chain-canvas__flow"
+        [attr.role]="editable ? 'button' : 'img'"
+        [attr.tabindex]="editable ? 0 : null"
+        [attr.aria-pressed]="editable ? flow.selected : null"
+        [attr.aria-label]="flow.name"
+        [attr.data-element]="flow.id"
+        [class.chain-canvas__flow--true]="flow.branch === 'true'"
+        [class.chain-canvas__flow--false]="flow.branch === 'false'"
+        [class.chain-canvas__element--problem]="flow.problem"
+        [class.chain-canvas__element--selected]="flow.selected"
+      >
+        <!-- A wider, unseen stroke to click; it shows as the focus ring. -->
+        <path class="chain-canvas__flow-hit" fill="none" stroke="transparent" stroke-width="12" [attr.d]="flow.path" />
+        <path class="chain-canvas__flow-line" [attr.d]="flow.path" [attr.marker-end]="'url(#' + id + '-arrow-' + (flow.branch ?? 'plain') + ')'" />
+        @if (flow.branch) {
+          <!-- The check sits above a true flow and the cross below a false one, clear of the diamond. -->
+          <text class="chain-canvas__branch" [attr.x]="flow.start.x + 6" [attr.y]="flow.branch === 'true' ? flow.start.y - 6 : flow.start.y + 16">
+            {{ flow.branch === 'true' ? '✓' : '✗' }}
+          </text>
+        }
+      </g>
+    }
+
+    @if (marquee(); as box) {
+      <rect class="chain-canvas__marquee" [attr.x]="box.x" [attr.y]="box.y" [attr.width]="box.w" [attr.height]="box.h" />
+    }
+    @if (wire(); as line) {
+      <line class="chain-canvas__wire" [attr.x1]="line.from.x" [attr.y1]="line.from.y" [attr.x2]="line.to.x" [attr.y2]="line.to.y" />
+    }
+
+    <g class="chain-canvas__handles">
+      @for (lane of lanes(); track lane.id) {
+        @for (corner of lane.corners; track corner.corner) {
+          <circle
+            r="6"
+            [class]="'chain-canvas__corner chain-canvas__corner--' + corner.corner"
+            [attr.cx]="corner.point.x"
+            [attr.cy]="corner.point.y"
+            [attr.data-lane]="lane.id"
+            [attr.data-corner]="corner.corner"
+          />
+        }
+      }
+      @for (flow of flows(); track flow.id) {
+        @for (handle of flow.handles; track $index) {
+          <circle
+            r="5"
+            [class]="'chain-canvas__flow-handle chain-canvas__flow-handle--' + handle.kind"
+            [attr.cx]="handle.point.x"
+            [attr.cy]="handle.point.y"
+            [attr.data-flow]="flow.id"
+            [attr.data-flow-handle]="handle.kind"
+          />
+        }
+      }
+      @for (node of nodes(); track node.id) {
+        @for (handle of node.handles; track $index) {
+          <g
+            class="chain-canvas__handle-target"
+            [attr.data-handle]="node.id"
+            [attr.data-exit]="handle.exit ? '' : null"
+            [attr.data-branch]="handle.tone === 'plain' ? null : handle.tone"
+          >
+            @if (editable) {
+              <circle class="chain-canvas__handle-hit" r="9" fill="transparent" [attr.cx]="handle.point.x" [attr.cy]="handle.point.y" />
+            }
+            <circle r="4" [class]="'chain-canvas__handle chain-canvas__handle--' + handle.tone" [attr.cx]="handle.point.x" [attr.cy]="handle.point.y" />
+          </g>
+        }
+      }
+    </g>
+
+    @if (renaming(); as lane) {
+      <foreignObject [attr.x]="lane.box.x" [attr.y]="lane.box.y" [attr.width]="renameSize.w" [attr.height]="renameSize.h">
+        <input
+          #renameInput
+          class="chain-canvas__rename"
+          type="text"
+          aria-label="Nome da área"
+          maxlength="120"
+          [value]="lane.title"
+          (keydown)="renameKey($event)"
+          (blur)="commitRename()"
+          (pointerdown)="$event.stopPropagation()"
+          (click)="$event.stopPropagation()"
+          (dblclick)="$event.stopPropagation()"
+        />
+      </foreignObject>
+    }
+  </g>
+</svg>

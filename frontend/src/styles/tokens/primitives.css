@@ -1,0 +1,230 @@
+/*
+ * Chain design tokens: primitives.
+ *
+ * Raw values with no meaning attached. Components never read these directly;
+ * they read the semantic tokens in light.css and dark.css.
+ * Source of truth for the values and their rationale: specs/modules/design-system.md.
+ *
+ * Color ramps were generated in OKLCH (fixed hue, a lightness ladder shared by
+ * every chromatic ramp, chroma reduced until the color fits sRGB) and are stored
+ * as sRGB hex so they can be checked by the contrast test (contrast.spec.ts).
+ */
+:root {
+  --chain-color-white: #FFFFFF;
+  --chain-color-black: #000000;
+
+  /* neutral: OKLCH hue 75 (warm paper), very low chroma */
+  --chain-color-neutral-50: #FCFAF7;
+  --chain-color-neutral-100: #F4F2EF;
+  --chain-color-neutral-200: #E9E6E2;
+  --chain-color-neutral-300: #D7D4CF;
+  --chain-color-neutral-400: #A8A49E;
+  --chain-color-neutral-500: #837F7A;
+  --chain-color-neutral-600: #66635E;
+  --chain-color-neutral-700: #504C48;
+  --chain-color-neutral-800: #383531;
+  --chain-color-neutral-850: #2A2723;
+  --chain-color-neutral-900: #201E1A;
+  --chain-color-neutral-950: #13110F;
+
+  /* ink: OKLCH hue 270 (ultramarine ink), the brand ramp */
+  --chain-color-ink-50: #F4F7FE;
+  --chain-color-ink-100: #E6ECFF;
+  --chain-color-ink-200: #CDDAFF;
+  --chain-color-ink-300: #A9BEFE;
+  --chain-color-ink-400: #7D9BFF;
+  --chain-color-ink-500: #5978FD;
+  --chain-color-ink-600: #4159E3;
+  --chain-color-ink-700: #3043BC;
+  --chain-color-ink-800: #24338D;
+  --chain-color-ink-850: #1E2B77;
+  --chain-color-ink-900: #182361;
+  --chain-color-ink-950: #0C143A;
+
+  /* green: OKLCH hue 152 (success, start events) */
+  --chain-color-green-50: #E9FDED;
+  --chain-color-green-100: #D5F7DD;
+  --chain-color-green-200: #AEECBE;
+  --chain-color-green-300: #7BD997;
+  --chain-color-green-400: #49BC71;
+  --chain-color-green-500: #259F56;
+  --chain-color-green-600: #058141;
+  --chain-color-green-700: #016732;
+  --chain-color-green-800: #024D24;
+  --chain-color-green-850: #01411E;
+  --chain-color-green-900: #003617;
+  --chain-color-green-950: #011F0B;
+
+  /* amber: OKLCH hue 68 (warning, gateways) */
+  --chain-color-amber-50: #FFF5EB;
+  --chain-color-amber-100: #FEE9D3;
+  --chain-color-amber-200: #FFD2A2;
+  --chain-color-amber-300: #FEAD4B;
+  --chain-color-amber-400: #DF8C0A;
+  --chain-color-amber-500: #BB7400;
+  --chain-color-amber-600: #975D01;
+  --chain-color-amber-700: #784902;
+  --chain-color-amber-800: #5B3600;
+  --chain-color-amber-850: #4D2D00;
+  --chain-color-amber-900: #402400;
+  --chain-color-amber-950: #261400;
+
+  /* red: OKLCH hue 27 (danger, end events) */
+  --chain-color-red-50: #FEF4F3;
+  --chain-color-red-100: #FEE7E4;
+  --chain-color-red-200: #FECDC7;
+  --chain-color-red-300: #FEA69C;
+  --chain-color-red-400: #FE6C61;
+  --chain-color-red-500: #E6443D;
+  --chain-color-red-600: #C51E21;
+  --chain-color-red-700: #A20711;
+  --chain-color-red-800: #7C0109;
+  --chain-color-red-850: #690509;
+  --chain-color-red-900: #560708;
+  --chain-color-red-950: #350203;
+
+  /* sky: OKLCH hue 236 (info, sub-workflows) */
+  --chain-color-sky-50: #EFF8FF;
+  --chain-color-sky-100: #DBF0FE;
+  --chain-color-sky-200: #B4E2FF;
+  --chain-color-sky-300: #76CCFE;
+  --chain-color-sky-400: #3EADE7;
+  --chain-color-sky-500: #0291CB;
+  --chain-color-sky-600: #0074A4;
+  --chain-color-sky-700: #025C83;
+  --chain-color-sky-800: #034563;
+  --chain-color-sky-850: #013A54;
+  --chain-color-sky-900: #002F46;
+  --chain-color-sky-950: #011B2A;
+
+  /* plum: OKLCH hue 305 (automatic tasks) */
+  --chain-color-plum-50: #F9F5FE;
+  --chain-color-plum-100: #F2E8FF;
+  --chain-color-plum-200: #E5D0FF;
+  --chain-color-plum-300: #D3ADFE;
+  --chain-color-plum-400: #B985F1;
+  --chain-color-plum-500: #9E66D7;
+  --chain-color-plum-600: #834BB9;
+  --chain-color-plum-700: #693996;
+  --chain-color-plum-800: #4F2A71;
+  --chain-color-plum-850: #422360;
+  --chain-color-plum-900: #361C4E;
+  --chain-color-plum-950: #200D31;
+
+  /* Typography */
+  --chain-font-sans: 'Instrument Sans Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --chain-font-mono: 'JetBrains Mono Variable', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+
+  /* Type scale (rem at a 16px root). Ratio ~1.2 between body steps. Each step has its line height. */
+  --chain-font-size-xs: 0.75rem;     /* 12px */
+  --chain-line-height-xs: 1rem;      /* 16px */
+  --chain-font-size-sm: 0.8125rem;   /* 13px */
+  --chain-line-height-sm: 1.25rem;   /* 20px */
+  --chain-font-size-md: 0.9375rem;   /* 15px, body */
+  --chain-line-height-md: 1.5rem;    /* 24px */
+  --chain-font-size-lg: 1.125rem;    /* 18px */
+  --chain-line-height-lg: 1.625rem;  /* 26px */
+  --chain-font-size-xl: 1.375rem;    /* 22px */
+  --chain-line-height-xl: 1.875rem;  /* 30px */
+  --chain-font-size-2xl: 1.75rem;    /* 28px */
+  --chain-line-height-2xl: 2.25rem;  /* 36px */
+  --chain-font-size-3xl: 2.25rem;
+  --chain-line-height-3xl: 2.75rem;
+  --chain-font-size-code: 0.92em;
+
+  --chain-font-weight-regular: 400;
+  --chain-font-weight-medium: 500;
+  --chain-font-weight-semibold: 600;
+  --chain-font-weight-bold: 700;
+
+  /* Spacing: 4px base */
+  --chain-space-0: 0;
+  --chain-space-1: 0.25rem;  /* 4px */
+  --chain-space-2: 0.5rem;   /* 8px */
+  --chain-space-3: 0.75rem;  /* 12px */
+  --chain-space-4: 1rem;     /* 16px */
+  --chain-space-5: 1.5rem;   /* 24px */
+  --chain-space-6: 2rem;     /* 32px */
+  --chain-space-7: 3rem;     /* 48px */
+  --chain-space-8: 4rem;     /* 64px */
+
+  /* Radius */
+  --chain-radius-none: 0;
+  --chain-radius-sm: 4px;
+  --chain-radius-md: 6px;
+  --chain-radius-lg: 10px;
+  --chain-radius-full: 9999px;
+
+  /* Motion */
+  --chain-duration-fast: 120ms;
+  --chain-duration-base: 180ms;
+  --chain-duration-slow: 260ms;
+  --chain-ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --chain-ease-exit: cubic-bezier(0.3, 0, 1, 1);
+
+  --chain-border-width: 1px;
+  --chain-border-width-strong: 2px;
+  --chain-border-width-accent: 3px;
+  --chain-space-hairline: 2px;
+
+  --chain-size-control-sm: 1.75rem;
+  --chain-size-control-md: 2.25rem;
+  --chain-size-shell-sidebar: 15rem;
+  --chain-size-shell-topbar: 3.5rem;
+  --chain-size-content-max: 80rem;
+  --chain-size-measure: 40rem;
+  --chain-size-card: 16rem;
+  --chain-size-shell-break: 64rem;
+  --chain-size-compact-break: 30rem;
+  --chain-size-palette: 17rem;           /* 272px: the form designer's palette column (form-designer.md §5) */
+  --chain-size-aside: 24rem;             /* 384px: a side column, such as the automation editor's call preview (automation-ui.md §7.1) */
+  --chain-size-canvas: 41.875rem;          /* 670px: the editor canvas's minimum height (workflow-editor.md §2) */
+  --chain-size-canvas-compact: 25rem;      /* 400px: the same below 1700px of viewport width */
+  --chain-size-icon-sm: 1rem;
+  --chain-size-icon-md: 1.125rem;
+  --chain-size-icon-lg: 1.25rem;
+  --chain-size-spinner: 0.875rem;
+  --chain-size-mark: 1.75rem;
+  --chain-size-textarea-min: 6rem;
+  --chain-size-dialog-sm: 26rem;
+  --chain-size-dialog-md: 36rem;
+  --chain-size-dialog-lg: 48rem;
+  --chain-size-panel-min: 26.25rem;        /* 420px: a side panel at its narrowest (workflow-editor.md §2) */
+  --chain-size-panel-max: 52.5rem;         /* 840px: and at its widest; 50vw in between */
+  --chain-size-toast: 24rem;
+  --chain-size-drawer: 18rem;
+  --chain-size-drawer-max: 85vw;
+  --chain-size-editor-grid: 0.625rem;
+  --chain-size-node-event: 4rem;
+  --chain-size-node-task-w: 8.75rem;
+  --chain-size-node-task-h: 4.375rem;
+  --chain-size-node-gateway: 4.375rem;
+  --chain-size-node-handle: 0.75rem;
+
+  --chain-letter-spacing-tight: -0.035em;
+  --chain-letter-spacing-heading: -0.012em;
+  --chain-letter-spacing-snug: -0.005em;
+  --chain-letter-spacing-label: 0.04em;
+  --chain-letter-spacing-eyebrow: 0.08em;
+  --chain-letter-spacing-underline: 0.18em;
+
+  --chain-duration-spin: 700ms;
+  --chain-duration-instant: 0.01ms;
+  --chain-motion-rise: 0.5rem;
+  --chain-motion-offscreen: -200%;
+  --chain-scale-enter: 0.98;
+
+  /* Layers */
+  --chain-z-shell: 10;
+  --chain-z-overlay: 1000;
+  --chain-z-toast: 1100;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --chain-duration-fast: 0ms;
+    --chain-duration-base: 0ms;
+    --chain-duration-slow: 0ms;
+    --chain-duration-spin: 0ms;
+  }
+}

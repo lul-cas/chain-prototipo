@@ -1,0 +1,40 @@
+<div class="chain-step">
+  <chain-form-field label="Processo">
+    <select chainInput [disabled]="options() === null" (change)="choose($event)">
+      <option value="" [selected]="chosenId() === null">{{ options() === null ? 'Carregando…' : 'Nenhum' }}</option>
+      @if (chosenId() !== null && options() !== null && chosen() === null) {
+        <option [value]="chosenId()" [selected]="true">Processo indisponível</option>
+      }
+      @for (process of options() ?? []; track process.id) {
+        <option [value]="process.id" [selected]="process.id === chosenId()">
+          {{ process.latestVersion === null ? process.name + ' (nunca publicado)' : process.name }}
+        </option>
+      }
+    </select>
+  </chain-form-field>
+  @if (listFailed()) {
+    <chain-alert tone="danger">Não foi possível carregar os processos.</chain-alert>
+  }
+
+  @if (chosen(); as process) {
+    @if (process.latestVersion === null) {
+      <chain-alert tone="warning">Publique o processo para mapear as entradas e as saídas.</chain-alert>
+    } @else if (contractFailed()) {
+      <chain-alert tone="danger">Não foi possível ler o processo.</chain-alert>
+    } @else if (contract() === undefined || mappings() === null) {
+      <p class="chain-step__muted">Carregando o processo…</p>
+    } @else {
+      <p class="chain-step__muted">Versão {{ contract()?.version }}</p>
+      @if (mappings(); as current) {
+        <chain-step-mappings
+          [mappings]="current"
+          (mappingsChange)="update($event)"
+          [catalog]="catalog()"
+          [texts]="texts"
+          [free]="contract()?.inputs === null"
+          requiredWord="obrigatório"
+        />
+      }
+    }
+  }
+</div>

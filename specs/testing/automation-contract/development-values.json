@@ -1,0 +1,6 @@
+{
+  "description": "The development-only values that docker-compose.yml supplies by default (automation.md §4.1, card #164). They are published, so both services refuse them outside development. Keep this file equal to docker-compose.yml's defaults.",
+  "keks": "dev:ZGV2ZWxvcG1lbnQtb25seS1rZXktZG8tbm90LXVzZSE=",
+  "resultToken": "ZGV2ZWxvcG1lbnQtb25seS1yZXN1bHQtdG9rZW4tMDA",
+  "resultTokenSha256": "dcf5a1eb6a5bbb92ba48b910dd25245847b721798dc2e1c71dfa238e2e3f25d1"
+}

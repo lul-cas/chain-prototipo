@@ -1,0 +1,11 @@
+/* Global stylesheet entry point (angular.json "styles"). Order matters: fonts, tokens, base, controls, overlays, tabs. */
+@import '@fontsource-variable/instrument-sans/wght.css';
+@import '@fontsource-variable/jetbrains-mono/wght.css';
+@import './tokens/primitives.css';
+@import './tokens/light.css';
+@import './tokens/dark.css';
+@import './base.css';
+@import './controls.css';
+@import '@angular/cdk/overlay-prebuilt.css';
+@import './overlays.css';
+@import './tabs.css';

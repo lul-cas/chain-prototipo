@@ -1,0 +1,169 @@
+name: CI
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  backend:
+    name: backend tests
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      DOTNET_CLI_TELEMETRY_OPTOUT: true
+      DOCKER_API_VERSION: "1.44"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v6.0.0
+        with:
+          global-json-file: backend/global.json
+
+      - name: Check Docker
+        run: docker info
+
+      - name: Test
+        working-directory: backend
+        run: dotnet test
+
+  # The Elixir automation service (approved by the owner on 2026-10-17, card #31). Its tests check the shared contract
+  # fixtures as the .NET tests do (ADR-0011 §11). The versions match the automation image (automation/Dockerfile).
+  automation:
+    name: automation tests (Elixir)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: automation
+    env:
+      MIX_ENV: test
+      DATABASE_URL: ecto://chain:chain@localhost:5432/chain_test
+    # The tests create and migrate their own database on this service; nothing in it outlives the job.
+    services:
+      postgres:
+        image: postgres:17.11-alpine
+        env:
+          POSTGRES_USER: chain
+          POSTGRES_PASSWORD: chain
+          POSTGRES_DB: chain
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U chain"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 12
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Setup Elixir
+        id: beam
+        uses: erlef/setup-beam@v1.24.1
+        with:
+          otp-version: "29.0.5"
+          elixir-version: "1.20.2"
+          version-type: strict
+
+      - name: Cache dependencies and build
+        uses: actions/cache@v6.1.0
+        with:
+          path: |
+            automation/deps
+            automation/_build
+          key: automation-${{ runner.os }}-otp-${{ steps.beam.outputs.otp-version }}-elixir-${{ steps.beam.outputs.elixir-version }}-${{ hashFiles('automation/mix.lock') }}
+
+      - name: Dependencies
+        run: mix deps.get
+
+      - name: Compile
+        run: mix compile --warnings-as-errors
+
+      - name: Format
+        run: mix format --check-formatted
+
+      - name: Test
+        run: mix test --warnings-as-errors
+
+  frontend:
+    name: frontend lint, tests and build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Setup Node
+        uses: actions/setup-node@v7.0.0
+        with:
+          node-version: 24.18.0
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Unit and component tests
+        run: npm test
+
+      - name: Production build
+        run: npx ng build
+
+  e2e:
+    name: end-to-end (Playwright on docker compose)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Setup Node
+        uses: actions/setup-node@v7.0.0
+        with:
+          node-version: 24.18.0
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install
+        run: npm ci
+
+      - name: Install Chromium for Playwright
+        run: npx playwright install --with-deps chromium
+
+      # e2e/run.sh builds an isolated compose project (postgres, api, frontend) with its own ports, bootstraps an admin,
+      # runs the tests and removes the project (ADR-0010 D6). No secrets are involved: the stack is created for the run.
+      - name: End-to-end tests
+        run: npm run e2e
+
+      - name: Keep the traces of failed tests
+        if: failure()
+        uses: actions/upload-artifact@v7.0.1
+        with:
+          name: playwright-results
+          path: frontend/test-results
+          retention-days: 7

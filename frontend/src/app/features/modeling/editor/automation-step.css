@@ -1,0 +1,12 @@
+/* An automatic step's automation and mappings (workflow-editor.md §10.9). */
+.chain-step {
+  display: flex;
+  flex-direction: column;
+  gap: var(--chain-space-3);
+}
+
+.chain-step__muted {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: var(--chain-font-size-sm);
+}

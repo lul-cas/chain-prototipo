@@ -1,0 +1,76 @@
+.chain-dialog-backdrop {
+  background: var(--color-bg-backdrop);
+}
+
+.chain-dialog-backdrop.cdk-overlay-backdrop-showing {
+  opacity: 1;
+}
+
+.chain-dialog-pane {
+  max-width: calc(100vw - 2 * var(--chain-space-4));
+  max-height: calc(100dvh - 2 * var(--chain-space-4));
+}
+
+.chain-dialog-pane--sm {
+  width: var(--chain-size-dialog-sm);
+}
+
+.chain-dialog-pane--md {
+  width: var(--chain-size-dialog-md);
+}
+
+.chain-dialog-pane--lg {
+  width: var(--chain-size-dialog-lg);
+}
+
+/*
+ * A dialog's actions (dialog-layout.ts) are projected from the dialog's own template, so a style of the layout component
+ * never reaches them (#117): they are laid out here, at the end of the footer, with a gap between them.
+ */
+chain-dialog [chainDialogActions] {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--chain-space-2);
+}
+
+/* A side panel (workflow-editor.md §10.5): at the right edge, full height, sliding in. */
+.chain-dialog-pane.chain-dialog-pane--side {
+  width: clamp(var(--chain-size-panel-min), 50vw, var(--chain-size-panel-max));
+  max-width: 100vw;
+  height: 100dvh;
+  max-height: 100dvh;
+}
+
+.chain-dialog-pane--side .cdk-dialog-container {
+  height: 100%;
+}
+
+.chain-dialog-pane--side chain-dialog {
+  height: 100%;
+  border-block: 0;
+  border-inline-end: 0;
+  border-radius: 0;
+  animation-name: chain-panel-in;
+}
+
+.chain-dialog-pane--side chain-dialog .chain-dialog__body {
+  flex: 1;
+}
+
+.chain-dialog-pane.chain-dialog-pane--side chain-dialog .chain-dialog__actions {
+  border-radius: 0;
+}
+
+@keyframes chain-panel-in {
+  from {
+    transform: translateX(100%);
+  }
+}
+
+.chain-dialog-pane .cdk-dialog-container {
+  display: block;
+  width: 100%;
+  max-height: inherit;
+  outline: none;
+}

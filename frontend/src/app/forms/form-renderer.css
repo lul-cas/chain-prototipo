@@ -1,0 +1,155 @@
+/* The form renderer (forms.md F3), from the semantic tokens only (design-system.md). */
+
+.chain-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--chain-space-6);
+}
+
+.chain-form__fields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--chain-space-5);
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.chain-form__problems:focus-visible {
+  outline: var(--chain-border-width-strong) solid var(--color-focus-ring);
+  outline-offset: var(--chain-space-1);
+  border-radius: var(--chain-radius-md);
+}
+
+.chain-form__summary {
+  margin: var(--chain-space-2) 0 0;
+  padding-left: var(--chain-space-5);
+}
+
+.chain-form__summary a {
+  color: var(--color-text-link);
+}
+
+.chain-form__heading {
+  margin: var(--chain-space-2) 0 0;
+  font-size: var(--chain-font-size-lg);
+  line-height: var(--chain-line-height-lg);
+  font-weight: var(--chain-font-weight-semibold);
+  color: var(--color-text);
+}
+
+.chain-form__paragraph {
+  margin: 0;
+  color: var(--color-text-muted);
+}
+
+.chain-form__separator {
+  width: 100%;
+  margin: 0;
+  border: 0;
+  border-top: var(--chain-border-width) solid var(--color-border-subtle);
+}
+
+/* A node is only a wrapper: its content takes part in the layout directly, and a hidden field leaves no gap. */
+.chain-form-node {
+  display: contents;
+}
+
+/* Groups and dynamic lists */
+
+.chain-form-group,
+.chain-form-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--chain-space-4);
+  min-width: 0;
+  margin: 0;
+  padding: var(--chain-space-4);
+  border: var(--chain-border-width) solid var(--color-border-subtle);
+  border-radius: var(--chain-radius-lg);
+}
+
+.chain-form-group__legend,
+.chain-form-choices__legend {
+  padding: 0 var(--chain-space-1);
+  font-size: var(--chain-font-size-sm);
+  line-height: var(--chain-line-height-sm);
+  font-weight: var(--chain-font-weight-semibold);
+  color: var(--color-text);
+}
+
+.chain-form-list__row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--chain-space-3);
+  min-width: 0;
+  margin: 0;
+  padding: var(--chain-space-3);
+  border: var(--chain-border-width) dashed var(--color-border-strong);
+  border-radius: var(--chain-radius-md);
+}
+
+.chain-form-list__row-legend {
+  padding: 0 var(--chain-space-1);
+  font-size: var(--chain-font-size-xs);
+  line-height: var(--chain-line-height-xs);
+  color: var(--color-text-muted);
+}
+
+.chain-form-list__row > .chain-button,
+.chain-form-list > .chain-button {
+  align-self: flex-start;
+}
+
+/* Choices: checkboxes and radios */
+
+.chain-form-choices {
+  display: flex;
+  flex-direction: column;
+  gap: var(--chain-space-2);
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.chain-form-choices__legend {
+  padding: 0;
+  margin-bottom: var(--chain-space-1);
+}
+
+.chain-form-choice {
+  display: flex;
+  align-items: center;
+  gap: var(--chain-space-2);
+  min-height: var(--chain-size-control-sm);
+}
+
+.chain-form-choice__control {
+  flex: none;
+  width: var(--chain-size-icon-md);
+  height: var(--chain-size-icon-md);
+  margin: 0;
+  accent-color: var(--color-action-primary);
+}
+
+.chain-form-choice__control:focus-visible {
+  outline: var(--chain-border-width-strong) solid var(--color-focus-ring);
+  outline-offset: var(--chain-space-hairline);
+}
+
+.chain-form-choice__label {
+  color: var(--color-text);
+}
+
+/* Read-only and computed fields read as output, not as inputs to fill (one more class than the form field's own rules). */
+
+.chain-form .chain-form-field .chain-input[readonly] {
+  background: var(--color-bg-subtle);
+  border-style: dashed;
+}
+
+.chain-form .chain-form-field .chain-input--computed {
+  font-variant-numeric: tabular-nums;
+}

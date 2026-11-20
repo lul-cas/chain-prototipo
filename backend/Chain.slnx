@@ -1,0 +1,25 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Chain.Api/Chain.Api.csproj" />
+    <Project Path="src/Chain.Automations.Application/Chain.Automations.Application.csproj" />
+    <Project Path="src/Chain.Automations/Chain.Automations.csproj" />
+    <Project Path="src/Chain.Expressions/Chain.Expressions.csproj" />
+    <Project Path="src/Chain.Forms.Application/Chain.Forms.Application.csproj" />
+    <Project Path="src/Chain.Forms/Chain.Forms.csproj" />
+    <Project Path="src/Chain.Identity.Application/Chain.Identity.Application.csproj" />
+    <Project Path="src/Chain.Identity/Chain.Identity.csproj" />
+    <Project Path="src/Chain.Infrastructure/Chain.Infrastructure.csproj" />
+    <Project Path="src/Chain.Mcp/Chain.Mcp.csproj" />
+    <Project Path="src/Chain.SharedKernel/Chain.SharedKernel.csproj" />
+    <Project Path="src/Chain.Workflows.Application/Chain.Workflows.Application.csproj" />
+    <Project Path="src/Chain.Workflows/Chain.Workflows.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Chain.Api.Tests/Chain.Api.Tests.csproj" />
+    <Project Path="tests/Chain.Automations.Tests/Chain.Automations.Tests.csproj" />
+    <Project Path="tests/Chain.Expressions.Tests/Chain.Expressions.Tests.csproj" />
+    <Project Path="tests/Chain.Forms.Tests/Chain.Forms.Tests.csproj" />
+    <Project Path="tests/Chain.Identity.Tests/Chain.Identity.Tests.csproj" />
+    <Project Path="tests/Chain.Workflows.Tests/Chain.Workflows.Tests.csproj" />
+  </Folder>
+</Solution>

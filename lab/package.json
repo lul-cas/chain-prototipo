@@ -1,0 +1,10 @@
+{
+  "name": "chain-lab",
+  "private": true,
+  "type": "module",
+  "description": "The evaluation lab's tooling: specs/experiments/laboratorio/",
+  "scripts": {
+    "test": "node --test \"mock/test/*.test.mjs\" \"cadastro/test/*.test.mjs\""
+  },
+  "engines": { "node": ">=24" }
+}

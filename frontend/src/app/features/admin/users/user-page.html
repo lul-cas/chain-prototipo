@@ -1,0 +1,64 @@
+<div class="chain-user">
+  <a class="chain-user__back" routerLink="/administracao/usuarios">Voltar para Usuários</a>
+
+  @if (loadError(); as failure) {
+    <h1>Usuário</h1>
+    <chain-alert tone="danger">{{ failure.text }}</chain-alert>
+    @if (failure.retry) {
+      <div><button chainButton variant="secondary" type="button" (click)="load()">Tentar de novo</button></div>
+    }
+  } @else if (user(); as current) {
+    <div class="chain-user__header">
+      <div class="chain-user__identity">
+        <h1>{{ current.displayName }}</h1>
+        <code>{{ current.username }}</code>
+      </div>
+      <div class="chain-user__actions">
+        <button chainButton variant="secondary" type="button" (click)="edit()">Editar</button>
+        @if (current.isActive) {
+          <button chainButton variant="secondary" type="button" [loading]="busy() === 'deactivate'" (click)="act('deactivate')">Desativar</button>
+        } @else {
+          <button chainButton variant="secondary" type="button" [loading]="busy() === 'activate'" (click)="act('activate')">Ativar</button>
+        }
+        <button chainButton variant="secondary" type="button" [loading]="busy() === 'reset'" (click)="act('reset')">Redefinir senha</button>
+        @if (current.isLocked) {
+          <button chainButton variant="secondary" type="button" [loading]="busy() === 'unlock'" (click)="act('unlock')">Desbloquear</button>
+        }
+      </div>
+    </div>
+
+    <p class="chain-user__muted">Criado em {{ current.createdAt | date: 'dd/MM/yyyy' }}</p>
+    <ul class="chain-user__facts" aria-label="Papel e situação">
+      @for (fact of facts(); track fact) {
+        <li>{{ fact }}</li>
+      }
+    </ul>
+
+    @if (notice(); as text) {
+      <chain-alert tone="info">{{ text }}</chain-alert>
+    }
+    @if (actionError(); as current) {
+      <chain-alert tone="danger">
+        <span class="chain-user__inline">
+          {{ current.text }}
+          @if (current.retry) {
+            <button chainButton variant="secondary" size="sm" type="button" (click)="current.retry()">Tentar de novo</button>
+          }
+        </span>
+      </chain-alert>
+    }
+
+    <section class="chain-user__groups" aria-labelledby="chain-user-groups">
+      <h2 id="chain-user-groups">Grupos</h2>
+      @if (current.groups.length === 0) {
+        <p class="chain-user__muted">Nenhum grupo.</p>
+      } @else {
+        <ul>
+          @for (group of current.groups; track group.id) {
+            <li><a [routerLink]="['/administracao/grupos', group.id]">{{ group.name }}</a></li>
+          }
+        </ul>
+      }
+    </section>
+  }
+</div>

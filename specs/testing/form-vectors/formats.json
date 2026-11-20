@@ -1,0 +1,253 @@
+{
+  "description": "Built-in text formats of forms.md F1. The C# validator (Chain.Forms.Tests) and the Angular renderer (frontend/src/app/forms) must both give 'valid' for every case.",
+  "cases": [
+    {
+      "format": "email",
+      "value": "ana@example.com",
+      "valid": true
+    },
+    {
+      "format": "email",
+      "value": "a@b.c",
+      "valid": true
+    },
+    {
+      "format": "email",
+      "value": "ana.silva+erp@sub.example.com.br",
+      "valid": true
+    },
+    {
+      "format": "email",
+      "value": "ana@example",
+      "valid": false
+    },
+    {
+      "format": "email",
+      "value": "ana example@x.com",
+      "valid": false
+    },
+    {
+      "format": "email",
+      "value": "@x.com",
+      "valid": false
+    },
+    {
+      "format": "email",
+      "value": "ana@@x.com",
+      "valid": false
+    },
+    {
+      "format": "email",
+      "value": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa@example.com",
+      "valid": true
+    },
+    {
+      "format": "email",
+      "value": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa@example.com",
+      "valid": false
+    },
+    {
+      "format": "email",
+      "value": "ana@example.com\n",
+      "valid": false
+    },
+    {
+      "format": "email",
+      "value": "ana\u0085@example.com",
+      "valid": false
+    },
+    {
+      "format": "email",
+      "value": "ana\ufeff@example.com",
+      "valid": false
+    },
+    {
+      "format": "cpf",
+      "value": "529.982.247-25",
+      "valid": true
+    },
+    {
+      "format": "cpf",
+      "value": "52998224725",
+      "valid": true
+    },
+    {
+      "format": "cpf",
+      "value": "529.982.24725",
+      "valid": true
+    },
+    {
+      "format": "cpf",
+      "value": "123.456.789-09",
+      "valid": true
+    },
+    {
+      "format": "cpf",
+      "value": "529.982.247-24",
+      "valid": false
+    },
+    {
+      "format": "cpf",
+      "value": "111.111.111-11",
+      "valid": false
+    },
+    {
+      "format": "cpf",
+      "value": "5299822472",
+      "valid": false
+    },
+    {
+      "format": "cpf",
+      "value": "529-982-247-25",
+      "valid": false
+    },
+    {
+      "format": "cpf",
+      "value": "\u0665\u0662\u0669.\u0669\u0668\u0662.\u0662\u0664\u0667-\u0662\u0665",
+      "valid": false
+    },
+    {
+      "format": "cpf",
+      "value": "529.982.247-25\n",
+      "valid": false
+    },
+    {
+      "format": "cnpj",
+      "value": "11.222.333/0001-81",
+      "valid": true
+    },
+    {
+      "format": "cnpj",
+      "value": "11222333000181",
+      "valid": true
+    },
+    {
+      "format": "cnpj",
+      "value": "04.252.011/0001-10",
+      "valid": true
+    },
+    {
+      "format": "cnpj",
+      "value": "11.222.333/0001-80",
+      "valid": false
+    },
+    {
+      "format": "cnpj",
+      "value": "00.000.000/0000-00",
+      "valid": false
+    },
+    {
+      "format": "cnpj",
+      "value": "11.222.333.0001-81",
+      "valid": false
+    },
+    {
+      "format": "cnpj",
+      "value": "11.222.333/0001-81\n",
+      "valid": false
+    },
+    {
+      "format": "phone",
+      "value": "(11) 98765-4321",
+      "valid": true
+    },
+    {
+      "format": "phone",
+      "value": "1133334444",
+      "valid": true
+    },
+    {
+      "format": "phone",
+      "value": "+55 11 98765-4321",
+      "valid": true
+    },
+    {
+      "format": "phone",
+      "value": "+1 555 123 4567",
+      "valid": false
+    },
+    {
+      "format": "phone",
+      "value": "123456789",
+      "valid": false
+    },
+    {
+      "format": "phone",
+      "value": "12345",
+      "valid": false
+    },
+    {
+      "format": "phone",
+      "value": "11 98765 4321 00",
+      "valid": false
+    },
+    {
+      "format": "phone",
+      "value": "+55  (11)  98765-4321",
+      "valid": true
+    },
+    {
+      "format": "phone",
+      "value": "+55  (11)  98765-4321\n",
+      "valid": false
+    },
+    {
+      "format": "phone",
+      "value": "(11)\u00a098765-4321",
+      "valid": false,
+      "note": "Only the plain space separates (owner, 2026-10-19, #124)."
+    },
+    {
+      "format": "phone",
+      "value": "(11)\u008598765-4321",
+      "valid": false
+    },
+    {
+      "format": "phone",
+      "value": "(11)\ufeff98765-4321",
+      "valid": false
+    },
+    {
+      "format": "phone",
+      "value": "(11)\n98765-4321",
+      "valid": false,
+      "note": "A newline does not separate (#124)."
+    },
+    {
+      "format": "phone",
+      "value": "(11)\t98765-4321",
+      "valid": false,
+      "note": "A tab does not separate (#124)."
+    },
+    {
+      "format": "phone",
+      "value": "(11) 98765 4321",
+      "valid": true
+    },
+    {
+      "format": "cep",
+      "value": "01310-100",
+      "valid": true
+    },
+    {
+      "format": "cep",
+      "value": "01310100",
+      "valid": true
+    },
+    {
+      "format": "cep",
+      "value": "0131-0100",
+      "valid": false
+    },
+    {
+      "format": "cep",
+      "value": "1310100",
+      "valid": false
+    },
+    {
+      "format": "cep",
+      "value": "01310-100\n",
+      "valid": false
+    }
+  ]
+}

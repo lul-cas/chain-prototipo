@@ -1,0 +1,131 @@
+<section class="chain-editor" aria-labelledby="chain-designer-title">
+  @if (loadError(); as problem) {
+    @if (problem.code === 'not_found') {
+      <h1 id="chain-designer-title">Formulário não encontrado</h1>
+      <p>Ele não existe, ou você não pode modelá-lo.</p>
+      <p><a routerLink="/formularios">Ver os formulários</a></p>
+    } @else {
+      <h1 id="chain-designer-title">Formulário</h1>
+      <chain-alert tone="danger">{{ messageFor(problem.code) }}</chain-alert>
+      <div>
+        <button chainButton variant="secondary" type="button" (click)="load()">Tentar de novo</button>
+      </div>
+    }
+  } @else if (form(); as form) {
+    <header class="chain-editor__header">
+      <p class="chain-editor__eyebrow">Formulário:</p>
+      <div class="chain-editor__title-row">
+        <h1 id="chain-designer-title">{{ form.name }}</h1>
+        @if (!editing()) {
+          <button chainButton variant="ghost" size="sm" type="button" (click)="edit()">Editar nome e descrição</button>
+        }
+      </div>
+      @if (editing()) {
+        <form class="chain-editor__header-form" (submit)="saveHeader($event)">
+          <chain-form-field label="Nome" required [error]="nameError()">
+            <input chainInput type="text" [maxLength]="nameLimit" [value]="nameDraft()" (input)="nameDraft.set(typed($event)); nameError.set(null)" />
+          </chain-form-field>
+          <chain-form-field label="Descrição" [hint]="descriptionDraft().length + '/' + descriptionLimit + ' caracteres'" [error]="descriptionError()">
+            <textarea
+              chainInput
+              rows="2"
+              [maxLength]="descriptionLimit"
+              [value]="descriptionDraft()"
+              (input)="descriptionDraft.set(typed($event)); descriptionError.set(null)"
+            ></textarea>
+          </chain-form-field>
+          <div class="chain-editor__header-actions">
+            <button chainButton type="submit" [loading]="savingHeader()">Salvar</button>
+            <button chainButton variant="secondary" type="button" (click)="editing.set(false)">Cancelar</button>
+          </div>
+        </form>
+      } @else if (form.description) {
+        <p class="chain-editor__description">{{ form.description }}</p>
+      }
+    </header>
+
+    <div class="chain-editor__toolbar-card">
+      <div class="chain-editor__toolbar" role="toolbar" aria-label="Ações do formulário" tabindex="-1" (keydown)="moveInToolbar($event)">
+        <button chainButton variant="secondary" size="sm" type="button" class="chain-designer__add" (click)="addFromMenu()">Adicionar componente</button>
+        <button chainButton variant="secondary" size="sm" type="button" [loading]="busy() === 'save'" [disabled]="!editor.dirty() || busy() !== null" (click)="save()">
+          Salvar rascunho
+        </button>
+        <button chainButton variant="ghost" size="sm" type="button" [disabled]="!editor.canUndo()" (click)="editor.undo()">Desfazer</button>
+        <button chainButton variant="ghost" size="sm" type="button" [disabled]="!editor.canRedo()" (click)="editor.redo()">Refazer</button>
+        <button chainButton variant="ghost" size="sm" type="button" [disabled]="!editor.dirty()" (click)="discard()">Descartar alterações</button>
+        <button chainButton variant="secondary" size="sm" type="button" [disabled]="selected() === null" (click)="removeSelection()">Excluir</button>
+        <span class="chain-editor__divider" aria-hidden="true"></span>
+        <button chainButton size="sm" type="button" [loading]="busy() === 'publish'" [disabled]="busy() !== null" (click)="publish()">Publicar</button>
+        <button chainButton variant="secondary" size="sm" type="button" [loading]="busy() === 'validate'" [disabled]="busy() !== null" (click)="validate()">
+          Validar
+        </button>
+        <span class="chain-editor__divider" aria-hidden="true"></span>
+        <button chainButton variant="secondary" size="sm" type="button" (click)="preview()">Pré-visualizar</button>
+        <button chainButton variant="ghost" size="sm" type="button" (click)="showVersions()">Versões</button>
+        <button chainButton variant="ghost" size="sm" type="button" (click)="showJson()">Visualizar JSON</button>
+        <button chainButton variant="ghost" size="sm" type="button" (click)="downloadJson()">Baixar JSON</button>
+      </div>
+
+      <div class="chain-editor__status-row">
+        @if (editor.dirty()) {
+          <span class="chain-editor__unsaved">Alterações não salvas</span>
+        }
+        <p class="chain-editor__status" role="status" aria-label="Situação da edição">{{ status() }}</p>
+        @if (selected(); as component) {
+          <button chainButton variant="secondary" size="sm" type="button" (click)="openProperties(component.id)">Propriedades…</button>
+          <button chainButton variant="secondary" size="sm" type="button" [disabled]="!canMoveUp()" (click)="editor.moveUp()">Mover para cima</button>
+          <button chainButton variant="secondary" size="sm" type="button" [disabled]="!canMoveDown()" (click)="editor.moveDown()">Mover para baixo</button>
+          <button chainButton variant="secondary" size="sm" type="button" (click)="moveTo()">Mover para…</button>
+        }
+      </div>
+    </div>
+
+    @if (actionError(); as refusal) {
+      <chain-alert tone="danger">
+        <div class="chain-designer__refusal">
+          <span>{{ refusal.message }}</span>
+          @if (refusal.reload) {
+            <button chainButton variant="secondary" size="sm" type="button" (click)="reload()">Recarregar</button>
+          }
+        </div>
+      </chain-alert>
+    }
+
+    <div class="chain-editor__findings" aria-live="polite">
+      @if (problems(); as problems) {
+        @if (problems.length > 0) {
+          <section class="chain-editor__problems" [attr.aria-label]="problemsLabel()">
+            <h2 class="chain-editor__problems-title">{{ problemsLabel() }}</h2>
+            <ul class="chain-editor__problem-list">
+              @for (problem of problems; track $index) {
+                <li>
+                  @if (problem.path !== null) {
+                    <button type="button" class="chain-editor__problem" (click)="show(problem.path)">
+                      {{ problemText(problem) }} <code>{{ problem.code }}</code>
+                    </button>
+                  } @else {
+                    <span class="chain-editor__problem">{{ problemText(problem) }} <code>{{ problem.code }}</code></span>
+                  }
+                </li>
+              }
+            </ul>
+          </section>
+        } @else {
+          <chain-alert tone="success">Nenhum problema encontrado.</chain-alert>
+        }
+      }
+    </div>
+
+    <div class="chain-designer__columns">
+      <aside class="chain-designer__palette" aria-label="Paleta">
+        <chain-form-palette (add)="add($event)" />
+      </aside>
+      <chain-form-tree class="chain-designer__form" [problems]="outlined()" (properties)="openProperties($event)" />
+    </div>
+
+    <footer class="chain-editor__footer">
+      <span>{{ form.latestVersion ? 'Versão publicada: ' + form.latestVersion : 'Nunca publicado' }}</span>
+      <span>Rascunho salvo em <time [attr.datetime]="form.draftUpdatedAt">{{ form.draftUpdatedAt | date: 'dd/MM/yyyy HH:mm' }}</time></span>
+    </footer>
+  }
+</section>

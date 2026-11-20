@@ -1,0 +1,95 @@
+/* Editing (workflow-editor.md §10.2, §10.3): the element being connected from, the focus ring, the pointer, the marquee,
+   the line being drawn and the lane corners. Apart from workflow-canvas.css, which the read-only canvas needs too. */
+.chain-canvas__element--source .chain-canvas__shape {
+  stroke: var(--color-selection);
+  stroke-width: 3;
+  stroke-dasharray: 4 3;
+}
+
+.chain-canvas [data-element]:focus {
+  outline: none; /* the ring below shows the focus, around the shape rather than its box */
+}
+
+.chain-canvas__ring {
+  fill: none;
+  stroke: var(--color-focus-ring);
+  stroke-width: 2;
+  visibility: hidden;
+}
+
+.chain-canvas [data-element]:focus-visible .chain-canvas__ring {
+  visibility: visible;
+}
+
+/* A flow is clicked on a wider, unseen stroke (drawn by the template), which shows as its focus ring. */
+.chain-canvas__flow:focus-visible .chain-canvas__flow-hit {
+  stroke: var(--color-focus-ring);
+  stroke-width: 6;
+}
+
+.chain-canvas--editable [data-element],
+.chain-canvas--editable .chain-canvas__handle-target {
+  cursor: pointer;
+}
+
+.chain-canvas--connecting .chain-canvas__node {
+  cursor: crosshair;
+}
+
+.chain-canvas__marquee {
+  fill: var(--color-selection);
+  fill-opacity: 0.08;
+  stroke: var(--color-selection);
+  stroke-width: 1;
+  stroke-dasharray: 4 3;
+  pointer-events: none;
+}
+
+.chain-canvas__wire {
+  stroke: var(--color-flow);
+  stroke-width: 1.75;
+  stroke-dasharray: 6 4;
+  pointer-events: none;
+}
+
+.chain-canvas__corner {
+  fill: var(--color-bg-surface);
+  stroke: var(--color-selection);
+  stroke-width: 1.5;
+}
+
+.chain-canvas__corner--tl,
+.chain-canvas__corner--br {
+  cursor: nwse-resize;
+}
+
+.chain-canvas__corner--tr,
+.chain-canvas__corner--bl {
+  cursor: nesw-resize;
+}
+
+/* A selected flow's end and bend handles (§10.4) */
+.chain-canvas__flow-handle {
+  fill: var(--color-bg-surface);
+  stroke: var(--color-selection);
+  stroke-width: 1.5;
+  cursor: grab;
+}
+
+.chain-canvas__flow-handle--bend {
+  fill: var(--color-selection);
+}
+
+/* Renaming a lane in place, over its title band (§10.6) */
+.chain-canvas__rename {
+  box-sizing: border-box;
+  inline-size: 100%;
+  block-size: 100%;
+  padding: 0 var(--chain-space-2);
+  border: var(--chain-border-width-strong) solid var(--color-selection);
+  border-radius: var(--chain-radius-sm);
+  background: var(--color-bg-surface);
+  color: var(--color-text);
+  font: inherit;
+  font-size: var(--chain-font-size-sm);
+}

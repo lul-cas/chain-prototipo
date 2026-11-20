@@ -1,0 +1,25 @@
+/* The workflow editor's own styles (workflow-editor.md §2); the frame is in ../editor-frame.css. */
+/* Each palette button carries its kind's color (§2), on its leading edge. */
+.chain-editor__palette {
+  border-inline-start: var(--chain-border-width-strong) solid var(--palette-color, var(--color-border-subtle));
+}
+
+.chain-editor__palette--start {
+  --palette-color: var(--color-node-start-fg);
+}
+
+.chain-editor__palette--task {
+  --palette-color: var(--color-node-task-fg);
+}
+
+.chain-editor__palette--gateway {
+  --palette-color: var(--color-node-gateway-fg);
+}
+
+.chain-editor__palette--end {
+  --palette-color: var(--color-node-end-fg);
+}
+
+.chain-editor__palette--lane {
+  --palette-color: var(--color-node-lane-band);
+}

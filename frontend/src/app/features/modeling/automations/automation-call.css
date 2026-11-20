@@ -1,0 +1,61 @@
+/* Chamada (automation-ui.md §7.3): the destination, host and method side by side on wide screens, then the path and rows. */
+.chain-call__grid,
+.chain-call__row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--chain-size-card)), 1fr));
+  align-items: start;
+  gap: var(--chain-space-2) var(--chain-space-3);
+}
+
+/* A field with an Inserir menu beside it. */
+.chain-call__insert {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--chain-space-2);
+}
+
+.chain-call__insert input {
+  flex: 1 1 var(--chain-size-card);
+}
+
+.chain-call__wide {
+  grid-column: 1 / -1;
+}
+
+.chain-call__rows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--chain-space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.chain-call__row {
+  padding-block-end: var(--chain-space-3);
+  border-block-end: var(--chain-border-width) solid var(--color-border-subtle);
+}
+
+.chain-call__actions {
+  display: flex;
+  justify-content: flex-end;
+  align-self: end;
+}
+
+.chain-call__keys {
+  display: flex;
+  flex-direction: column;
+  gap: var(--chain-space-1);
+  margin: 0;
+  padding: var(--chain-space-2) var(--chain-space-3);
+  border: var(--chain-border-width) solid var(--color-border-subtle);
+  border-radius: var(--chain-radius-md);
+}
+
+.chain-call__key {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--chain-space-2);
+}

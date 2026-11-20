@@ -1,0 +1,144 @@
+<div class="chain-bot">
+  <a routerLink="/administracao/bots">Voltar para Bots</a>
+
+  @if (loadError(); as failure) {
+    <h1>Bot</h1>
+    <chain-alert tone="danger">{{ failure.text }}</chain-alert>
+    @if (failure.retry) {
+      <div><button chainButton variant="secondary" type="button" (click)="load()">Tentar de novo</button></div>
+    }
+  } @else if (bot(); as current) {
+    <div class="chain-bot__header">
+      <div class="chain-bot__identity">
+        <h1>{{ current.displayName }}</h1>
+        <code>{{ current.name }}</code>
+        <p class="chain-bot__badge">{{ current.isActive ? 'Ativo' : 'Inativo' }}</p>
+      </div>
+      <div class="chain-bot__actions">
+        <button chainButton variant="secondary" type="button" (click)="rename()">Editar nome</button>
+        <button chainButton variant="secondary" type="button" [disabled]="busy()" (click)="switchActive()">
+          {{ current.isActive ? 'Desativar' : 'Ativar' }}
+        </button>
+      </div>
+    </div>
+
+    @if (notice(); as text) {
+      <chain-alert tone="info">{{ text }}</chain-alert>
+    }
+    @if (actionError(); as failure) {
+      <chain-alert tone="danger">
+        <span class="chain-bot__inline">
+          {{ failure.text }}
+          @if (failure.retry) {
+            <button chainButton variant="secondary" size="sm" type="button" (click)="failure.retry()">Tentar de novo</button>
+          }
+        </span>
+      </chain-alert>
+    }
+
+    <section class="chain-bot__section" aria-labelledby="chain-bot-groups">
+      <h2 id="chain-bot-groups">Grupos</h2>
+      @if (current.groups.length === 0) {
+        <p class="chain-bot__muted">Nenhum grupo.</p>
+      } @else {
+        <ul class="chain-bot__groups">
+          @for (group of current.groups; track group.id) {
+            <li><a [routerLink]="['/administracao/grupos', group.id]">{{ group.name }}</a></li>
+          }
+        </ul>
+      }
+    </section>
+
+    <section class="chain-bot__section" aria-labelledby="chain-bot-mcp">
+      <h2 id="chain-bot-mcp">MCP</h2>
+      <label class="chain-bot__check">
+        <input type="checkbox" aria-describedby="chain-bot-mcp-hint" [checked]="current.mcpEnabled" [disabled]="busy()" (change)="switchMcp($event)" />
+        Pode ser usado por agentes de IA pelo MCP
+      </label>
+      <p id="chain-bot-mcp-hint" class="chain-bot__muted">Os tokens deste bot passam a funcionar em /mcp. Na API comum eles funcionam sempre.</p>
+      <fieldset class="chain-bot__rate">
+        <legend>Chamadas por minuto</legend>
+        <label class="chain-bot__check">
+          <input type="radio" name="chain-bot-rate" [checked]="!ownRate()" (change)="chooseRate(false)" />
+          Padrão do servidor
+        </label>
+        <label class="chain-bot__check">
+          <input type="radio" name="chain-bot-rate" [checked]="ownRate()" (change)="chooseRate(true)" />
+          Limite próprio
+        </label>
+        <input
+          class="chain-input chain-bot__number"
+          type="number"
+          min="1"
+          max="600"
+          step="1"
+          aria-label="Chamadas por minuto"
+          [attr.aria-invalid]="rateError() ? 'true' : null"
+          [attr.aria-describedby]="rateError() ? 'chain-bot-rate-error' : null"
+          [disabled]="!ownRate()"
+          [value]="rate()"
+          (input)="typedRate($event)"
+        />
+        @if (rateError(); as text) {
+          <p id="chain-bot-rate-error" class="chain-bot__error">{{ text }}</p>
+        }
+        <div>
+          <button chainButton variant="secondary" size="sm" type="button" [disabled]="busy()" (click)="saveRate()">Salvar limite</button>
+        </div>
+      </fieldset>
+    </section>
+
+    <section class="chain-bot__section" aria-labelledby="chain-bot-tokens">
+      <div class="chain-bot__tokens-header">
+        <h2 id="chain-bot-tokens">Tokens</h2>
+        <button chainButton variant="secondary" type="button" (click)="newToken()">Novo token</button>
+      </div>
+      @if (current.tokens.length === 0) {
+        <p class="chain-bot__muted">Nenhum token ainda.</p>
+      } @else {
+        <p class="chain-bot__muted">{{ activeText() }}</p>
+        <div class="chain-admin-table__scroll">
+          <table class="chain-admin-table">
+            <caption class="chain-visually-hidden">Tokens</caption>
+            <thead>
+              <tr>
+                <th scope="col">Rótulo</th>
+                <th scope="col">Prefixo</th>
+                <th scope="col">Criado em</th>
+                <th scope="col">Último uso</th>
+                <th scope="col">Revogado em</th>
+                <th scope="col"><span class="chain-visually-hidden">Ações</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (token of current.tokens; track token.id) {
+                <tr>
+                  <th scope="row">{{ token.label }}</th>
+                  <td><code>{{ 'chn_' + token.prefix + '_…' }}</code></td>
+                  <td>{{ token.createdAt | date: 'dd/MM/yyyy HH:mm' }}</td>
+                  <td>{{ token.lastUsedAt | date: 'dd/MM/yyyy HH:mm' }}</td>
+                  <td>{{ token.revokedAt | date: 'dd/MM/yyyy HH:mm' }}</td>
+                  <td>
+                    @if (token.revokedAt === null) {
+                      <button
+                        chainButton
+                        variant="ghost"
+                        size="sm"
+                        type="button"
+                        [attr.aria-label]="'Revogar o token ' + token.label"
+                        [disabled]="busy()"
+                        (click)="revoke(token)"
+                      >
+                        Revogar
+                      </button>
+                    }
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </section>
+  }
+</div>

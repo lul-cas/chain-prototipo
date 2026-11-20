@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\Chain.Workflows\Chain.Workflows.csproj" />
+    <ProjectReference Include="..\Chain.SharedKernel\Chain.SharedKernel.csproj" />
+    <ProjectReference Include="..\Chain.Forms\Chain.Forms.csproj" />
+    <ProjectReference Include="..\Chain.Automations\Chain.Automations.csproj" />
+    <ProjectReference Include="..\Chain.Expressions\Chain.Expressions.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+</Project>

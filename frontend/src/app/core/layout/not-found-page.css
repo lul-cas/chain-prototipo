@@ -1,0 +1,18 @@
+:host {
+  display: block;
+  min-height: 100dvh;
+}
+
+.chain-not-found {
+  display: flex;
+  flex-direction: column;
+  gap: var(--chain-space-3);
+  max-width: var(--chain-size-measure);
+  margin: 0 auto;
+  padding: var(--chain-space-7) var(--chain-space-4);
+}
+
+h1 {
+  font-size: var(--chain-font-size-2xl);
+  line-height: var(--chain-line-height-2xl);
+}

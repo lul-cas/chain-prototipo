@@ -1,0 +1,43 @@
+/* Versões (automation-ui.md §8.4): the list of versions, and one version read-only. */
+.chain-versions,
+.chain-versions__fields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--chain-space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.chain-versions__item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--chain-space-2) var(--chain-space-3);
+  padding-block: var(--chain-space-2);
+  border-block-end: var(--chain-border-width) solid var(--color-border-subtle);
+}
+
+.chain-versions__item > span:first-child {
+  display: flex;
+  flex-direction: column;
+}
+
+.chain-versions__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--chain-space-1);
+}
+
+.chain-versions__muted {
+  color: var(--color-text-muted);
+  font-size: var(--chain-font-size-sm);
+}
+
+.chain-versions__code {
+  margin: 0;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font-size: var(--chain-font-size-sm);
+}

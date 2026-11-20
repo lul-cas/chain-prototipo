@@ -1,0 +1,94 @@
+.chain-requests {
+  display: flex;
+  flex-direction: column;
+  gap: var(--chain-space-5);
+  max-width: var(--chain-size-measure);
+}
+
+h1 {
+  font-size: var(--chain-font-size-2xl);
+  line-height: var(--chain-line-height-2xl);
+}
+
+.chain-requests__filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--chain-space-5);
+}
+
+.chain-requests__scope {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--chain-space-2) var(--chain-space-4);
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.chain-requests__scope legend {
+  margin-bottom: var(--chain-space-1);
+  font-size: var(--chain-font-size-sm);
+  font-weight: var(--chain-font-weight-semibold);
+}
+
+.chain-requests__scope label {
+  display: flex;
+  align-items: center;
+  gap: var(--chain-space-2);
+}
+
+.chain-requests__scope input {
+  width: var(--chain-size-icon-md);
+  height: var(--chain-size-icon-md);
+  margin: 0;
+  accent-color: var(--color-action-primary);
+}
+
+.chain-requests__empty {
+  color: var(--color-text-muted);
+}
+
+.chain-requests__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--chain-space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.chain-requests__item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--chain-space-1);
+  padding: var(--chain-space-3) var(--chain-space-4);
+  border: var(--chain-border-width) solid var(--color-border-subtle);
+  border-radius: var(--chain-radius-md);
+  background: var(--color-bg-surface);
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.chain-requests__item:hover {
+  border-color: var(--color-border-strong);
+  background: var(--color-bg-hover);
+}
+
+.chain-requests__name {
+  font-weight: var(--chain-font-weight-semibold);
+}
+
+.chain-requests__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--chain-space-1) var(--chain-space-3);
+  font-size: var(--chain-font-size-sm);
+  line-height: var(--chain-line-height-sm);
+  color: var(--color-text-muted);
+}
+
+.chain-requests__status {
+  color: var(--color-text);
+  font-weight: var(--chain-font-weight-medium);
+}

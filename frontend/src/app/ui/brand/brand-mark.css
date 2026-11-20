@@ -1,0 +1,26 @@
+:host {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--chain-space-2);
+  color: var(--color-text);
+}
+
+.chain-brand-mark__symbol {
+  width: var(--chain-size-mark);
+  height: var(--chain-size-mark);
+}
+
+.chain-brand-mark__ink {
+  stroke: var(--color-brand-mark);
+}
+
+.chain-brand-mark__link {
+  stroke: var(--color-brand-mark-link);
+}
+
+.chain-brand-mark__word {
+  font-size: var(--chain-font-size-lg);
+  line-height: 1;
+  font-weight: var(--chain-font-weight-bold);
+  letter-spacing: var(--chain-letter-spacing-tight);
+}

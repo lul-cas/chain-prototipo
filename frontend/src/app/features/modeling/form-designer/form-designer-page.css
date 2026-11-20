@@ -1,0 +1,50 @@
+/* The designer's own styles (form-designer.md §5); the frame is in ../editor-frame.css. */
+.chain-designer__refusal {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--chain-space-2) var(--chain-space-3);
+}
+
+/* Two columns (§5): the palette stays in view while the form scrolls. */
+.chain-designer__columns {
+  display: grid;
+  grid-template-columns: var(--chain-size-palette) minmax(0, 1fr);
+  align-items: start;
+  gap: var(--chain-space-5);
+}
+
+.chain-designer__palette {
+  position: sticky;
+  inset-block-start: var(--chain-space-4);
+  max-block-size: calc(100dvh - var(--chain-space-6));
+  padding: var(--chain-space-4);
+  overflow-y: auto;
+  border: var(--chain-border-width) solid var(--color-border-subtle);
+  border-radius: var(--chain-radius-lg);
+  background: var(--color-bg-surface);
+}
+
+.chain-designer__form {
+  max-inline-size: var(--chain-size-measure);
+}
+
+/* Adicionar componente replaces the palette on narrow screens (§5). */
+.chain-designer__add {
+  display: none;
+}
+
+/* Below the shell breakpoint (64rem, --chain-size-shell-break): one column, and the palette in a dialog. */
+@media (max-width: 64rem) {
+  .chain-designer__columns {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .chain-designer__palette {
+    display: none;
+  }
+
+  .chain-designer__add {
+    display: inline-flex;
+  }
+}

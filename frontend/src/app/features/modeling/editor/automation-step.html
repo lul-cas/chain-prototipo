@@ -1,0 +1,33 @@
+<div class="chain-step">
+  <chain-form-field label="Automação">
+    <select chainInput [disabled]="options() === null" (change)="choose($event)">
+      <option value="" [selected]="chosenId() === null">{{ options() === null ? 'Carregando…' : 'Nenhuma' }}</option>
+      @if (chosenId() !== null && options() !== null && chosen() === null) {
+        <option [value]="chosenId()" [selected]="true">Automação indisponível</option>
+      }
+      @for (automation of options() ?? []; track automation.id) {
+        <option [value]="automation.id" [selected]="automation.id === chosenId()">
+          {{ automation.latestVersion === null ? automation.name + ' (nunca publicada)' : automation.name }}
+        </option>
+      }
+    </select>
+  </chain-form-field>
+  @if (listFailed()) {
+    <chain-alert tone="danger">Não foi possível carregar as automações.</chain-alert>
+  }
+
+  @if (chosen(); as automation) {
+    @if (automation.latestVersion === null) {
+      <chain-alert tone="warning">Publique a automação para mapear as entradas e as saídas.</chain-alert>
+    } @else if (contractFailed()) {
+      <chain-alert tone="danger">Não foi possível ler a automação.</chain-alert>
+    } @else if (contract() === undefined || mappings() === null) {
+      <p class="chain-step__muted">Carregando a automação…</p>
+    } @else {
+      <p class="chain-step__muted">Versão {{ contract()?.version }}</p>
+      @if (mappings(); as current) {
+        <chain-step-mappings [mappings]="current" (mappingsChange)="update($event)" [catalog]="catalog()" />
+      }
+    }
+  }
+</div>

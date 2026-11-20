@@ -1,0 +1,66 @@
+<section class="chain-users" aria-labelledby="chain-users-title">
+  <div class="chain-users__header">
+    <h1 id="chain-users-title">Usuários</h1>
+    <button chainButton type="button" (click)="create()">Novo usuário</button>
+  </div>
+
+  @if (notice(); as text) {
+    <chain-alert tone="info">{{ text }}</chain-alert>
+  }
+
+  <input
+    class="chain-input chain-users__search"
+    type="search"
+    aria-label="Buscar por nome ou usuário"
+    placeholder="Buscar por nome ou usuário"
+    [value]="search()"
+    (input)="typed($event)"
+  />
+
+  @if (loadError(); as message) {
+    <chain-alert tone="danger">{{ message }}</chain-alert>
+    <div><button chainButton variant="secondary" type="button" (click)="reload()">Tentar de novo</button></div>
+  } @else if (page(); as current) {
+    @if (current.total === 0) {
+      <p class="chain-users__muted">Nenhum usuário encontrado.</p>
+    } @else {
+      <p class="chain-users__muted">{{ countText() }}</p>
+      <div class="chain-admin-table__scroll">
+        <table class="chain-admin-table">
+          <caption class="chain-visually-hidden">Usuários</caption>
+          <thead>
+            <tr>
+              <th scope="col">Nome</th>
+              <th scope="col">Usuário</th>
+              <th scope="col">Papel</th>
+              <th scope="col">Situação</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (user of current.items; track user.id) {
+              <tr>
+                <th scope="row"><a [routerLink]="['/administracao/usuarios', user.id]">{{ user.displayName }}</a></th>
+                <td><code>{{ user.username }}</code></td>
+                <td>{{ user.isAdmin ? 'Administrador' : '' }}</td>
+                <td>
+                  <ul class="chain-admin-table__states">
+                    @for (state of states(user); track state) {
+                      <li>{{ state }}</li>
+                    }
+                  </ul>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+      @if (paged()) {
+        <nav class="chain-users__pager" aria-label="Páginas de usuários">
+          <button chainButton variant="secondary" size="sm" type="button" [disabled]="!hasPrevious()" (click)="previous()">Anterior</button>
+          <span>{{ rangeText() }}</span>
+          <button chainButton variant="secondary" size="sm" type="button" [disabled]="!hasNext()" (click)="next()">Próxima</button>
+        </nav>
+      }
+    }
+  }
+</section>

@@ -1,0 +1,46 @@
+/* The admin pages' tables (admin-ui.md §4.1, §5.1, §6.1): a caption, column headers, and the row's header in the first cell. */
+
+.chain-admin-table__scroll {
+  overflow-x: auto;
+}
+
+.chain-admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+
+.chain-admin-table th,
+.chain-admin-table td {
+  padding: var(--chain-space-2) var(--chain-space-3);
+  border-bottom: var(--chain-border-width) solid var(--color-border-subtle);
+  text-align: start;
+  vertical-align: top;
+}
+
+.chain-admin-table thead th {
+  color: var(--color-text-muted);
+  font-size: var(--chain-font-size-sm);
+  font-weight: var(--chain-font-weight-semibold);
+}
+
+.chain-admin-table tbody th {
+  font-weight: var(--chain-font-weight-regular);
+}
+
+/* States as a list, so a screen reader doesn't run them together. */
+.chain-admin-table__states {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--chain-space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.chain-admin-table__states li {
+  padding: 0 var(--chain-space-2);
+  border: var(--chain-border-width) solid var(--color-border-subtle);
+  border-radius: var(--chain-radius-full);
+  font-size: var(--chain-font-size-sm);
+}

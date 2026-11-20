@@ -1,0 +1,361 @@
+@if (visible()) {
+  @switch (component().type) {
+    @case ('heading') {
+      <h3 class="chain-form__heading">{{ component().text }}</h3>
+    }
+    @case ('paragraph') {
+      <p class="chain-form__paragraph">{{ component().text }}</p>
+    }
+    @case ('separator') {
+      <hr class="chain-form__separator" />
+    }
+    @case ('text') {
+      <chain-form-field
+        [label]="component().label ?? ''"
+        [hint]="component().description ?? null"
+        [required]="required()"
+        [error]="message()"
+      >
+        <input
+          chainInput
+          type="text"
+          autocomplete="off"
+          [value]="text()"
+          [placeholder]="component().placeholder ?? ''"
+          [readOnly]="component().readOnly === true"
+          (input)="update(valueOf($event))"
+          (blur)="touch()"
+        />
+      </chain-form-field>
+    }
+    @case ('textarea') {
+      <chain-form-field
+        [label]="component().label ?? ''"
+        [hint]="component().description ?? null"
+        [required]="required()"
+        [error]="message()"
+      >
+        <textarea
+          chainInput
+          [value]="text()"
+          [placeholder]="component().placeholder ?? ''"
+          [readOnly]="component().readOnly === true"
+          (input)="update(valueOf($event))"
+          (blur)="touch()"
+        ></textarea>
+      </chain-form-field>
+    }
+    @case ('number') {
+      <chain-form-field
+        [label]="component().label ?? ''"
+        [hint]="component().description ?? null"
+        [required]="required()"
+        [error]="message()"
+      >
+        <input
+          chainInput
+          type="text"
+          inputmode="decimal"
+          autocomplete="off"
+          [value]="text()"
+          [placeholder]="component().placeholder ?? ''"
+          [readOnly]="component().readOnly === true"
+          (input)="update(valueOf($event))"
+          (blur)="touch()"
+        />
+      </chain-form-field>
+    }
+    @case ('date') {
+      <chain-form-field
+        [label]="component().label ?? ''"
+        [hint]="component().description ?? null"
+        [required]="required()"
+        [error]="message()"
+      >
+        <input
+          chainInput
+          type="date"
+          [value]="text()"
+          [readOnly]="component().readOnly === true"
+          (input)="update(valueOf($event))"
+          (blur)="touch()"
+        />
+      </chain-form-field>
+    }
+    @case ('time') {
+      <chain-form-field
+        [label]="component().label ?? ''"
+        [hint]="component().description ?? null"
+        [required]="required()"
+        [error]="message()"
+      >
+        <input
+          chainInput
+          type="time"
+          [value]="text()"
+          [readOnly]="component().readOnly === true"
+          (input)="update(valueOf($event))"
+          (blur)="touch()"
+        />
+      </chain-form-field>
+    }
+    @case ('datetime') {
+      <chain-form-field
+        [label]="component().label ?? ''"
+        [hint]="component().description ?? null"
+        [required]="required()"
+        [error]="message()"
+      >
+        <input
+          chainInput
+          type="datetime-local"
+          [value]="localDateTime()"
+          [readOnly]="component().readOnly === true"
+          (input)="updateDateTime(valueOf($event))"
+          (blur)="touch()"
+        />
+      </chain-form-field>
+    }
+    @case ('select') {
+      <chain-form-field
+        [label]="component().label ?? ''"
+        [hint]="component().description ?? null"
+        [required]="required()"
+        [error]="message()"
+      >
+        <select
+          chainInput
+          [disabled]="component().readOnly === true"
+          (change)="update(valueOf($event))"
+          (blur)="touch()"
+        >
+          <option value="" [selected]="text() === ''">Selecione</option>
+          @for (option of component().options ?? []; track option.value) {
+            <option [value]="option.value" [selected]="option.value === text()">
+              {{ option.label }}
+            </option>
+          }
+        </select>
+      </chain-form-field>
+    }
+    @case ('checkbox') {
+      <div class="chain-form-checkbox">
+        <div class="chain-form-choice chain-form-choice--single">
+          <input
+            type="checkbox"
+            class="chain-form-choice__control"
+            [id]="id"
+            [checked]="value() === true"
+            [disabled]="component().readOnly === true"
+            [attr.aria-invalid]="message() ? 'true' : null"
+            [attr.aria-required]="required() ? 'true' : null"
+            [attr.aria-describedby]="describedBy()"
+            (change)="update(checkedOf($event))"
+            (blur)="touch()"
+          />
+          <label class="chain-form-choice__label" [for]="id">{{ component().label }}</label>
+          @if (required()) {
+            <span class="chain-form-field__required" aria-hidden="true">obrigatório</span>
+          }
+        </div>
+        @if (component().description; as hint) {
+          <p class="chain-form-field__hint" [id]="hintId">{{ hint }}</p>
+        }
+        <p class="chain-form-field__error" [id]="errorId" aria-live="polite">{{ message() }}</p>
+      </div>
+    }
+    @case ('radio') {
+      <fieldset class="chain-form-choices" [attr.aria-describedby]="describedBy()">
+        <legend class="chain-form-choices__legend">
+          {{ component().label }}
+          @if (required()) {
+            <span class="chain-form-field__required">obrigatório</span>
+          }
+        </legend>
+        @if (component().description; as hint) {
+          <p class="chain-form-field__hint" [id]="hintId">{{ hint }}</p>
+        }
+        @for (option of component().options ?? []; track option.value; let i = $index) {
+          <div class="chain-form-choice">
+            <input
+              type="radio"
+              class="chain-form-choice__control"
+              [id]="id + '-' + i"
+              [name]="id"
+              [value]="option.value"
+              [checked]="option.value === text()"
+              [disabled]="component().readOnly === true"
+              [attr.aria-invalid]="message() ? 'true' : null"
+              (change)="update(option.value)"
+              (blur)="touch()"
+            />
+            <label class="chain-form-choice__label" [for]="id + '-' + i">{{ option.label }}</label>
+          </div>
+        }
+        <p class="chain-form-field__error" [id]="errorId" aria-live="polite">{{ message() }}</p>
+      </fieldset>
+    }
+    @case ('checklist') {
+      <fieldset class="chain-form-choices" [attr.aria-describedby]="describedBy()">
+        <legend class="chain-form-choices__legend">
+          {{ component().label }}
+          @if (required()) {
+            <span class="chain-form-field__required">obrigatório</span>
+          }
+        </legend>
+        @if (component().description; as hint) {
+          <p class="chain-form-field__hint" [id]="hintId">{{ hint }}</p>
+        }
+        @for (option of component().options ?? []; track option.value; let i = $index) {
+          <div class="chain-form-choice">
+            <input
+              type="checkbox"
+              class="chain-form-choice__control"
+              [id]="id + '-' + i"
+              [checked]="selected().includes(option.value)"
+              [disabled]="component().readOnly === true"
+              [attr.aria-invalid]="message() ? 'true' : null"
+              (change)="toggle(option.value, checkedOf($event))"
+              (blur)="touch()"
+            />
+            <label class="chain-form-choice__label" [for]="id + '-' + i">{{ option.label }}</label>
+          </div>
+        }
+        <p class="chain-form-field__error" [id]="errorId" aria-live="polite">{{ message() }}</p>
+      </fieldset>
+    }
+    @case ('computed') {
+      <chain-form-field [label]="component().label ?? ''"
+        [hint]="component().description ?? null" [error]="message()">
+        <input
+          chainInput
+          type="text"
+          class="chain-input--computed"
+          readonly
+          [value]="computedText()"
+        />
+      </chain-form-field>
+    }
+    @case ('file') {
+      <div class="chain-form-file">
+        <div class="chain-form-field__header">
+          @if (uploads) {
+            <label class="chain-form-field__label" [for]="id">{{ component().label }}</label>
+          } @else {
+            <p class="chain-form-field__label">{{ component().label }}</p>
+          }
+          @if (required()) {
+            <span class="chain-form-field__required">obrigatório</span>
+          }
+        </div>
+        @if (component().description; as hint) {
+          <p class="chain-form-field__hint" [id]="hintId">{{ hint }}</p>
+        }
+        @if (uploads) {
+          <input
+            type="file"
+            class="chain-form-file__input"
+            [id]="id"
+            [attr.accept]="accept()"
+            [multiple]="(component().validate?.maxFiles ?? 10) > 1"
+            [attr.aria-describedby]="describedBy()"
+            [attr.aria-invalid]="message() ? 'true' : null"
+            (change)="chooseFiles($event)"
+          />
+        } @else {
+          <p class="chain-form-file__notice" [id]="id" tabindex="-1">O envio de arquivos não está disponível nesta tela.</p>
+        }
+        <div class="chain-form-file__status" aria-live="polite">
+          @if (fileEntries().length > 0) {
+            <ul class="chain-form-file__list">
+              @for (entry of fileEntries(); track entry.id) {
+                <li class="chain-form-file__item">
+                  @if (entry.file; as file) {
+                    <a [href]="'/api/files/' + file.fileId">{{ file.name }}</a>
+                    <span class="chain-form-file__note">{{ sizeOf(file) }}</span>
+                    <button chainButton variant="ghost" size="sm" type="button" [attr.aria-label]="'Remover ' + file.name" (click)="removeFile(entry.id)">
+                      Remover
+                    </button>
+                  } @else {
+                    <span class="chain-form-file__note">Enviando {{ entry.name }}…</span>
+                    <button
+                      chainButton
+                      variant="ghost"
+                      size="sm"
+                      type="button"
+                      [attr.aria-label]="'Cancelar o envio de ' + entry.name"
+                      (click)="cancelUpload(entry.id)"
+                    >
+                      Cancelar
+                    </button>
+                  }
+                </li>
+              }
+            </ul>
+          }
+          @for (problem of uploadProblems(); track $index) {
+            <p class="chain-form-file__problem">{{ problem }}</p>
+          }
+        </div>
+        @if (message(); as text) {
+          <p class="chain-form-field__error" [id]="errorId">{{ text }}</p>
+        }
+      </div>
+    }
+    @case ('group') {
+      <fieldset class="chain-form-group" [attr.aria-describedby]="component().description ? hintId : null">
+        <legend class="chain-form-group__legend">{{ component().label }}</legend>
+        @if (component().description; as hint) {
+          <p class="chain-form-field__hint" [id]="hintId">{{ hint }}</p>
+        }
+        @for (child of component().components ?? []; track $index) {
+          <chain-form-node
+            [component]="child"
+            [prefix]="path()"
+            [container]="valuePath()"
+            [index]="$index"
+          />
+        }
+      </fieldset>
+    }
+    @case ('dynamicList') {
+      <fieldset class="chain-form-list" [id]="id" [attr.aria-describedby]="describedBy()">
+        <legend class="chain-form-group__legend">{{ component().label }}</legend>
+        @if (component().description; as hint) {
+          <p class="chain-form-field__hint" [id]="hintId">{{ hint }}</p>
+        }
+        @for (row of rows(); track $index; let i = $index) {
+          <fieldset class="chain-form-list__row">
+            <legend class="chain-form-list__row-legend">
+              {{ component().label }}, linha {{ i + 1 }}
+            </legend>
+            @for (child of component().components ?? []; track $index) {
+              <chain-form-node
+                [component]="child"
+                [prefix]="rowPrefix(i)"
+                [container]="rowContainer(i)"
+                [index]="$index"
+              />
+            }
+            <button chainButton variant="ghost" size="sm" type="button" (click)="removeRow(i)">
+              Remover linha {{ i + 1 }}
+            </button>
+          </fieldset>
+        }
+        <button
+          #add
+          chainButton
+          variant="secondary"
+          size="sm"
+          type="button"
+          [id]="id + '-add'"
+          [disabled]="!canAddRow()"
+          (click)="addRow()"
+        >
+          Adicionar linha
+        </button>
+        <p class="chain-form-field__error" [id]="errorId" aria-live="polite">{{ message() }}</p>
+      </fieldset>
+    }
+  }
+}

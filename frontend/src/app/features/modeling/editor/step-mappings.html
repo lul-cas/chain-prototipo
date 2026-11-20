@@ -1,0 +1,86 @@
+<fieldset class="chain-step__section">
+  <legend>Entradas</legend>
+  @if (free()) {
+    <p class="chain-step__muted">O processo não tem formulário inicial: ele recebe as chaves que você enviar.</p>
+    @for (row of mappings().freeInputs; track $index) {
+      <div class="chain-step__row" role="group" [attr.aria-label]="'Entrada ' + ($index + 1)">
+        <input chainInput type="text" aria-label="Chave" class="chain-step__key" [value]="row.key" (input)="setFreeKey($index, $event)" />
+        <button chainButton variant="ghost" size="sm" type="button" (click)="removeFree($index)">Remover</button>
+        @if (asText(row.value)) {
+          <span class="chain-step__kept">{{ valueText(row.value) }}</span>
+        } @else {
+          <chain-operand-editor [operand]="row.value" (operandChange)="setFreeValue($index, $event)" type="unknown" [catalog]="inputCatalog()" pathLabel="Dado" />
+        }
+        @if (problem('free:' + $index); as found) {
+          <p class="chain-step__problem" [class.chain-step__problem--error]="'error' in found">{{ problemText(found) }}</p>
+        }
+      </div>
+    }
+    <div>
+      <button chainButton variant="secondary" size="sm" type="button" (click)="addFree()">+ entrada</button>
+    </div>
+  } @else {
+    @for (input of mappings().inputs; track input.field.key) {
+      <div class="chain-step__row" role="group" [attr.aria-label]="input.field.key">
+        <span class="chain-step__name">
+          {{ input.field.key }}
+          <span class="chain-step__muted">({{ typeName(input.field.type) }}{{ input.field.required ? ', ' + requiredWord() : '' }})</span>
+        </span>
+        @if (asText(input.value, input.field)) {
+          <span class="chain-step__kept">{{ valueText(input.value!) }}</span>
+          <button chainButton variant="ghost" size="sm" type="button" (click)="setInput(input.field.key, null)">Remover</button>
+        } @else if (fileField(input.field)) {
+          <p class="chain-step__muted chain-step__note">Arquivos não passam para um subprocesso.</p>
+        } @else {
+          <chain-operand-editor
+            [operand]="input.value"
+            (operandChange)="setInput(input.field.key, $event)"
+            [type]="input.field.type"
+            [catalog]="inputCatalog()"
+            [optional]="true"
+            pathLabel="Dado"
+          />
+        }
+        @if (problem('input:' + input.field.key); as found) {
+          <p class="chain-step__problem" [class.chain-step__problem--error]="'error' in found">{{ problemText(found) }}</p>
+        }
+      </div>
+    } @empty {
+      <p class="chain-step__muted">Não há entradas.</p>
+    }
+    @for (other of mappings().otherInputs; track other.key) {
+      <div class="chain-step__row" role="group" [attr.aria-label]="other.key">
+        <span class="chain-step__kept">{{ keptText(other) }}</span>
+        <button chainButton variant="ghost" size="sm" type="button" (click)="removeInput(other.key)">Remover</button>
+        @if (problem('input:' + other.key); as found) {
+          <p class="chain-step__problem">{{ problemText(found) }}</p>
+        }
+      </div>
+    }
+  }
+</fieldset>
+
+<fieldset class="chain-step__section">
+  <legend>Saídas</legend>
+  <p class="chain-step__muted">Guardar como: a chave em que a saída fica nos dados da solicitação. Vazio, ela não é guardada.</p>
+  @for (output of mappings().outputs; track output.field.key) {
+    <div class="chain-step__row" role="group" [attr.aria-label]="output.field.key">
+      <span class="chain-step__name">
+        {{ output.field.key }}
+        <span class="chain-step__muted">({{ typeName(output.field.type) }}{{ output.field.required ? '' : ', pode faltar' }})</span>
+      </span>
+      <input chainInput type="text" aria-label="Guardar como" [value]="output.target" (input)="setTarget(output.field.key, $event)" />
+      @if (problem('output:' + output.field.key); as found) {
+        <p class="chain-step__problem chain-step__problem--error">{{ problemText(found) }}</p>
+      }
+    </div>
+  } @empty {
+    <p class="chain-step__muted">Não há saídas.</p>
+  }
+  @for (other of mappings().otherOutputs; track other.key) {
+    <div class="chain-step__row" role="group" [attr.aria-label]="other.key">
+      <span class="chain-step__kept">{{ keptText(other) }}</span>
+      <button chainButton variant="ghost" size="sm" type="button" (click)="removeOutput(other.key)">Remover</button>
+    </div>
+  }
+</fieldset>

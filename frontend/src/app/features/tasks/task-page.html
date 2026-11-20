@@ -1,0 +1,96 @@
+<section class="chain-task" aria-labelledby="chain-task-title">
+  @if (loadError(); as problem) {
+    @if (problem.code === 'not_found') {
+      <h1 id="chain-task-title">Tarefa não encontrada</h1>
+      <p>Ela não existe, ou você não pode vê-la.</p>
+      <p><a routerLink="/">Ir para o início</a></p>
+    } @else {
+      <h1 id="chain-task-title">Tarefa</h1>
+      <chain-alert tone="danger">{{ loadMessage(problem) }}</chain-alert>
+      <div class="chain-task__actions">
+        <button chainButton variant="secondary" type="button" (click)="reload()">Tentar de novo</button>
+      </div>
+    }
+  } @else if (detail(); as detail) {
+    <header class="chain-task__header">
+      @if (instance(); as request) {
+        <p class="chain-eyebrow">{{ request.definitionName }}</p>
+      }
+      <h1 id="chain-task-title">{{ detail.task.label }}</h1>
+      @if (instance(); as request) {
+        <p class="chain-task__meta">Solicitada por {{ request.requester.displayName }}</p>
+      }
+      <div class="chain-task__assignment">
+        <span class="chain-task__badge">{{ availability() }}</span>
+        @if (!closed()) {
+          @if (!detail.task.assignee) {
+            <button chainButton variant="secondary" size="sm" type="button" [loading]="busy()" (click)="start()">Começar</button>
+          } @else if (assignedToOther()) {
+            <button chainButton variant="secondary" size="sm" type="button" [loading]="busy()" (click)="takeOver()">Assumir</button>
+          }
+        }
+      </div>
+    </header>
+
+    @if (commandError(); as message) {
+      <chain-alert tone="danger">
+        {{ message }}
+        @if (closed()) {
+          <a routerLink="/">Ir para o início</a>
+        }
+        @if (retry()) {
+          <div class="chain-task__retry">
+            <button chainButton variant="secondary" size="sm" type="button" (click)="tryAgain()">Tentar novamente</button>
+          </div>
+        }
+      </chain-alert>
+    }
+
+    @if (detail.task.kind === 'decision') {
+      <form class="chain-task__form" (submit)="$event.preventDefault()">
+        <p class="chain-task__question">{{ detail.task.question }}</p>
+        <chain-form-field label="Justificativa (opcional)">
+          <textarea chainInput maxlength="1000" [value]="justification()" [disabled]="!canAct()" (input)="justification.set(valueOf($event))"></textarea>
+        </chain-form-field>
+        @if (canAct()) {
+          <div class="chain-task__actions">
+            <button chainButton type="button" [loading]="busy()" (click)="decide(true)">Sim</button>
+            <button chainButton variant="secondary" type="button" [loading]="busy()" (click)="decide(false)">Não</button>
+          </div>
+        }
+      </form>
+    } @else if (document(); as document) {
+      <h2 class="chain-task__section">Dados da tarefa</h2>
+      <chain-form-renderer
+        [document]="document"
+        [prefill]="prefill()"
+        [context]="context()"
+        [serverErrors]="serverErrors()"
+        [disabled]="!canAct()"
+        (submitted)="complete($event.json)"
+      >
+        <chain-form-field label="Comentário (opcional)">
+          <textarea chainInput maxlength="1000" [value]="comment()" [disabled]="!canAct()" (input)="comment.set(valueOf($event))"></textarea>
+        </chain-form-field>
+        @if (canAct()) {
+          <div class="chain-task__actions">
+            <button chainButton type="submit" [loading]="busy()">Concluir</button>
+          </div>
+        }
+      </chain-form-renderer>
+    } @else {
+      <form class="chain-task__form" (submit)="$event.preventDefault(); complete(null)">
+        <chain-form-field label="Comentário (opcional)">
+          <textarea chainInput maxlength="1000" [value]="comment()" [disabled]="!canAct()" (input)="comment.set(valueOf($event))"></textarea>
+        </chain-form-field>
+        @if (canAct()) {
+          <div class="chain-task__actions">
+            <button chainButton type="submit" [loading]="busy()">Concluir</button>
+          </div>
+        }
+      </form>
+    }
+  } @else {
+    <p class="chain-task__loading" role="status">Carregando tarefa…</p>
+  }
+</section>

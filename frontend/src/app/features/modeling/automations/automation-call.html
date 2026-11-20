@@ -1,0 +1,278 @@
+@let d = document();
+<section class="chain-section" chainControl="request" aria-labelledby="chain-section-request">
+  <h2 id="chain-section-request">Chamada</h2>
+
+  <div class="chain-call__grid">
+    <chain-form-field label="Destino" [hint]="destinationHint()" [error]="problemAt('request.destination')">
+      <select chainInput chainControl="request.destination" (change)="setDestination($event)">
+        @if (d.request.destination === '') {
+          <option value="" selected>Escolha um destino</option>
+        }
+        @if (missing()) {
+          <option [value]="d.request.destination" selected>{{ d.request.destination }} (não existe mais)</option>
+        }
+        @for (destination of destinations(); track destination.name) {
+          <option [value]="destination.name" [selected]="destination.name === d.request.destination">{{ label(destination) }}</option>
+        }
+      </select>
+    </chain-form-field>
+
+    @if (hostShown()) {
+      <chain-form-field label="Host" [hint]="hostHint()" [error]="problemAt('request.host', 'host')">
+        <input chainInput class="chain-mono" type="text" autocomplete="off" spellcheck="false" chainControl="request.host" [value]="d.request.host ?? ''" (change)="setHost($event)" />
+      </chain-form-field>
+    }
+
+    <chain-form-field label="Método" [error]="problemAt('request.method')">
+      <select chainInput chainControl="request.method" (change)="setMethod($event)">
+        @if (!methods.includes(d.request.method)) {
+          <option [value]="d.request.method" selected>{{ d.request.method }} (não editável)</option>
+        }
+        @for (method of methods; track method) {
+          <option [value]="method" [selected]="method === d.request.method">{{ method }}</option>
+        }
+      </select>
+    </chain-form-field>
+  </div>
+
+  <chain-form-field label="Caminho" [hint]="address() ? 'Depois de ' + address() : null" [error]="problemAt('request.path', 'path')">
+    <div class="chain-call__insert">
+      <input
+        chainInput
+        class="chain-mono"
+        type="text"
+        autocomplete="off"
+        spellcheck="false"
+        data-caret="path"
+        chainControl="request.path"
+        [value]="d.request.path"
+        (change)="setPath($event)"
+        (blur)="keepCaret('path', $event)"
+      />
+      <chain-insert-menu
+        label="Inserir entrada"
+        target="Caminho"
+        [choices]="pathChoices()"
+        empty="Nenhuma entrada cabe no caminho: só entradas de texto, número, sim ou não, data, data e hora ou hora."
+        (chosen)="insertInPath($event)"
+      />
+    </div>
+  </chain-form-field>
+
+  <h3>Parâmetros da consulta</h3>
+  <p class="chain-section__muted">Se a entrada faltar, o parâmetro não é enviado.</p>
+  @if (queryRows().length > 0) {
+    <ol class="chain-call__rows">
+      @for (row of queryRows(); track row.id) {
+        <li>
+          <div class="chain-call__row" role="group" [attr.aria-label]="'Parâmetro ' + (row.index + 1)">
+            <chain-form-field label="Nome" [error]="row.nameProblem">
+              <input
+                chainInput
+                class="chain-mono"
+                type="text"
+                autocomplete="off"
+                spellcheck="false"
+                [attr.data-row-name]="row.id"
+                [chainControl]="row.path"
+                [value]="row.name"
+                (change)="setQueryName(row.id, $event)"
+              />
+            </chain-form-field>
+            <chain-form-field label="Valor é">
+              <select chainInput (change)="setQueryKind(row.id, $event)">
+                <option value="literal" [selected]="row.kind === 'literal'">Texto fixo</option>
+                <option value="input" [selected]="row.kind === 'input'">Entrada</option>
+              </select>
+            </chain-form-field>
+            @if (row.kind === 'literal') {
+              <chain-form-field label="Valor" [error]="row.valueProblem">
+                <input chainInput type="text" autocomplete="off" spellcheck="false" [value]="row.value" (change)="setQueryValue(row.id, $event)" />
+              </chain-form-field>
+            } @else {
+              <chain-form-field label="Entrada" [error]="row.valueProblem">
+                <select chainInput (change)="setQueryValue(row.id, $event)">
+                  @if (!row.known) {
+                    <option [value]="row.value" selected>{{ row.value }}</option>
+                  }
+                  @for (choice of pathChoices(); track choice.value) {
+                    <option [value]="choice.label" [selected]="choice.value === row.key">{{ choice.label }}</option>
+                  }
+                </select>
+              </chain-form-field>
+            }
+            <div class="chain-call__actions">
+              <button chainButton variant="ghost" size="sm" type="button" [attr.aria-label]="'Remover o parâmetro ' + (row.name || row.index + 1)" (click)="removeQueryRow(row.id)">
+                Remover
+              </button>
+            </div>
+          </div>
+        </li>
+      }
+    </ol>
+  } @else {
+    <p class="chain-section__muted">Nenhum.</p>
+  }
+  <div>
+    <button chainButton variant="secondary" size="sm" type="button" class="chain-call__add-query" (click)="addQueryRow()">Adicionar parâmetro</button>
+  </div>
+
+  <h3 chainControl="request.headers">Cabeçalhos</h3>
+  <p class="chain-section__muted">
+    Entradas não vão em cabeçalhos nesta versão.
+    @if (isAdmin()) {
+      <a routerLink="/administracao/credenciais">Gerenciar credenciais</a>
+    }
+  </p>
+  @if (problemAt('request.headers'); as text) {
+    <p class="chain-section__flag">{{ text }}</p>
+  }
+  @if (headerRows().length > 0) {
+    <ol class="chain-call__rows">
+      @for (row of headerRows(); track row.id) {
+        <li>
+          <div class="chain-call__row" role="group" [attr.aria-label]="'Cabeçalho ' + (row.index + 1)">
+            <chain-form-field label="Nome" [error]="row.nameProblem">
+              <input
+                chainInput
+                class="chain-mono"
+                type="text"
+                autocomplete="off"
+                spellcheck="false"
+                [attr.data-row-name]="row.id"
+                [chainControl]="row.path"
+                [value]="row.name"
+                (change)="setHeaderName(row.id, $event)"
+              />
+            </chain-form-field>
+            <chain-form-field label="Valor" [hint]="row.credentials" [error]="row.valueProblem">
+              <div class="chain-call__insert">
+                <input
+                  chainInput
+                  class="chain-mono"
+                  type="text"
+                  autocomplete="off"
+                  spellcheck="false"
+                  [attr.data-caret]="'header:' + row.id"
+                  [value]="row.value"
+                  (change)="setHeaderValue(row.id, $event)"
+                  (blur)="keepCaret('header:' + row.id, $event)"
+                />
+                <chain-insert-menu
+                  label="Inserir credencial"
+                  [target]="'Valor de ' + (row.name || 'cabeçalho ' + (row.index + 1))"
+                  [choices]="credentialChoices()"
+                  [empty]="credentialEmpty()"
+                  (chosen)="insertCredential('header:' + row.id, $event)"
+                />
+              </div>
+            </chain-form-field>
+            <div class="chain-call__actions">
+              <button chainButton variant="ghost" size="sm" type="button" [attr.aria-label]="'Remover o cabeçalho ' + (row.name || row.index + 1)" (click)="removeHeaderRow(row.id)">
+                Remover
+              </button>
+            </div>
+          </div>
+        </li>
+      }
+    </ol>
+  }
+  @if (d.execution.idempotency.mode === 'header') {
+    <p class="chain-section__row chain-section__muted"><code>{{ d.execution.idempotency.header }}: (chave desta execução)</code></p>
+  }
+  @if (headerRows().length === 0 && d.execution.idempotency.mode !== 'header') {
+    <p class="chain-section__muted">Nenhum.</p>
+  }
+  <div>
+    <button chainButton variant="secondary" size="sm" type="button" class="chain-call__add-header" (click)="addHeaderRow()">Adicionar cabeçalho</button>
+  </div>
+
+  <h3>Autenticação</h3>
+  <chain-form-field label="Autenticação" [error]="authProblem()">
+    <select chainInput chainControl="request.auth" (change)="setAuth($event)">
+      @if (authKind() === null) {
+        <option value="" selected>{{ d.request.auth?.type }} (não editável)</option>
+      }
+      <option value="none" [selected]="authKind() === 'none'">Nenhuma</option>
+      <option value="basic" [selected]="authKind() === 'basic'">Básica</option>
+    </select>
+  </chain-form-field>
+  @if (d.request.auth; as auth) {
+    <div class="chain-call__grid">
+      <chain-form-field label="Usuário" [hint]="credentialsIn(auth.username ?? '')" [error]="problemAt('request.auth.username', 'auth:username')">
+        <div class="chain-call__insert">
+          <input
+            chainInput
+            class="chain-mono"
+            type="text"
+            autocomplete="off"
+            spellcheck="false"
+            data-caret="auth:username"
+            chainControl="request.auth.username"
+            [value]="auth.username ?? ''"
+            (change)="setAuthField('username', $event)"
+            (blur)="keepCaret('auth:username', $event)"
+          />
+          <chain-insert-menu
+            label="Inserir credencial"
+            target="Usuário"
+            [choices]="credentialChoices()"
+            [empty]="credentialEmpty()"
+            (chosen)="insertCredential('auth:username', $event)"
+          />
+        </div>
+      </chain-form-field>
+      <chain-form-field label="Senha" [hint]="credentialsIn(auth.password ?? '')" [error]="problemAt('request.auth.password', 'auth:password')">
+        <div class="chain-call__insert">
+          <input
+            chainInput
+            class="chain-mono"
+            type="text"
+            autocomplete="off"
+            spellcheck="false"
+            data-caret="auth:password"
+            chainControl="request.auth.password"
+            [value]="auth.password ?? ''"
+            (change)="setAuthField('password', $event)"
+            (blur)="keepCaret('auth:password', $event)"
+          />
+          <chain-insert-menu
+            label="Inserir credencial"
+            target="Senha"
+            [choices]="credentialChoices()"
+            [empty]="credentialEmpty()"
+            (chosen)="insertCredential('auth:password', $event)"
+          />
+        </div>
+      </chain-form-field>
+    </div>
+  }
+
+  <h3>Corpo</h3>
+  <chain-form-field label="Corpo" [error]="bodyProblem()">
+    <select chainInput chainControl="request.body" (change)="setBody($event)">
+      @if (bodyKind() === null) {
+        <option value="" selected>{{ d.request.body?.type }} (não editável)</option>
+      }
+      <option value="none" [selected]="bodyKind() === 'none'">Sem corpo</option>
+      <option value="all" [selected]="bodyKind() === 'all'">JSON com todas as entradas</option>
+      <option value="some" [selected]="bodyKind() === 'some'">JSON com só estas entradas</option>
+    </select>
+  </chain-form-field>
+  @if (bodyKind() === 'some') {
+    <fieldset class="chain-call__keys">
+      <legend>Entradas no corpo</legend>
+      @for (choice of bodyChoices(); track choice.key) {
+        <label class="chain-call__key">
+          <input type="checkbox" [checked]="choice.checked" [attr.data-control]="choice.path" (change)="setBodyKey(choice.key, $event)" />
+          <code>{{ choice.key }}</code>
+          @if (choice.problem) {
+            <span class="chain-section__flag">{{ choice.problem }}</span>
+          }
+        </label>
+      } @empty {
+        <p class="chain-section__muted">Nenhuma entrada.</p>
+      }
+    </fieldset>
+  }
+</section>

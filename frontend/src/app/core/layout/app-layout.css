@@ -1,0 +1,11 @@
+.chain-app-layout__actions {
+  display: flex;
+  gap: var(--chain-space-3);
+  align-items: center;
+}
+
+.chain-app-layout__user {
+  color: var(--color-text-muted);
+  font-size: var(--chain-font-size-sm);
+  line-height: var(--chain-line-height-sm);
+}

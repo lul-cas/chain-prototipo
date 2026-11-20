@@ -1,0 +1,121 @@
+:host {
+  display: block;
+}
+
+.chain-form-tree,
+.chain-draft-card__children {
+  display: flex;
+  flex-direction: column;
+  gap: var(--chain-space-3);
+}
+
+.chain-draft-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--chain-space-1);
+  padding: var(--chain-space-3);
+  border: var(--chain-border-width) solid var(--color-border-subtle);
+  border-radius: var(--chain-radius-md);
+  background: var(--color-bg-surface);
+}
+
+.chain-draft-card--problem {
+  outline: var(--chain-border-width-strong) solid var(--color-border-danger);
+}
+
+.chain-tree-item {
+  border-radius: var(--chain-radius-md);
+  cursor: default;
+}
+
+.chain-tree-item[aria-selected='true'] > .chain-draft-card {
+  border-color: var(--color-selection);
+  background: var(--color-bg-selected);
+  box-shadow: 0 0 0 var(--chain-border-width) var(--color-selection);
+}
+
+.chain-draft-card__head {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--chain-space-2);
+}
+
+.chain-draft-card__label,
+.chain-draft-card__heading {
+  margin: 0;
+  font-weight: var(--chain-font-weight-semibold);
+}
+
+.chain-draft-card__required,
+.chain-draft-card__meta,
+.chain-draft-card__condition,
+.chain-draft-card__empty,
+.chain-form-tree__empty {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: var(--chain-font-size-sm);
+}
+
+.chain-draft-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--chain-space-1) var(--chain-space-2);
+}
+
+.chain-draft-card__key {
+  font-family: var(--chain-font-mono);
+}
+
+.chain-draft-card__badge {
+  padding: 0 var(--chain-space-1);
+  border: var(--chain-border-width) solid var(--color-border-subtle);
+  border-radius: var(--chain-radius-full);
+}
+
+.chain-draft-card__text {
+  margin: 0;
+}
+
+.chain-draft-card__separator {
+  inline-size: 100%;
+  border: 0;
+  border-block-start: var(--chain-border-width) solid var(--color-border-subtle);
+}
+
+.chain-draft-card__control {
+  min-block-size: var(--chain-size-control-md);
+  padding: var(--chain-space-2) var(--chain-space-3);
+  border: var(--chain-border-width) solid var(--color-border-control);
+  border-radius: var(--chain-radius-md);
+  color: var(--color-text-muted);
+}
+
+.chain-draft-card__control--tall {
+  min-block-size: calc(var(--chain-size-control-md) * 2);
+}
+
+.chain-draft-card__options {
+  padding-inline-start: var(--chain-space-5);
+  list-style: circle;
+}
+
+.chain-draft-card__options--many {
+  list-style: square;
+}
+
+.chain-form-tree,
+.chain-draft-card__children {
+  margin: 0;
+  list-style: none;
+}
+
+.chain-form-tree {
+  padding: 0;
+}
+
+.chain-draft-card__children {
+  margin-block-start: var(--chain-space-2);
+  padding: var(--chain-space-3);
+  border: var(--chain-border-width) dashed var(--color-border-subtle);
+  border-radius: var(--chain-radius-md);
+}

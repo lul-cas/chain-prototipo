@@ -1,0 +1,28 @@
+.chain-groups {
+  display: flex;
+  flex-direction: column;
+  gap: var(--chain-space-4);
+  max-width: var(--chain-size-content-max);
+}
+
+.chain-groups__header,
+.chain-groups__check {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--chain-space-2);
+}
+
+.chain-groups__header {
+  justify-content: space-between;
+}
+
+h1 {
+  font-size: var(--chain-font-size-2xl);
+  line-height: var(--chain-line-height-2xl);
+}
+
+.chain-groups__muted {
+  margin: 0;
+  color: var(--color-text-muted);
+}

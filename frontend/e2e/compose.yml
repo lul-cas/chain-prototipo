@@ -1,0 +1,13 @@
+# Only for the end-to-end tests (e2e/run.sh adds this file to docker-compose.yml): a stub HTTP target for automation steps,
+# reachable on the compose network and nowhere else (automation.md §10). It runs on the frontend's image, so the test stack
+# needs no other image.
+services:
+  stub:
+    build:
+      context: ./frontend
+      target: dev
+    command: ["node", "/stub/server.mjs"]
+    environment:
+      STUB_API_KEY: "${CHAIN_E2E_STUB_KEY:?e2e/run.sh sets the stub key}"
+    volumes:
+      - ./frontend/e2e/stub:/stub:ro

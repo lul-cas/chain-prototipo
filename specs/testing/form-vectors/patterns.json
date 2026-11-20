@@ -1,0 +1,105 @@
+{
+  "description": "Modeler patterns of forms.md F1 (validate.pattern), matched against the whole value. The C# validator (Chain.Forms.Tests) and the Angular renderer (frontend/src/app/forms) must both give 'valid' for every case.",
+  "cases": [
+    {
+      "pattern": "[A-Z]{3}-[0-9]{3}",
+      "value": "ABC-123",
+      "valid": true
+    },
+    {
+      "pattern": "[A-Z]{3}-[0-9]{3}",
+      "value": "XABC-123",
+      "valid": false
+    },
+    {
+      "pattern": "[A-Z]{3}-[0-9]{3}",
+      "value": "ABC-123\n",
+      "valid": false
+    },
+    {
+      "pattern": "a|b",
+      "value": "ab",
+      "valid": false
+    },
+    {
+      "pattern": "(a|b)c",
+      "value": "bc",
+      "valid": true
+    },
+    {
+      "pattern": "^[0-9]{5}-[0-9]{3}$",
+      "value": "01310-100",
+      "valid": true
+    },
+    {
+      "pattern": "^[0-9]{5}-[0-9]{3}$",
+      "value": "01310-100\n",
+      "valid": false
+    },
+    {
+      "pattern": "a$\\n",
+      "value": "a\n",
+      "valid": false
+    },
+    {
+      "pattern": "[0-9]+$\\n?",
+      "value": "12\n",
+      "valid": false
+    },
+    {
+      "pattern": "a(?!$)\\n",
+      "value": "a\n",
+      "valid": true
+    },
+    {
+      "pattern": "a(b|$)",
+      "value": "a",
+      "valid": true
+    },
+    {
+      "pattern": "a(b|$)",
+      "value": "ab",
+      "valid": true
+    },
+    {
+      "pattern": "R\\$ [0-9]+",
+      "value": "R$ 10",
+      "valid": true
+    },
+    {
+      "pattern": "[$]",
+      "value": "$",
+      "valid": true
+    },
+    {
+      "pattern": "[\\]$]",
+      "value": "$",
+      "valid": true
+    },
+    {
+      "pattern": "\\\\$",
+      "value": "\\",
+      "valid": true
+    },
+    {
+      "pattern": "a\\)",
+      "value": "a)",
+      "valid": true
+    },
+    {
+      "pattern": "a)|(?:b",
+      "value": "aXYZ",
+      "valid": false
+    },
+    {
+      "pattern": "a)|(?:b",
+      "value": "a",
+      "valid": false
+    },
+    {
+      "pattern": "a)(b",
+      "value": "ab",
+      "valid": false
+    }
+  ]
+}

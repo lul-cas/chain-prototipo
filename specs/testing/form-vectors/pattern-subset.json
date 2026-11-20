@@ -1,0 +1,408 @@
+{
+  "description": "The pattern allowlist of forms.md F1 (FM005, card #149): what both .NET and JavaScript read alike. The C# validator (Chain.Forms.Tests) and the designer's local check (frontend/src/app/forms) must both allow each allowed case, and refuse each other one naming the same first construct and replacement.",
+  "cases": [
+    {
+      "pattern": "[A-Z]{3}-[0-9]{3}",
+      "allowed": true
+    },
+    {
+      "pattern": "^[0-9]{5}-?[0-9]{3}$",
+      "allowed": true
+    },
+    {
+      "pattern": "(a|b)c",
+      "allowed": true
+    },
+    {
+      "pattern": "(?:ab)+",
+      "allowed": true
+    },
+    {
+      "pattern": "a(?=b)",
+      "allowed": true
+    },
+    {
+      "pattern": "a(?!b)c",
+      "allowed": true
+    },
+    {
+      "pattern": "a*?",
+      "allowed": true
+    },
+    {
+      "pattern": "a+?",
+      "allowed": true
+    },
+    {
+      "pattern": "a??",
+      "allowed": true
+    },
+    {
+      "pattern": "a{2}",
+      "allowed": true
+    },
+    {
+      "pattern": "a{2,}",
+      "allowed": true
+    },
+    {
+      "pattern": "a{2,5}?",
+      "allowed": true
+    },
+    {
+      "pattern": "\\.",
+      "allowed": true
+    },
+    {
+      "pattern": "\\-",
+      "allowed": true
+    },
+    {
+      "pattern": "\\$",
+      "allowed": true
+    },
+    {
+      "pattern": "\\\\",
+      "allowed": true
+    },
+    {
+      "pattern": "\\t\\n\\r",
+      "allowed": true
+    },
+    {
+      "pattern": "\\x41",
+      "allowed": true
+    },
+    {
+      "pattern": "\\u00e9",
+      "allowed": true
+    },
+    {
+      "pattern": "[^a-z]",
+      "allowed": true
+    },
+    {
+      "pattern": "[a\\-z]",
+      "allowed": true
+    },
+    {
+      "pattern": "[\\]]",
+      "allowed": true
+    },
+    {
+      "pattern": "[\\[]",
+      "allowed": true
+    },
+    {
+      "pattern": "[-a]",
+      "allowed": true
+    },
+    {
+      "pattern": "[a-]",
+      "allowed": true
+    },
+    {
+      "pattern": "\u00e7",
+      "allowed": true
+    },
+    {
+      "pattern": "\ud83d\ude00",
+      "allowed": true
+    },
+    {
+      "pattern": "a-b",
+      "allowed": true
+    },
+    {
+      "pattern": "a/b",
+      "allowed": true
+    },
+    {
+      "pattern": "\\(\\)\\[\\]\\{\\}",
+      "allowed": true
+    },
+    {
+      "pattern": "\\/",
+      "allowed": true
+    },
+    {
+      "pattern": "[\\x41-\\x5A]",
+      "allowed": true
+    },
+    {
+      "pattern": "[\\u00e0-\\u00ff]",
+      "allowed": true
+    },
+    {
+      "pattern": "",
+      "allowed": true
+    },
+    {
+      "pattern": "[a-z]+(?:\\.[a-z]+)*@[a-z]+",
+      "allowed": true
+    },
+    {
+      "pattern": "\\d{3}",
+      "allowed": false,
+      "construct": "\\d",
+      "replacement": "[0-9]"
+    },
+    {
+      "pattern": "\\D",
+      "allowed": false,
+      "construct": "\\D",
+      "replacement": "[^0-9]"
+    },
+    {
+      "pattern": "\\w+",
+      "allowed": false,
+      "construct": "\\w",
+      "replacement": "[a-zA-Z0-9_]"
+    },
+    {
+      "pattern": "\\W",
+      "allowed": false,
+      "construct": "\\W",
+      "replacement": "[^a-zA-Z0-9_]"
+    },
+    {
+      "pattern": "a\\sb",
+      "allowed": false,
+      "construct": "\\s",
+      "replacement": "[ \\t\\n\\r]"
+    },
+    {
+      "pattern": "\\S",
+      "allowed": false,
+      "construct": "\\S",
+      "replacement": "[^ \\t\\n\\r]"
+    },
+    {
+      "pattern": "\\bfim",
+      "allowed": false,
+      "construct": "\\b"
+    },
+    {
+      "pattern": "\\B",
+      "allowed": false,
+      "construct": "\\B"
+    },
+    {
+      "pattern": "a.c",
+      "allowed": false,
+      "construct": ".",
+      "replacement": "[^\\n]"
+    },
+    {
+      "pattern": "\\Aabc",
+      "allowed": false,
+      "construct": "\\A",
+      "replacement": "^"
+    },
+    {
+      "pattern": "abc\\Z",
+      "allowed": false,
+      "construct": "\\Z",
+      "replacement": "$"
+    },
+    {
+      "pattern": "abc\\z",
+      "allowed": false,
+      "construct": "\\z",
+      "replacement": "$"
+    },
+    {
+      "pattern": "\\G",
+      "allowed": false,
+      "construct": "\\G"
+    },
+    {
+      "pattern": "\\e",
+      "allowed": false,
+      "construct": "\\e",
+      "replacement": "\\x1B"
+    },
+    {
+      "pattern": "\\f",
+      "allowed": false,
+      "construct": "\\f",
+      "replacement": "\\x0C"
+    },
+    {
+      "pattern": "\\v",
+      "allowed": false,
+      "construct": "\\v",
+      "replacement": "\\x0B"
+    },
+    {
+      "pattern": "\\0",
+      "allowed": false,
+      "construct": "\\0",
+      "replacement": "\\x00"
+    },
+    {
+      "pattern": "\\p{L}",
+      "allowed": false,
+      "construct": "\\p"
+    },
+    {
+      "pattern": "\\P{L}",
+      "allowed": false,
+      "construct": "\\P"
+    },
+    {
+      "pattern": "(a)\\1",
+      "allowed": false,
+      "construct": "\\1"
+    },
+    {
+      "pattern": "(?<n>a)\\k<n>",
+      "allowed": false,
+      "construct": "(?<"
+    },
+    {
+      "pattern": "\\cA",
+      "allowed": false,
+      "construct": "\\c"
+    },
+    {
+      "pattern": "(?<=a)b",
+      "allowed": false,
+      "construct": "(?<="
+    },
+    {
+      "pattern": "(?<!a)b",
+      "allowed": false,
+      "construct": "(?<!"
+    },
+    {
+      "pattern": "(?'n'a)",
+      "allowed": false,
+      "construct": "(?'"
+    },
+    {
+      "pattern": "(?>a)",
+      "allowed": false,
+      "construct": "(?>"
+    },
+    {
+      "pattern": "(?#c)a",
+      "allowed": false,
+      "construct": "(?#"
+    },
+    {
+      "pattern": "(?(a)b|c)",
+      "allowed": false,
+      "construct": "(?("
+    },
+    {
+      "pattern": "(?i)a",
+      "allowed": false,
+      "construct": "(?i"
+    },
+    {
+      "pattern": "(?i:a)",
+      "allowed": false,
+      "construct": "(?i"
+    },
+    {
+      "pattern": "[]a]",
+      "allowed": false,
+      "construct": "[]"
+    },
+    {
+      "pattern": "[^]a]",
+      "allowed": false,
+      "construct": "[^]"
+    },
+    {
+      "pattern": "[a-z-[aeiou]]",
+      "allowed": false,
+      "construct": "[",
+      "replacement": "\\["
+    },
+    {
+      "pattern": "[\\d]",
+      "allowed": false,
+      "construct": "\\d",
+      "replacement": "[0-9]"
+    },
+    {
+      "pattern": "[\\b]",
+      "allowed": false,
+      "construct": "\\b"
+    },
+    {
+      "pattern": "a]",
+      "allowed": false,
+      "construct": "]",
+      "replacement": "\\]"
+    },
+    {
+      "pattern": "a}",
+      "allowed": false,
+      "construct": "}",
+      "replacement": "\\}"
+    },
+    {
+      "pattern": "a{",
+      "allowed": false,
+      "construct": "{",
+      "replacement": "\\{"
+    },
+    {
+      "pattern": "a{,2}",
+      "allowed": false,
+      "construct": "{",
+      "replacement": "\\{"
+    },
+    {
+      "pattern": "a{2",
+      "allowed": false,
+      "construct": "{",
+      "replacement": "\\{"
+    },
+    {
+      "pattern": "\\ ",
+      "allowed": false,
+      "construct": "\\ ",
+      "replacement": " "
+    },
+    {
+      "pattern": "\\\u00e9",
+      "allowed": false,
+      "construct": "\\\u00e9",
+      "replacement": "\u00e9"
+    },
+    {
+      "pattern": "\\x4",
+      "allowed": false,
+      "construct": "\\x"
+    },
+    {
+      "pattern": "\\u00e",
+      "allowed": false,
+      "construct": "\\u"
+    },
+    {
+      "pattern": "^*",
+      "allowed": false,
+      "construct": "*"
+    },
+    {
+      "pattern": "(?=a)*",
+      "allowed": false,
+      "construct": "*"
+    },
+    {
+      "pattern": "a|+",
+      "allowed": false,
+      "construct": "+"
+    },
+    {
+      "pattern": "(?{2})",
+      "allowed": false,
+      "construct": "(?{"
+    }
+  ]
+}

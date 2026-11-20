@@ -1,0 +1,263 @@
+{
+  "now": "2026-10-15T12:00:00Z",
+  "zone": "-03:00",
+  "data": {},
+  "cases": [
+    {
+      "name": "date stays yyyy-MM-dd",
+      "value": {
+        "kind": "call",
+        "function": "date",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "text",
+            "value": "2026-10-15"
+          }
+        ]
+      },
+      "expect": {
+        "type": "date",
+        "value": "2026-10-15"
+      }
+    },
+    {
+      "name": "time without seconds becomes HH:mm:ss",
+      "value": {
+        "kind": "call",
+        "function": "time",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "text",
+            "value": "09:00"
+          }
+        ]
+      },
+      "expect": {
+        "type": "time",
+        "value": "09:00:00"
+      }
+    },
+    {
+      "name": "time with seconds stays HH:mm:ss",
+      "value": {
+        "kind": "call",
+        "function": "time",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "text",
+            "value": "09:00:00"
+          }
+        ]
+      },
+      "expect": {
+        "type": "time",
+        "value": "09:00:00"
+      }
+    },
+    {
+      "name": "offset datetime becomes utc Z",
+      "value": {
+        "kind": "call",
+        "function": "datetime",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "text",
+            "value": "2026-10-15T13:00:00-03:00"
+          }
+        ]
+      },
+      "expect": {
+        "type": "datetime",
+        "value": "2026-10-15T16:00:00Z"
+      }
+    },
+    {
+      "name": "utc datetime stays Z",
+      "value": {
+        "kind": "call",
+        "function": "datetime",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "text",
+            "value": "2026-10-15T16:00:00Z"
+          }
+        ]
+      },
+      "expect": {
+        "type": "datetime",
+        "value": "2026-10-15T16:00:00Z"
+      }
+    },
+    {
+      "name": "datetime without seconds gains seconds",
+      "value": {
+        "kind": "call",
+        "function": "datetime",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "text",
+            "value": "2026-10-15T13:00Z"
+          }
+        ]
+      },
+      "expect": {
+        "type": "datetime",
+        "value": "2026-10-15T13:00:00Z"
+      }
+    },
+    {
+      "name": "fractional trailing zeros are stripped",
+      "value": {
+        "kind": "call",
+        "function": "datetime",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "text",
+            "value": "2026-10-15T16:00:00.1200000Z"
+          }
+        ]
+      },
+      "expect": {
+        "type": "datetime",
+        "value": "2026-10-15T16:00:00.12Z"
+      }
+    },
+    {
+      "name": "significant fractional digits stay",
+      "value": {
+        "kind": "call",
+        "function": "datetime",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "text",
+            "value": "2026-10-15T16:00:00.0000001Z"
+          }
+        ]
+      },
+      "expect": {
+        "type": "datetime",
+        "value": "2026-10-15T16:00:00.0000001Z"
+      }
+    },
+    {
+      "name": "string of an offset datetime is the stored form",
+      "value": {
+        "kind": "call",
+        "function": "string",
+        "args": [
+          {
+            "kind": "call",
+            "function": "datetime",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "text",
+                "value": "2026-10-15T13:00:00-03:00"
+              }
+            ]
+          }
+        ]
+      },
+      "expect": {
+        "type": "text",
+        "value": "2026-10-15T16:00:00Z"
+      }
+    },
+    {
+      "name": "string of two writings of one instant is equal",
+      "condition": {
+        "kind": "compare",
+        "left": {
+          "kind": "call",
+          "function": "string",
+          "args": [
+            {
+              "kind": "call",
+              "function": "datetime",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "text",
+                  "value": "2026-10-15T13:00:00-03:00"
+                }
+              ]
+            }
+          ]
+        },
+        "operator": "equals",
+        "right": {
+          "kind": "call",
+          "function": "string",
+          "args": [
+            {
+              "kind": "call",
+              "function": "datetime",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "text",
+                  "value": "2026-10-15T16:00:00Z"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "expect": {
+        "result": true
+      }
+    },
+    {
+      "name": "string of 09:00 and 09:00:00 is equal",
+      "condition": {
+        "kind": "compare",
+        "left": {
+          "kind": "call",
+          "function": "string",
+          "args": [
+            {
+              "kind": "call",
+              "function": "time",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "text",
+                  "value": "09:00"
+                }
+              ]
+            }
+          ]
+        },
+        "operator": "equals",
+        "right": {
+          "kind": "call",
+          "function": "string",
+          "args": [
+            {
+              "kind": "call",
+              "function": "time",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "text",
+                  "value": "09:00:00"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "expect": {
+        "result": true
+      }
+    }
+  ]
+}

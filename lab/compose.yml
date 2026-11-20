@@ -1,0 +1,13 @@
+# Only for the evaluation lab (lab/stack.sh adds this file to docker-compose.yml): the mock of the external systems, reachable on
+# the compose network and nowhere else (specs/experiments/laboratorio/mock.md §2). It runs on the frontend's image, as the e2e stub
+# does, so the stack needs no other image.
+services:
+  mock:
+    build:
+      context: ./frontend
+      target: dev
+    command: ["node", "/mock/server.mjs"]
+    environment:
+      MOCK_API_KEY: "${CHAIN_LAB_MOCK_KEY:?lab/stack.sh sets the mock key}"
+    volumes:
+      - ./lab/mock:/mock:ro

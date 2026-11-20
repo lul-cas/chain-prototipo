@@ -1,0 +1,103 @@
+/* The five sections (automation-ui.md §7.1): the preview sits in a second column on wide screens and stays in view. */
+.chain-sections {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, var(--chain-size-aside));
+  align-items: start;
+  gap: var(--chain-space-5);
+}
+
+.chain-sections__main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--chain-space-4);
+}
+
+.chain-sections__preview {
+  position: sticky;
+  inset-block-start: var(--chain-space-4);
+}
+
+.chain-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--chain-space-2);
+  padding: var(--chain-space-4);
+  border: var(--chain-border-width) solid var(--color-border-subtle);
+  border-radius: var(--chain-radius-lg);
+  background: var(--color-bg-surface);
+}
+
+.chain-section h2 {
+  font-size: var(--chain-font-size-lg);
+}
+
+.chain-section h3 {
+  margin-block-start: var(--chain-space-2);
+  font-size: var(--chain-font-size-md);
+}
+
+.chain-section p,
+.chain-section__facts {
+  margin: 0;
+}
+
+.chain-section__facts {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: var(--chain-space-1) var(--chain-space-3);
+}
+
+.chain-section__facts dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.chain-section__table {
+  inline-size: 100%;
+  border-collapse: collapse;
+  font-size: var(--chain-font-size-sm);
+}
+
+.chain-section__table th,
+.chain-section__table td {
+  padding: var(--chain-space-1) var(--chain-space-2);
+  border-block-end: var(--chain-border-width) solid var(--color-border-subtle);
+  text-align: start;
+}
+
+.chain-section__muted {
+  color: var(--color-text-muted);
+  font-size: var(--chain-font-size-sm);
+}
+
+.chain-section__flag {
+  color: var(--color-text-danger);
+  font-size: var(--chain-font-size-sm);
+}
+
+.chain-section__warning {
+  color: var(--color-status-warning-text);
+  font-size: var(--chain-font-size-sm);
+}
+
+.chain-section__preview {
+  margin: 0;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font-size: var(--chain-font-size-sm);
+}
+
+[data-control].chain-section__outlined,
+.chain-section__outlined {
+  outline: var(--chain-border-width-strong) solid var(--color-border-danger);
+}
+
+@media (max-width: 64rem) {
+  .chain-sections {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .chain-sections__preview {
+    position: static;
+  }
+}

@@ -1,0 +1,71 @@
+.chain-form-field {
+  --field-control-height: var(--chain-size-control-md);
+  --field-radius: var(--chain-radius-md);
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--chain-space-1);
+  min-width: 0;
+}
+
+.chain-form-field__header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--chain-space-3);
+}
+
+.chain-form-field__label {
+  font-size: var(--chain-font-size-sm);
+  line-height: var(--chain-line-height-sm);
+  font-weight: var(--chain-font-weight-semibold);
+  color: var(--color-text);
+}
+
+.chain-form-field__required {
+  font-family: var(--chain-font-mono);
+  font-size: var(--chain-font-size-xs);
+  line-height: var(--chain-line-height-xs);
+  letter-spacing: var(--chain-letter-spacing-label);
+  color: var(--color-text-muted);
+}
+
+.chain-form-field__hint {
+  font-size: var(--chain-font-size-sm);
+  line-height: var(--chain-line-height-sm);
+  color: var(--color-text-muted);
+}
+
+.chain-form-field__control {
+  margin-top: var(--chain-space-1);
+}
+
+/* The control itself is styled in src/styles/controls.css. */
+.chain-form-field--invalid .chain-input,
+.chain-form-field--invalid .chain-input:hover {
+  border-color: var(--color-border-danger);
+  border-width: var(--chain-border-width);
+  box-shadow: inset var(--chain-border-width-accent) 0 0 var(--color-border-danger);
+}
+
+.chain-form-field__error {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--chain-space-1);
+  margin-top: var(--chain-space-1);
+  font-size: var(--chain-font-size-sm);
+  line-height: var(--chain-line-height-sm);
+  font-weight: var(--chain-font-weight-medium);
+  color: var(--color-text-danger);
+}
+
+.chain-form-field__error:empty {
+  margin-top: 0;
+}
+
+.chain-form-field__error svg {
+  flex: none;
+  width: var(--chain-size-icon-sm);
+  height: var(--chain-size-icon-sm);
+  margin-top: var(--chain-space-hairline);
+}

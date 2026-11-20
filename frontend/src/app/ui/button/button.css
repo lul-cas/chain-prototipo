@@ -1,0 +1,110 @@
+:host {
+  --button-height: var(--chain-size-control-md);
+  --button-padding-x: var(--chain-space-4);
+  --button-radius: var(--chain-radius-md);
+  --button-bg: var(--color-action-primary);
+  --button-bg-hover: var(--color-action-primary-hover);
+  --button-bg-active: var(--color-action-primary-active);
+  --button-fg: var(--color-text-on-action);
+  --button-border: transparent;
+
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--chain-space-2);
+  min-height: var(--button-height);
+  padding: 0 var(--button-padding-x);
+  border: var(--chain-border-width) solid var(--button-border);
+  border-radius: var(--button-radius);
+  background: var(--button-bg);
+  color: var(--button-fg);
+  font-size: var(--chain-font-size-md);
+  line-height: var(--chain-line-height-sm);
+  font-weight: var(--chain-font-weight-semibold);
+  letter-spacing: var(--chain-letter-spacing-snug);
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  transition:
+    background-color var(--chain-duration-fast) var(--chain-ease-standard),
+    border-color var(--chain-duration-fast) var(--chain-ease-standard),
+    transform var(--chain-duration-fast) var(--chain-ease-standard);
+}
+
+:host(:hover) {
+  background: var(--button-bg-hover);
+}
+
+:host(:active) {
+  background: var(--button-bg-active);
+  transform: translateY(var(--chain-border-width));
+}
+
+:host(.chain-button--secondary) {
+  --button-bg: var(--color-bg-surface);
+  --button-bg-hover: var(--color-bg-hover);
+  --button-bg-active: var(--color-bg-hover);
+  --button-fg: var(--color-text);
+  --button-border: var(--color-border-control);
+}
+
+:host(.chain-button--ghost) {
+  --button-bg: transparent;
+  --button-bg-hover: var(--color-bg-hover);
+  --button-bg-active: var(--color-bg-hover);
+  --button-fg: var(--color-text);
+}
+
+:host(.chain-button--danger) {
+  --button-bg: var(--color-action-danger);
+  --button-bg-hover: var(--color-action-danger-hover);
+  --button-bg-active: var(--color-action-danger-hover);
+  --button-fg: var(--color-text-on-danger);
+}
+
+:host(.chain-button--sm) {
+  --button-height: var(--chain-size-control-sm);
+  --button-padding-x: var(--chain-space-3);
+  font-size: var(--chain-font-size-sm);
+}
+
+:host(:disabled) {
+  cursor: not-allowed;
+  opacity: 0.5;
+  transform: none;
+  background: var(--button-bg);
+}
+
+:host(.chain-button--loading) {
+  cursor: progress;
+  transform: none;
+  background: var(--button-bg);
+}
+
+.chain-button__label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--chain-space-2);
+}
+
+.chain-button__label svg {
+  width: var(--chain-size-icon-sm);
+  height: var(--chain-size-icon-sm);
+}
+
+.chain-button__spinner {
+  width: var(--chain-size-spinner);
+  height: var(--chain-size-spinner);
+  border: var(--chain-border-width-strong) solid currentColor;
+  border-top-color: transparent;
+  border-radius: var(--chain-radius-full);
+  animation: chain-button-spin var(--chain-duration-spin) linear infinite;
+}
+
+@keyframes chain-button-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

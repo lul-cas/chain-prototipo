@@ -1,0 +1,19 @@
+{
+  "contractVersion": 1,
+  "requestId": "0199f000-0000-7000-8000-000000000001",
+  "activation": 1,
+  "outcome": "failed",
+  "output": null,
+  "error": { "class": "http_status", "message": "The target answered HTTP 404.", "status": 404 },
+  "attempts": [
+    {
+      "number": 1, "startedAt": "2026-10-16T12:00:01.120Z", "durationMs": 95, "outcome": "permanent_error",
+      "errorClass": "http_status", "status": 404, "responseBytes": 31,
+      "request": {
+        "method": "POST", "destination": "erp", "host": "api.erp.example", "path": "/v1/clientes/123.456%2F78%209/consultas",
+        "queryNames": ["origem", "valor"], "headerNames": ["Accept", "Content-Type", "Idempotency-Key", "X-Api-Key"],
+        "secrets": [{ "name": "erp_api_key", "version": 2 }]
+      }
+    }
+  ]
+}

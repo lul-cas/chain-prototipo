@@ -1,0 +1,98 @@
+/*
+ * Chain semantic tokens: light theme ("paper").
+ * Every color is a reference to a primitive (primitives.css). dark.css defines the same names.
+ * Values and rationale: specs/modules/design-system.md §3. Contrast: contrast-pairs.ts.
+ */
+:root,
+[data-theme='light'] {
+  color-scheme: light;
+
+  /* Backgrounds */
+  --color-bg-canvas: var(--chain-color-neutral-100);
+  --color-bg-surface: var(--chain-color-white);
+  --color-bg-subtle: var(--chain-color-neutral-50);
+  --color-bg-raised: var(--chain-color-white);
+  --color-bg-hover: var(--chain-color-neutral-200);
+  --color-bg-selected: var(--chain-color-ink-100);
+  --color-bg-inverse: var(--chain-color-neutral-900);
+  --color-bg-backdrop: rgb(19 17 15 / 0.48);
+
+  /* Text */
+  --color-text: var(--chain-color-neutral-900);
+  --color-text-muted: var(--chain-color-neutral-600);
+  --color-text-disabled: var(--chain-color-neutral-400);
+  --color-text-link: var(--chain-color-ink-700);
+  --color-text-danger: var(--chain-color-red-700);
+  --color-text-selected: var(--chain-color-ink-800);
+  --color-text-inverse: var(--chain-color-neutral-50);
+  --color-text-on-action: var(--chain-color-white);
+  --color-text-on-danger: var(--chain-color-white);
+
+  /* Actions */
+  --color-action-primary: var(--chain-color-ink-700);
+  --color-action-primary-hover: var(--chain-color-ink-800);
+  --color-action-primary-active: var(--chain-color-ink-900);
+  --color-action-danger: var(--chain-color-red-700);
+  --color-action-danger-hover: var(--chain-color-red-800);
+
+  /* Borders and focus */
+  --color-border-subtle: var(--chain-color-neutral-200);
+  --color-border-strong: var(--chain-color-neutral-300);
+  --color-border-control: var(--chain-color-neutral-500);
+  --color-border-control-hover: var(--chain-color-neutral-700);
+  --color-border-danger: var(--chain-color-red-600);
+  --color-border-elevated: var(--chain-color-neutral-200);
+  --color-focus-ring: var(--chain-color-ink-600);
+
+  /* Status */
+  --color-status-info-bg: var(--chain-color-sky-50);
+  --color-status-info-border: var(--chain-color-sky-200);
+  --color-status-info-icon: var(--chain-color-sky-600);
+  --color-status-info-text: var(--chain-color-sky-800);
+  --color-status-success-bg: var(--chain-color-green-50);
+  --color-status-success-border: var(--chain-color-green-200);
+  --color-status-success-icon: var(--chain-color-green-600);
+  --color-status-success-text: var(--chain-color-green-800);
+  --color-status-warning-bg: var(--chain-color-amber-50);
+  --color-status-warning-border: var(--chain-color-amber-200);
+  --color-status-warning-icon: var(--chain-color-amber-600);
+  --color-status-warning-text: var(--chain-color-amber-800);
+  --color-status-danger-bg: var(--chain-color-red-50);
+  --color-status-danger-border: var(--chain-color-red-200);
+  --color-status-danger-icon: var(--chain-color-red-600);
+  --color-status-danger-text: var(--chain-color-red-800);
+
+  /* Workflow node kinds: stroke and label (fg), fill (bg) */
+  --color-node-start-fg: var(--chain-color-green-700);
+  --color-node-start-bg: var(--chain-color-green-50);
+  --color-node-task-fg: var(--chain-color-ink-700);
+  --color-node-task-bg: var(--chain-color-ink-50);
+  --color-node-automatic-fg: var(--chain-color-plum-700);
+  --color-node-automatic-bg: var(--chain-color-plum-50);
+  --color-node-subworkflow-fg: var(--chain-color-sky-700);
+  --color-node-subworkflow-bg: var(--chain-color-sky-50);
+  --color-node-gateway-fg: var(--chain-color-amber-700);
+  --color-node-gateway-bg: var(--chain-color-amber-50);
+  --color-node-end-fg: var(--chain-color-red-700);
+  --color-node-end-bg: var(--chain-color-red-50);
+  --color-node-lane-fg: var(--chain-color-neutral-700);
+  --color-node-lane-bg: var(--chain-color-neutral-100);
+  --color-node-lane-border: var(--chain-color-neutral-500);
+  --color-node-lane-band: var(--chain-color-neutral-800);
+  --color-node-lane-band-fg: var(--chain-color-neutral-50);
+
+  --color-flow: var(--chain-color-neutral-700);
+  --color-flow-true: var(--chain-color-green-700);
+  --color-flow-false: var(--chain-color-red-700);
+  --color-handle: var(--chain-color-ink-700);
+  --color-selection: var(--chain-color-ink-600);
+
+  /* Brand mark */
+  --color-brand-mark: var(--chain-color-ink-700);
+  --color-brand-mark-link: var(--chain-color-ink-400);
+
+  /* Elevation: soft, warm-tinted shadows */
+  --shadow-raised: 0 1px 2px rgb(32 30 26 / 0.06), 0 1px 1px rgb(32 30 26 / 0.04);
+  --shadow-popover: 0 4px 12px -2px rgb(32 30 26 / 0.12), 0 2px 4px rgb(32 30 26 / 0.06);
+  --shadow-dialog: 0 24px 48px -12px rgb(32 30 26 / 0.28), 0 4px 12px rgb(32 30 26 / 0.08);
+}

@@ -1,0 +1,32 @@
+:host {
+  display: flex;
+  align-items: center;
+  gap: var(--chain-space-3);
+  min-height: var(--chain-size-control-md);
+  padding: 0 var(--chain-space-3);
+  border-radius: var(--chain-radius-md);
+  color: var(--color-text-muted);
+  font-size: var(--chain-font-size-md);
+  font-weight: var(--chain-font-weight-medium);
+  text-decoration: none;
+  transition:
+    background-color var(--chain-duration-fast) var(--chain-ease-standard),
+    color var(--chain-duration-fast) var(--chain-ease-standard);
+}
+
+:host svg {
+  width: var(--chain-size-icon-sm);
+  height: var(--chain-size-icon-sm);
+}
+
+:host(:hover) {
+  background: var(--color-bg-hover);
+  color: var(--color-text);
+}
+
+:host([aria-current='page']) {
+  background: var(--color-bg-selected);
+  color: var(--color-text-selected);
+  font-weight: var(--chain-font-weight-semibold);
+  box-shadow: inset var(--chain-border-width-accent) 0 0 var(--color-action-primary);
+}

@@ -1,0 +1,50 @@
+<section class="chain-groups" aria-labelledby="chain-groups-title">
+  <div class="chain-groups__header">
+    <h1 id="chain-groups-title">Grupos</h1>
+    <button chainButton type="button" (click)="create()">Novo grupo</button>
+  </div>
+
+  @if (notice(); as text) {
+    <chain-alert tone="info">{{ text }}</chain-alert>
+  }
+
+  <label class="chain-groups__check">
+    <input type="checkbox" [checked]="includeArchived()" (change)="toggleArchived($event)" />
+    Mostrar arquivados
+  </label>
+
+  @if (loadError(); as message) {
+    <chain-alert tone="danger">{{ message }}</chain-alert>
+    <div><button chainButton variant="secondary" type="button" (click)="reload()">Tentar de novo</button></div>
+  } @else if (groups(); as list) {
+    @if (list.length === 0) {
+      <p class="chain-groups__muted">Nenhum grupo ainda. Crie o primeiro com “Novo grupo”.</p>
+    } @else {
+      <div class="chain-admin-table__scroll">
+        <table class="chain-admin-table">
+          <caption class="chain-visually-hidden">Grupos</caption>
+          <thead>
+            <tr>
+              <th scope="col">Nome</th>
+              <th scope="col">Descrição</th>
+              <th scope="col">Membros</th>
+              <th scope="col">Modelagem</th>
+              <th scope="col">Situação</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (group of list; track group.id) {
+              <tr>
+                <th scope="row"><a [routerLink]="['/administracao/grupos', group.id]">{{ group.name }}</a></th>
+                <td>{{ group.description }}</td>
+                <td>{{ group.memberCount }}</td>
+                <td>{{ group.isModeler ? 'Modela processos' : '' }}</td>
+                <td>{{ group.isArchived ? 'Arquivado' : '' }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  }
+</section>

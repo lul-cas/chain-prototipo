@@ -1,0 +1,73 @@
+# Local development environment. Not for production use.
+# Usage: cp .env.example .env (optional) && docker compose up --build
+name: chain
+
+services:
+  postgres:
+    image: postgres:17.11-alpine
+    environment:
+      POSTGRES_USER: ${CHAIN_DB_USER:-chain}
+      POSTGRES_PASSWORD: ${CHAIN_DB_PASSWORD:-chain}
+      POSTGRES_DB: ${CHAIN_DB_NAME:-chain}
+    ports:
+      - "${CHAIN_DB_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build: ./backend
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__Chain: "Host=postgres;Port=5432;Database=${CHAIN_DB_NAME:-chain};Username=${CHAIN_DB_USER:-chain};Password=${CHAIN_DB_PASSWORD:-chain}"
+      Chain__ApplyMigrationsOnStartup: "true"
+      # Frontend origin allowed to send state-changing requests (CSRF defence; specs/modules/identity.md).
+      Chain__AllowedOrigins__0: "${CHAIN_FRONTEND_ORIGIN:-http://localhost:4200}"
+      # Key-encryption keys for automation secrets (automation.md §4.1). The default is a development-only key:
+      # never use it outside local development, and never take a production key from a .env file.
+      Chain__Automation__Keks: "${CHAIN_AUTOMATION_KEKS:-dev:ZGV2ZWxvcG1lbnQtb25seS1rZXktZG8tbm90LXVzZSE=}"
+      Chain__Automation__ActiveKek: "${CHAIN_AUTOMATION_ACTIVE_KEK:-dev}"
+      # The result call from Elixir (automation-contract.md §4.1): the API keeps only the SHA-256 of the token, and the internal
+      # port 8081 is reachable on the compose network only. The default token is development-only, like the KEK above.
+      Chain__Automation__ResultTokenSha256: "${CHAIN_AUTOMATION_RESULT_TOKEN_SHA256:-dcf5a1eb6a5bbb92ba48b910dd25245847b721798dc2e1c71dfa238e2e3f25d1}"
+    ports:
+      - "${CHAIN_API_PORT:-8080}:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  automation:
+    build: ./automation
+    environment:
+      DATABASE_URL: "ecto://${CHAIN_DB_USER:-chain}:${CHAIN_DB_PASSWORD:-chain}@postgres:5432/${CHAIN_DB_NAME:-chain}"
+      # The same development-only KEK as the API's, so Elixir can open the secrets the API stores (automation-contract.md §5).
+      CHAIN_AUTOMATION_KEKS: "${CHAIN_AUTOMATION_KEKS:-dev:ZGV2ZWxvcG1lbnQtb25seS1rZXktZG8tbm90LXVzZSE=}"
+      # Results go to the API's internal listener, which only the compose network reaches (automation-contract.md §4.1),
+      # with the development-only token whose SHA-256 the API has by default. Never use it outside local development.
+      CHAIN_AUTOMATION_RESULT_URL: "http://api:8081/internal/automation/results"
+      CHAIN_AUTOMATION_RESULT_TOKEN: "${CHAIN_AUTOMATION_RESULT_TOKEN:-ZGV2ZWxvcG1lbnQtb25seS1yZXN1bHQtdG9rZW4tMDA}"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend
+      target: dev
+    environment:
+      CHAIN_API_PROXY_TARGET: http://api:8080
+    ports:
+      - "${CHAIN_FRONTEND_PORT:-4200}:4200"
+    volumes:
+      - ./frontend:/app
+      - frontend_node_modules:/app/node_modules
+    depends_on:
+      - api
+
+volumes:
+  postgres_data:
+  frontend_node_modules:

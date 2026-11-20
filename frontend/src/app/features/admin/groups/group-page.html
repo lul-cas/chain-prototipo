@@ -1,0 +1,129 @@
+<div class="chain-group">
+  <a routerLink="/administracao/grupos">Voltar para Grupos</a>
+
+  @if (loadError(); as failure) {
+    <h1>Grupo</h1>
+    <chain-alert tone="danger">{{ failure.text }}</chain-alert>
+    @if (failure.retry) {
+      <div><button chainButton variant="secondary" type="button" (click)="load()">Tentar de novo</button></div>
+    }
+  } @else if (group(); as current) {
+    <div class="chain-group__header">
+      <div class="chain-group__identity">
+        <h1>{{ current.name }}</h1>
+        @if (current.description) {
+          <p class="chain-group__muted">{{ current.description }}</p>
+        }
+        @if (current.isArchived) {
+          <p class="chain-group__badge">Arquivado</p>
+        }
+      </div>
+      <div class="chain-group__actions">
+        <button chainButton variant="secondary" type="button" (click)="edit()">Editar nome e descrição</button>
+        <button chainButton variant="secondary" type="button" [disabled]="busy()" (click)="archive()">
+          {{ current.isArchived ? 'Desarquivar' : 'Arquivar' }}
+        </button>
+      </div>
+    </div>
+
+    @if (notice(); as text) {
+      <chain-alert tone="info">{{ text }}</chain-alert>
+    }
+    @if (actionError(); as failure) {
+      <chain-alert tone="danger">
+        <span class="chain-group__inline">
+          {{ failure.text }}
+          @if (failure.retry) {
+            <button chainButton variant="secondary" size="sm" type="button" (click)="failure.retry()">Tentar de novo</button>
+          }
+        </span>
+      </chain-alert>
+    }
+
+    <section class="chain-group__section" aria-labelledby="chain-group-modeling">
+      <h2 id="chain-group-modeling">Modelagem</h2>
+      <label class="chain-group__check">
+        <input
+          type="checkbox"
+          aria-describedby="chain-group-modeling-hint"
+          [checked]="current.isModeler"
+          [disabled]="current.isArchived || busy()"
+          (change)="toggleModeler($event)"
+        />
+        Os membros podem modelar processos e formulários
+      </label>
+      <p id="chain-group-modeling-hint" class="chain-group__muted">
+        {{ current.isArchived ? 'Suspensa enquanto o grupo estiver arquivado.' : 'Os membros veem Processos e Formulários a partir da próxima página que abrirem.' }}
+      </p>
+    </section>
+
+    <section class="chain-group__section" aria-labelledby="chain-group-members">
+      <div class="chain-group__members-header">
+        <h2 id="chain-group-members">Membros</h2>
+        <button
+          chainButton
+          variant="secondary"
+          type="button"
+          [disabled]="current.isArchived"
+          [attr.aria-describedby]="current.isArchived ? 'chain-group-members-closed' : null"
+          (click)="addMember()"
+        >
+          Adicionar membro
+        </button>
+      </div>
+      @if (current.isArchived) {
+        <p id="chain-group-members-closed" class="chain-group__muted">Um grupo arquivado não recebe membros.</p>
+      }
+      @if (current.members.length === 0) {
+        <p class="chain-group__muted">Nenhum membro ainda.</p>
+      } @else {
+        <p class="chain-group__muted">{{ countText() }}</p>
+        <div class="chain-admin-table__scroll">
+          <table class="chain-admin-table">
+            <caption class="chain-visually-hidden">Membros</caption>
+            <thead>
+              <tr>
+                <th scope="col">Nome</th>
+                <th scope="col">Identificador</th>
+                <th scope="col">Situação</th>
+                <th scope="col"><span class="chain-visually-hidden">Ações</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (member of current.members; track member.id) {
+                <tr>
+                  <th scope="row">{{ member.displayName }}</th>
+                  <td><code>{{ member.username }}</code></td>
+                  <td>
+                    @if (states(member); as list) {
+                      @if (list.length > 0) {
+                        <ul class="chain-admin-table__states">
+                          @for (state of list; track state) {
+                            <li>{{ state }}</li>
+                          }
+                        </ul>
+                      }
+                    }
+                  </td>
+                  <td>
+                    <button
+                      chainButton
+                      variant="ghost"
+                      size="sm"
+                      type="button"
+                      [attr.aria-label]="'Remover ' + member.displayName + ' do grupo'"
+                      [disabled]="busy()"
+                      (click)="remove(member)"
+                    >
+                      Remover
+                    </button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </section>
+  }
+</div>

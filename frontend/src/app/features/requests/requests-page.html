@@ -1,0 +1,53 @@
+<section class="chain-requests" aria-labelledby="chain-requests-title">
+  <h1 id="chain-requests-title">Solicitações</h1>
+
+  <div class="chain-requests__filters">
+    <fieldset class="chain-requests__scope">
+      <legend>Mostrar</legend>
+      <label>
+        <input type="radio" name="chain-requests-scope" value="mine" [checked]="scope() === 'mine'" (change)="scope.set('mine')" />
+        Minhas solicitações
+      </label>
+      <label>
+        <input type="radio" name="chain-requests-scope" value="visible" [checked]="scope() === 'visible'" (change)="scope.set('visible')" />
+        Todas que posso ver
+      </label>
+    </fieldset>
+    <chain-form-field label="Situação">
+      <select chainInput (change)="chooseStatus($event)">
+        <option value="" [selected]="status() === ''">Todas</option>
+        @for (entry of statuses; track entry[0]) {
+          <option [value]="entry[0]" [selected]="status() === entry[0]">{{ entry[1] }}</option>
+        }
+      </select>
+    </chain-form-field>
+  </div>
+
+  @if (error(); as message) {
+    <chain-alert tone="danger">{{ message }}</chain-alert>
+    <div>
+      <button chainButton variant="secondary" type="button" (click)="load()">Tentar de novo</button>
+    </div>
+  } @else if (requests(); as list) {
+    @if (list.length === 0) {
+      <p class="chain-requests__empty">Nenhuma solicitação.</p>
+    } @else {
+      <ul class="chain-requests__list">
+        @for (request of list; track request.id) {
+          <li>
+            <a class="chain-requests__item" [routerLink]="['/solicitacoes', request.id]">
+              <span class="chain-requests__name">{{ request.definitionName }}</span>
+              <span class="chain-requests__meta">
+                <span class="chain-requests__status">{{ statusLabel[request.status] }}</span>
+                <span>Solicitada por {{ request.requester.displayName }}</span>
+                <time [attr.datetime]="request.startedAt">{{ request.startedAt | date: 'dd/MM/yyyy HH:mm' }}</time>
+              </span>
+            </a>
+          </li>
+        }
+      </ul>
+    }
+  } @else {
+    <p role="status">Carregando solicitações…</p>
+  }
+</section>

@@ -1,0 +1,126 @@
+.chain-request {
+  display: flex;
+  flex-direction: column;
+  gap: var(--chain-space-6);
+  max-width: var(--chain-size-measure);
+}
+
+h1 {
+  font-size: var(--chain-font-size-2xl);
+  line-height: var(--chain-line-height-2xl);
+}
+
+h2 {
+  font-size: var(--chain-font-size-lg);
+  line-height: var(--chain-line-height-lg);
+}
+
+.chain-request__header,
+.chain-request__section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--chain-space-3);
+}
+
+.chain-request__facts {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--chain-space-2) var(--chain-space-4);
+  color: var(--color-text-muted);
+}
+
+.chain-request__status {
+  padding: var(--chain-space-1) var(--chain-space-3);
+  border: var(--chain-border-width) solid var(--color-border-strong);
+  border-radius: var(--chain-radius-full);
+  color: var(--color-text);
+  font-weight: var(--chain-font-weight-medium);
+}
+
+.chain-request__muted {
+  color: var(--color-text-muted);
+}
+
+.chain-request__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--chain-space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.chain-request__list > li {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--chain-space-1) var(--chain-space-3);
+}
+
+/* An incident's text, with the code and the recorded message below it (requests-ui.md §6). */
+.chain-request__incident {
+  flex-direction: column;
+}
+
+.chain-request__timeline {
+  display: flex;
+  flex-direction: column;
+  gap: var(--chain-space-3);
+  margin: 0;
+  padding: 0 0 0 var(--chain-space-4);
+  border-left: var(--chain-border-width) solid var(--color-border-subtle);
+  list-style: none;
+}
+
+.chain-request__event {
+  display: flex;
+  flex-direction: column;
+  gap: var(--chain-space-1);
+}
+
+.chain-request__when {
+  font-size: var(--chain-font-size-sm);
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.chain-request__note {
+  color: var(--color-text-muted);
+}
+
+.chain-data {
+  display: flex;
+  flex-direction: column;
+  gap: var(--chain-space-2);
+  margin: 0;
+}
+
+.chain-data__row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  gap: var(--chain-space-3);
+}
+
+.chain-data__row > dt {
+  font-family: var(--chain-font-mono);
+  font-size: var(--chain-font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.chain-data__row > dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.chain-data__rows {
+  margin: 0;
+  padding-left: var(--chain-space-5);
+}
+
+.chain-request__retry {
+  margin-top: var(--chain-space-2);
+}
+
+.chain-request__canvas {
+  block-size: var(--chain-size-canvas-compact);
+}

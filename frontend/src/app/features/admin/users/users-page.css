@@ -1,0 +1,32 @@
+.chain-users {
+  display: flex;
+  flex-direction: column;
+  gap: var(--chain-space-4);
+  max-width: var(--chain-size-content-max);
+}
+
+.chain-users__header,
+.chain-users__pager {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--chain-space-2);
+}
+
+.chain-users__header {
+  justify-content: space-between;
+}
+
+h1 {
+  font-size: var(--chain-font-size-2xl);
+  line-height: var(--chain-line-height-2xl);
+}
+
+.chain-users__search {
+  max-width: var(--chain-size-measure);
+}
+
+.chain-users__muted {
+  margin: 0;
+  color: var(--color-text-muted);
+}

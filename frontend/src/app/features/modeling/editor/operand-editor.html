@@ -1,0 +1,51 @@
+<select chainInput aria-label="Tipo do valor" class="chain-operand__kind" (change)="setKind($event)">
+  @for (option of kinds(); track option.kind) {
+    <option [value]="option.kind" [selected]="option.kind === kind()">{{ option.label }}</option>
+  }
+</select>
+@switch (kind()) {
+  @case ('path') {
+    <select chainInput [attr.aria-label]="pathLabel()" (change)="setPath($event)">
+      <option value="" [selected]="pathValue() === ''">Escolha o dado</option>
+      @for (entry of candidates(); track entryValue(entry)) {
+        <option [value]="entryValue(entry)" [selected]="entryValue(entry) === pathValue()">{{ entryLabel(entry) }}</option>
+      }
+    </select>
+  }
+  @case ('system') {
+    <select chainInput aria-label="Valor do sistema" (change)="setSystem($event)">
+      @for (name of systemNames(); track name) {
+        <option [value]="name" [selected]="systemName() === name">{{ systemLabel[name] }}</option>
+      }
+    </select>
+  }
+  @case ('literal') {
+    @switch (literalType()) {
+      @case ('boolean') {
+        <select chainInput aria-label="Valor" (change)="setLiteral($event)">
+          <option value="" [selected]="literalValue() === ''">Escolha</option>
+          <option value="true" [selected]="literalValue() === 'true'">verdadeiro</option>
+          <option value="false" [selected]="literalValue() === 'false'">falso</option>
+        </select>
+      }
+      @case ('date') {
+        <input chainInput type="date" aria-label="Valor" [value]="literalValue()" (input)="setLiteral($event)" />
+      }
+      @case ('datetime') {
+        <input chainInput type="datetime-local" aria-label="Valor" [value]="literalValue()" (input)="setLiteral($event)" />
+      }
+      @case ('time') {
+        <input chainInput type="time" aria-label="Valor" [value]="literalValue()" (input)="setLiteral($event)" />
+      }
+      @case ('number') {
+        <input chainInput type="text" inputmode="decimal" aria-label="Valor" [value]="literalValue()" (input)="setLiteral($event)" />
+      }
+      @default {
+        <input chainInput type="text" aria-label="Valor" [value]="literalValue()" (input)="setLiteral($event)" />
+      }
+    }
+  }
+}
+@if (units().length > 0) {
+  <chain-offset-editor [offset]="offset()" (offsetChange)="setOffset($event)" [units]="units()" label="Ajuste do valor" />
+}

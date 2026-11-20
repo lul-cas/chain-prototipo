@@ -1,0 +1,180 @@
+a[chainShellBrand] {
+  color: inherit;
+  text-decoration: none;
+}
+
+.chain-design__intro {
+  display: flex;
+  flex-direction: column;
+  gap: var(--chain-space-3);
+  max-width: var(--chain-size-measure);
+}
+
+.chain-design__title {
+  font-size: var(--chain-font-size-3xl);
+  line-height: var(--chain-line-height-3xl);
+}
+
+.chain-design__section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--chain-space-4);
+  margin-top: var(--chain-space-7);
+}
+
+.chain-design__section h2 {
+  font-size: var(--chain-font-size-xl);
+  line-height: var(--chain-line-height-xl);
+}
+
+.chain-design__themes,
+.chain-design__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--chain-size-card)), 1fr));
+  gap: var(--chain-space-4);
+}
+
+.chain-design__pane,
+.chain-design__shadow,
+.chain-design__lane {
+  border: var(--chain-border-width) solid var(--color-border-subtle);
+  border-radius: var(--chain-radius-lg);
+  background: var(--color-bg-surface);
+  color: var(--color-text);
+}
+
+.chain-design__pane,
+.chain-design__shadow {
+  display: flex;
+  flex-direction: column;
+  gap: var(--chain-space-3);
+  padding: var(--chain-space-4);
+}
+
+.chain-design__muted {
+  color: var(--color-text-muted);
+}
+
+.chain-design__fake {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  min-height: var(--chain-size-control-md);
+  padding: 0 var(--chain-space-4);
+  border-radius: var(--chain-radius-md);
+  background: var(--color-action-primary);
+  color: var(--color-text-on-action);
+  font-weight: var(--chain-font-weight-semibold);
+}
+
+.chain-design__ramp {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: var(--chain-space-1);
+}
+
+.chain-design__swatch {
+  display: flex;
+  flex-direction: column;
+  gap: var(--chain-space-1);
+  min-width: 0;
+}
+
+.chain-design__chip {
+  height: var(--chain-space-6);
+  border: var(--chain-border-width) solid var(--color-border-subtle);
+  border-radius: var(--chain-radius-sm);
+}
+
+.chain-design__step {
+  font-family: var(--chain-font-mono);
+  font-size: var(--chain-font-size-xs);
+  line-height: var(--chain-line-height-xs);
+  color: var(--color-text-muted);
+}
+
+.chain-design__stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--chain-space-4);
+  max-width: var(--chain-size-measure);
+}
+
+.chain-design__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--chain-space-2);
+  align-items: center;
+}
+
+.chain-design__radius {
+  display: flex;
+  align-items: flex-end;
+  width: var(--chain-space-8);
+  height: var(--chain-space-7);
+  padding: var(--chain-space-2);
+  background: var(--color-bg-selected);
+  border: var(--chain-border-width) solid var(--color-border-strong);
+}
+
+.chain-design__shadow--raised {
+  box-shadow: var(--shadow-raised);
+}
+
+.chain-design__shadow--popover {
+  box-shadow: var(--shadow-popover);
+}
+
+.chain-design__shadow--dialog {
+  box-shadow: var(--shadow-dialog);
+}
+
+.chain-design__node {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--chain-size-control-md);
+  padding: 0 var(--chain-space-3);
+  border: var(--chain-border-width-strong) solid currentColor;
+  border-radius: var(--chain-radius-md);
+  font-weight: var(--chain-font-weight-semibold);
+}
+
+.chain-design__flow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--chain-space-2);
+  font-weight: var(--chain-font-weight-semibold);
+}
+
+.chain-design__flow svg {
+  width: var(--chain-size-icon-sm);
+  height: var(--chain-size-icon-sm);
+}
+
+.chain-design__lane {
+  display: flex;
+  align-items: stretch;
+  min-height: var(--chain-space-8);
+  overflow: hidden;
+}
+
+.chain-design__lane-band {
+  display: flex;
+  align-items: center;
+  padding: 0 var(--chain-space-3);
+  font-weight: var(--chain-font-weight-semibold);
+}
+
+.chain-design__handle {
+  align-self: center;
+  width: var(--chain-size-node-handle);
+  height: var(--chain-size-node-handle);
+  margin-left: var(--chain-space-4);
+  border-radius: var(--chain-radius-full);
+}
+
+@media (min-width: 64rem) {
+  .chain-design__ramp {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+}

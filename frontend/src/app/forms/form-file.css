@@ -1,0 +1,75 @@
+/* A file field (forms.md F3, "File fields"): the picker, the files with their sizes and Remover, and refusals under it. Global
+   but scoped by class, like the renderer's styles. */
+.chain-form-file__notice {
+  margin: var(--chain-space-1) 0 0;
+  font-size: var(--chain-font-size-sm);
+  line-height: var(--chain-line-height-sm);
+  color: var(--color-text-muted);
+}
+
+.chain-form-file {
+  display: flex;
+  flex-direction: column;
+  gap: var(--chain-space-1);
+}
+
+.chain-form-file__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--chain-space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.chain-form-file__item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--chain-space-2);
+}
+
+/* The native input keeps its keyboard and screen reader behavior; its status text is collapsed, as the list shows the files. */
+.chain-form-file__input {
+  align-self: flex-start;
+  max-inline-size: 100%;
+  font-size: 0;
+}
+
+.chain-form-file__input::file-selector-button {
+  min-block-size: var(--chain-size-control-sm);
+  margin: 0;
+  padding: 0 var(--chain-space-3);
+  border: var(--chain-border-width) solid var(--color-border-control);
+  border-radius: var(--chain-radius-md);
+  background: var(--color-bg-surface);
+  color: var(--color-text);
+  font-family: inherit;
+  font-size: var(--chain-font-size-sm);
+  font-weight: var(--chain-font-weight-semibold);
+  cursor: pointer;
+}
+
+.chain-form-file__input:enabled:hover::file-selector-button {
+  background: var(--color-bg-hover);
+}
+
+.chain-form-file__input:disabled::file-selector-button {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.chain-form-file__status {
+  display: contents;
+}
+
+.chain-form-file__note {
+  color: var(--color-text-muted);
+  font-size: var(--chain-font-size-sm);
+}
+
+.chain-form-file__problem {
+  margin: 0;
+  color: var(--color-text-danger);
+  font-size: var(--chain-font-size-sm);
+}

@@ -1,0 +1,96 @@
+.chain-toast-region {
+  position: fixed;
+  z-index: var(--chain-z-toast);
+  right: var(--chain-space-4);
+  bottom: var(--chain-space-4);
+  left: var(--chain-space-4);
+  display: flex;
+  justify-content: flex-end;
+  pointer-events: none;
+}
+
+.chain-toast-region__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--chain-space-2);
+  width: min(var(--chain-size-toast), 100%);
+}
+
+.chain-toast {
+  --toast-accent: var(--color-status-info-icon);
+
+  display: flex;
+  align-items: flex-start;
+  gap: var(--chain-space-3);
+  padding: var(--chain-space-3) var(--chain-space-2) var(--chain-space-3) var(--chain-space-4);
+  border: var(--chain-border-width) solid var(--color-border-elevated);
+  border-radius: var(--chain-radius-md);
+  background: var(--color-bg-raised);
+  color: var(--color-text);
+  box-shadow: var(--shadow-popover), inset var(--chain-border-width-accent) 0 0 var(--toast-accent);
+  font-size: var(--chain-font-size-sm);
+  line-height: var(--chain-line-height-sm);
+  pointer-events: auto;
+  animation: chain-toast-in var(--chain-duration-slow) var(--chain-ease-standard);
+}
+
+.chain-toast[data-tone='success'] {
+  --toast-accent: var(--color-status-success-icon);
+}
+
+.chain-toast[data-tone='warning'] {
+  --toast-accent: var(--color-status-warning-icon);
+}
+
+.chain-toast[data-tone='danger'] {
+  --toast-accent: var(--color-status-danger-icon);
+}
+
+.chain-toast__icon {
+  flex: none;
+  padding-top: var(--chain-border-width);
+  color: var(--toast-accent);
+}
+
+.chain-toast__icon svg,
+.chain-toast__close svg {
+  width: var(--chain-size-icon-sm);
+  height: var(--chain-size-icon-sm);
+}
+
+.chain-toast__content {
+  flex: 1;
+  min-width: 0;
+}
+
+.chain-toast__title {
+  font-weight: var(--chain-font-weight-semibold);
+}
+
+.chain-toast__close {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: var(--chain-size-control-sm);
+  height: var(--chain-size-control-sm);
+  margin-top: calc(-1 * var(--chain-space-1));
+  padding: 0;
+  border: 0;
+  border-radius: var(--chain-radius-sm);
+  background: transparent;
+  color: var(--color-text-muted);
+  cursor: pointer;
+}
+
+.chain-toast__close:hover {
+  background: var(--color-bg-hover);
+  color: var(--color-text);
+}
+
+@keyframes chain-toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(var(--chain-space-3));
+  }
+}

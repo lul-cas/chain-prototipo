@@ -1,0 +1,5 @@
+/* A request's current step on its diagram (workflow-editor.md §10.11): a thicker outline in the action color. */
+.chain-canvas__element--current .chain-canvas__shape {
+  stroke: var(--color-action-primary);
+  stroke-width: 4;
+}

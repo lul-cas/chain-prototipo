@@ -1,0 +1,52 @@
+<section class="chain-inbox" aria-labelledby="chain-inbox-title">
+  <header class="chain-inbox__header">
+    <h1 id="chain-inbox-title">Tarefas</h1>
+    <p class="chain-inbox__greeting">Olá, {{ session.user()?.displayName }}.</p>
+  </header>
+
+  @if (error(); as message) {
+    <chain-alert tone="danger">{{ message }}</chain-alert>
+    <div>
+      <button chainButton variant="secondary" type="button" (click)="load()">Tentar de novo</button>
+    </div>
+  } @else if (inbox()) {
+    <div ngTabs class="chain-tabs">
+      <ul ngTabList class="chain-tabs__list" aria-label="Tarefas" selectionMode="follow" focusMode="roving" [(selectedTab)]="selected">
+        @for (tab of tabs(); track tab.value) {
+          <li ngTab class="chain-tabs__tab" [value]="tab.value">{{ tab.label }} ({{ tab.items.length }})</li>
+        }
+      </ul>
+      @for (tab of tabs(); track tab.value) {
+        <!-- @angular/aria makes inactive panels inert; hiding them is the page's part. -->
+        <div ngTabPanel class="chain-tabs__panel" [value]="tab.value" [hidden]="selected() !== tab.value">
+          <ng-template ngTabContent>
+            @if (tab.items.length === 0) {
+              <p class="chain-inbox__empty">{{ tab.empty }}</p>
+            } @else {
+              <ul class="chain-inbox__list">
+                @for (task of tab.items; track task.id) {
+                  <li>
+                    <a class="chain-inbox__item" [routerLink]="['/tarefas', task.id]">
+                      <span class="chain-inbox__label">{{ task.label }}</span>
+                      <span class="chain-inbox__meta">
+                        <span>{{ task.definitionName }}</span>
+                        <span>Solicitada por {{ task.requester.displayName }}</span>
+                        <span>{{ task.group?.name ?? 'quem solicitou' }}</span>
+                        @if (tab.value === 'others' && task.assignee) {
+                          <span>Com {{ task.assignee.displayName }}</span>
+                        }
+                        <time [attr.datetime]="task.createdAt">{{ task.createdAt | date: 'dd/MM/yyyy HH:mm' }}</time>
+                      </span>
+                    </a>
+                  </li>
+                }
+              </ul>
+            }
+          </ng-template>
+        </div>
+      }
+    </div>
+  } @else {
+    <p role="status">Carregando tarefas…</p>
+  }
+</section>

@@ -1,0 +1,179 @@
+/* The editor's canvas (workflow-editor.md §2, §3): the POC's notation, in Chain's semantic tokens only. */
+:host {
+  display: block;
+  block-size: max(var(--chain-size-canvas), 60vh);
+  border: var(--chain-border-width) solid var(--color-border-subtle);
+  border-radius: var(--chain-radius-lg);
+  background: var(--color-bg-surface);
+  overflow: hidden;
+}
+
+@media (max-width: 1700px) {
+  :host {
+    block-size: max(var(--chain-size-canvas-compact), 40vh);
+  }
+}
+
+.chain-canvas {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  touch-action: none;
+  user-select: none;
+}
+
+.chain-canvas__dot {
+  fill: var(--color-border-subtle);
+}
+
+.chain-canvas__dot--major {
+  fill: var(--color-border-strong);
+}
+
+/* Lanes */
+.chain-canvas__lane-body {
+  fill: var(--color-node-lane-bg);
+  fill-opacity: 0.35;
+  stroke: var(--color-node-lane-border);
+  stroke-width: 1;
+}
+
+.chain-canvas__lane-band {
+  fill: var(--color-node-lane-band);
+}
+
+.chain-canvas__lane-title {
+  fill: var(--color-node-lane-band-fg);
+  font-size: var(--chain-font-size-sm);
+  font-weight: 600;
+}
+
+/* Nodes: the color of each kind (design-system.md §4.1) */
+.chain-canvas__node {
+  --node-fg: var(--color-node-task-fg);
+  --node-bg: var(--color-node-task-bg);
+}
+
+.chain-canvas__node--start {
+  --node-fg: var(--color-node-start-fg);
+  --node-bg: var(--color-node-start-bg);
+}
+
+.chain-canvas__node--automatic {
+  --node-fg: var(--color-node-automatic-fg);
+  --node-bg: var(--color-node-automatic-bg);
+}
+
+.chain-canvas__node--subworkflow {
+  --node-fg: var(--color-node-subworkflow-fg);
+  --node-bg: var(--color-node-subworkflow-bg);
+}
+
+.chain-canvas__node--gateway {
+  --node-fg: var(--color-node-gateway-fg);
+  --node-bg: var(--color-node-gateway-bg);
+}
+
+.chain-canvas__node--end {
+  --node-fg: var(--color-node-end-fg);
+  --node-bg: var(--color-node-end-bg);
+}
+
+.chain-canvas__shape {
+  fill: var(--node-bg);
+  stroke: var(--node-fg);
+  stroke-width: 2;
+  stroke-linejoin: round;
+}
+
+.chain-canvas__label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  block-size: 100%;
+  color: var(--node-fg);
+  font-size: var(--chain-font-size-sm);
+  font-weight: 600;
+  line-height: 1.2;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+.chain-canvas__label--small {
+  font-size: var(--chain-font-size-xs);
+}
+
+.chain-canvas__caption {
+  fill: var(--color-text);
+  font-size: var(--chain-font-size-sm);
+  font-weight: 600;
+}
+
+.chain-canvas__marker {
+  fill: var(--node-fg);
+  font-size: var(--chain-font-size-md);
+}
+
+.chain-canvas__handle {
+  fill: var(--color-bg-surface);
+  stroke: var(--color-handle);
+  stroke-width: 1.5;
+}
+
+.chain-canvas__handle--true {
+  stroke: var(--color-flow-true);
+}
+
+.chain-canvas__handle--false {
+  stroke: var(--color-flow-false);
+}
+
+/* Flows: true and false carry a check or a cross besides their color (WCAG; ADR-0010 D2.1) */
+.chain-canvas__flow-line {
+  fill: none;
+  stroke: var(--color-flow);
+  stroke-width: 1.75;
+}
+
+.chain-canvas__flow--true .chain-canvas__flow-line {
+  stroke: var(--color-flow-true);
+}
+
+.chain-canvas__flow--false .chain-canvas__flow-line {
+  stroke: var(--color-flow-false);
+}
+
+.chain-canvas__arrow--plain {
+  fill: var(--color-flow);
+}
+
+.chain-canvas__arrow--true,
+.chain-canvas__flow--true .chain-canvas__branch {
+  fill: var(--color-flow-true);
+}
+
+.chain-canvas__arrow--false,
+.chain-canvas__flow--false .chain-canvas__branch {
+  fill: var(--color-flow-false);
+}
+
+.chain-canvas__branch {
+  font-size: var(--chain-font-size-sm);
+  font-weight: 700;
+}
+
+/* Problems and selection */
+.chain-canvas__element--problem .chain-canvas__shape,
+.chain-canvas__element--problem .chain-canvas__lane-body,
+.chain-canvas__element--problem .chain-canvas__flow-line {
+  stroke: var(--color-border-danger);
+  stroke-width: 3;
+  stroke-dasharray: 6 3;
+}
+
+.chain-canvas__element--selected .chain-canvas__shape,
+.chain-canvas__element--selected .chain-canvas__lane-body,
+.chain-canvas__element--selected .chain-canvas__flow-line {
+  stroke: var(--color-selection);
+  stroke-width: 3;
+}

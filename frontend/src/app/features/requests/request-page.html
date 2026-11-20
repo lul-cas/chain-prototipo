@@ -1,0 +1,201 @@
+<section class="chain-request" aria-labelledby="chain-request-title">
+  @if (loadError(); as problem) {
+    @if (problem.code === 'not_found') {
+      <h1 id="chain-request-title">Solicitação não encontrada</h1>
+      <p>Ela não existe, ou você não pode vê-la.</p>
+      <p><a routerLink="/solicitacoes">Ver as solicitações</a></p>
+    } @else {
+      <h1 id="chain-request-title">Solicitação</h1>
+      <chain-alert tone="danger">{{ loadMessage(problem) }}</chain-alert>
+      <div>
+        <button chainButton variant="secondary" type="button" (click)="load()">Tentar de novo</button>
+      </div>
+    }
+  } @else if (view(); as request) {
+    <header class="chain-request__header">
+      @if (request.parent; as parent) {
+        <p><a [routerLink]="['/solicitacoes', parent.id]">Parte de outra solicitação</a></p>
+      }
+      <h1 id="chain-request-title">{{ request.definitionName }}</h1>
+      <div class="chain-request__facts">
+        <span class="chain-request__status" [attr.data-status]="request.status">{{ statusLabel[request.status] }}</span>
+        <span>Solicitada por {{ request.requester.displayName }}</span>
+        <span>Iniciada em <time [attr.datetime]="request.startedAt">{{ request.startedAt | date: 'dd/MM/yyyy HH:mm' }}</time></span>
+        @if (request.endedAt) {
+          <span>Encerrada em <time [attr.datetime]="request.endedAt">{{ request.endedAt | date: 'dd/MM/yyyy HH:mm' }}</time></span>
+        }
+      </div>
+      @if (request.status === 'running') {
+        <div>
+          <button chainButton variant="secondary" type="button" [loading]="busy()" (click)="close()">Encerrar solicitação</button>
+        </div>
+      }
+    </header>
+
+    @if (commandError(); as message) {
+      <chain-alert tone="danger">
+        {{ message }}
+        @if (retry()) {
+          <div class="chain-request__retry">
+            <button chainButton variant="secondary" size="sm" type="button" (click)="tryAgain()">Tentar novamente</button>
+          </div>
+        }
+      </chain-alert>
+    }
+
+    @if (request.openTasks.length > 0) {
+      <section class="chain-request__section" aria-labelledby="chain-request-tasks">
+        <h2 id="chain-request-tasks">Tarefas abertas</h2>
+        <ul class="chain-request__list">
+          @for (task of request.openTasks; track task.id) {
+            <li>
+              <a [routerLink]="['/tarefas', task.id]">{{ task.label }}</a>
+              <span class="chain-request__muted">
+                @if (task.assignee) {
+                  Com {{ task.assignee.displayName }}
+                } @else {
+                  Disponível para {{ task.group?.name ?? 'quem solicitou' }}
+                }
+              </span>
+            </li>
+          }
+        </ul>
+      </section>
+    }
+
+    @if (openIncidents().length > 0) {
+      <section class="chain-request__section" aria-labelledby="chain-request-incidents">
+        <h2 id="chain-request-incidents">Incidentes</h2>
+        <ul class="chain-request__list">
+          @for (open of openIncidents(); track open.incident.id) {
+            <li class="chain-request__incident">
+              @if (open.text; as text) {
+                <span>{{ text }}</span>
+                <span class="chain-request__muted"><code class="chain-mono">{{ open.incident.code }}</code> {{ open.incident.message }}</span>
+              } @else if (open.incident.message) {
+                <span>{{ open.incident.message }}</span>
+                <span class="chain-request__muted"><code class="chain-mono">{{ open.incident.code }}</code></span>
+              } @else {
+                <span><code class="chain-mono">{{ open.incident.code }}</code></span>
+              }
+            </li>
+          }
+        </ul>
+      </section>
+    }
+
+    <section class="chain-request__section" aria-labelledby="chain-request-data">
+      <h2 id="chain-request-data">Dados</h2>
+      @if (hasData()) {
+        <ng-container [ngTemplateOutlet]="dataNode" [ngTemplateOutletContext]="{ $implicit: data() }" />
+      } @else {
+        <p class="chain-request__muted">Nenhum dado.</p>
+      }
+    </section>
+
+    <section class="chain-request__section" aria-labelledby="chain-request-flow">
+      <h2 id="chain-request-flow">Fluxo</h2>
+      <div>
+        <button chainButton variant="secondary" size="sm" type="button" [attr.aria-expanded]="flowShown()" (click)="toggleFlow()">
+          {{ flowShown() ? 'Ocultar o fluxo' : 'Mostrar o fluxo' }}
+        </button>
+      </div>
+      @if (flowShown()) {
+        @if (diagram(); as shown) {
+          <chain-workflow-canvas class="chain-request__canvas" [document]="shown.document" [current]="shown.current" />
+        } @else if (diagramFailed()) {
+          <chain-alert tone="danger">Não foi possível carregar o fluxo.</chain-alert>
+        } @else {
+          <p class="chain-request__muted">Carregando o fluxo…</p>
+        }
+      }
+    </section>
+
+    @if ((request.children ?? []).length > 0) {
+      <section class="chain-request__section" aria-labelledby="chain-request-children">
+        <h2 id="chain-request-children">Subsolicitações</h2>
+        <ul class="chain-request__list">
+          @for (child of request.children; track child.id) {
+            <li>
+              <a [routerLink]="['/solicitacoes', child.id]">{{ child.definitionName }}</a>
+              <span class="chain-request__muted">{{ statusLabel[child.status] }}</span>
+            </li>
+          }
+        </ul>
+      </section>
+    }
+
+    <section class="chain-request__section" aria-labelledby="chain-request-timeline">
+      <h2 id="chain-request-timeline">Linha do tempo</h2>
+      <ol class="chain-request__timeline">
+        @for (entry of timeline(); track $index) {
+          <li class="chain-request__event">
+            <time class="chain-request__when" [attr.datetime]="entry.event.occurredAt">{{ entry.event.occurredAt | date: 'dd/MM/yyyy HH:mm' }}</time>
+            <span>
+              @if (entry.sentence.who; as who) {
+                <strong>{{ who }}</strong>
+                @if (entry.sentence.group) {
+                  <span class="chain-request__muted"> (como {{ entry.sentence.group }})</span>
+                }
+              } @else {
+                <strong>Sistema:</strong>
+              }
+              {{ entry.sentence.what }}
+              @if (entry.sentence.file; as file) {
+                <a [href]="'/api/files/' + file.fileId">{{ file.name }}</a>
+                @if (file.size) {
+                  <span class="chain-request__muted"> ({{ file.size }})</span>
+                }
+              }
+              @if (entry.sentence.link) {
+                — <a [routerLink]="['/solicitacoes', entry.sentence.link]">ver</a>
+              }
+              @if (entry.sentence.via; as via) {
+                <span class="chain-request__muted"> · {{ via }}</span>
+              }
+            </span>
+            @if (entry.sentence.note) {
+              <q class="chain-request__note">{{ entry.sentence.note }}</q>
+            }
+          </li>
+        }
+      </ol>
+    </section>
+
+    @if (request.status === 'running' || request.status === 'faulted') {
+      <section class="chain-request__section" aria-labelledby="chain-request-comment">
+        <h2 id="chain-request-comment">Comentar</h2>
+        <chain-request-comment [instanceId]="request.id" (commented)="onCommented($event)" (stale)="onStale($event)" />
+      </section>
+    }
+  } @else {
+    <p role="status">Carregando solicitação…</p>
+  }
+</section>
+
+<ng-template #dataNode let-node>
+  @if (isText(node)) {
+    {{ node.text }}
+  } @else if (isHidden(node)) {
+    <span class="chain-request__muted">Oculto (dado sigiloso)</span>
+  } @else if (isFiles(node)) {
+    @for (file of node.files; track file.fileId; let last = $last) {
+      <a [href]="'/api/files/' + file.fileId">{{ file.name }}</a>@if (!last) {, }
+    }
+  } @else if (isEntries(node)) {
+    <dl class="chain-data">
+      @for (entry of node.entries; track entry[0]) {
+        <div class="chain-data__row">
+          <dt>{{ entry[0] }}</dt>
+          <dd><ng-container [ngTemplateOutlet]="dataNode" [ngTemplateOutletContext]="{ $implicit: entry[1] }" /></dd>
+        </div>
+      }
+    </dl>
+  } @else {
+    <ol class="chain-data__rows">
+      @for (item of itemsOf(node); track $index) {
+        <li><ng-container [ngTemplateOutlet]="dataNode" [ngTemplateOutletContext]="{ $implicit: item }" /></li>
+      }
+    </ol>
+  }
+</ng-template>

@@ -1,0 +1,44 @@
+/*
+ * The control of a text field (design-system.md §5): a native input, textarea or select with chainInput. Global, so a
+ * control named by aria-label on its own, as in the condition builder, looks like one in a chain-form-field, which may
+ * set --field-control-height and --field-radius.
+ */
+.chain-input {
+  display: block;
+  width: 100%;
+  min-height: var(--field-control-height, var(--chain-size-control-md));
+  padding: 0 var(--chain-space-3);
+  border: var(--chain-border-width) solid var(--color-border-control);
+  border-radius: var(--field-radius, var(--chain-radius-md));
+  background: var(--color-bg-surface);
+  color: var(--color-text);
+  font-size: var(--chain-font-size-md);
+  line-height: var(--chain-line-height-md);
+  transition: border-color var(--chain-duration-fast) var(--chain-ease-standard);
+}
+
+textarea.chain-input {
+  min-height: var(--chain-size-textarea-min);
+  padding: var(--chain-space-2) var(--chain-space-3);
+  resize: vertical;
+}
+
+.chain-input::placeholder {
+  color: var(--color-text-muted);
+  opacity: 1;
+}
+
+.chain-input:hover {
+  border-color: var(--color-border-control-hover);
+}
+
+.chain-input:focus-visible {
+  border-color: var(--color-focus-ring);
+}
+
+.chain-input:disabled {
+  cursor: not-allowed;
+  background: var(--color-bg-subtle);
+  color: var(--color-text-disabled);
+  border-style: dashed;
+}

@@ -1,0 +1,39 @@
+/* Tabs (design-system.md §5): @angular/aria's ngTabList, ngTab and ngTabPanel carry the roles and keyboard behavior; these
+   classes carry the look. The selected tab is marked by aria-selected, with an underline as well as color. */
+
+.chain-tabs__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--chain-space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-bottom: var(--chain-border-width) solid var(--color-border-subtle);
+}
+
+.chain-tabs__tab {
+  margin-bottom: calc(-1 * var(--chain-border-width));
+  padding: var(--chain-space-2) var(--chain-space-3);
+  border-bottom: var(--chain-border-width-strong) solid transparent;
+  color: var(--color-text-muted);
+  font-weight: var(--chain-font-weight-medium);
+  cursor: pointer;
+  user-select: none;
+}
+
+.chain-tabs__tab:hover {
+  color: var(--color-text);
+}
+
+.chain-tabs__tab[aria-selected='true'] {
+  border-bottom-color: var(--color-action-primary);
+  color: var(--color-text);
+}
+
+.chain-tabs__panel {
+  padding-top: var(--chain-space-4);
+}
+
+.chain-tabs__panel[hidden] {
+  display: none;
+}
